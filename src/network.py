@@ -99,21 +99,26 @@ class Network:
             self.__rms_prop(0.9, w_cache, b_cache)
 
     def __ada_grad(self, w_cache, b_cache):
-        w_cache = list(map(np.add, w_cache, self.DE_W))
-        b_cache = list(map(np.add, b_cache, self.DE_B))
+        w_cache = list(map(np.add, w_cache, list(map(np.square, self.DE_W))))
+        b_cache = list(map(np.add, b_cache, list(map(np.square, self.DE_B))))
         eta = self.hyper_parameters[1][1]
         # self.W = [W - (eta * self.DE_W) / (np.sqrt(w_cache) + self.eps) for W, DE_w in zip(self.W, self.DE_W)]
         # self.B = [b - (eta * self.DE_B) / (np.sqrt(b_cache) + self.eps) for b, DE_b in zip(self.B, self.DE_B)]
-        temp = map(np.sqrt, w_cache)
-        self.W = [W - np.multiply(eta, np.array(self.DE_W)) / (np.array(map(np.sqrt, w_cache)) + self.eps) for W, DE_w in zip(self.W, self.DE_W)]
-        self.B = [b - (eta * self.DE_B) / (np.sqrt(b_cache) + self.eps) for b, DE_b in zip(self.B, self.DE_B)]
+        self.W = [W - np.multiply(eta, DE_w) / (np.sqrt(w) + self.eps) for W, DE_w, w in zip(self.W, self.DE_W, w_cache)]
+        self.B = [B - np.multiply(eta, DE_b) / (np.sqrt(b) + self.eps) for B, DE_b, b in zip(self.B, self.DE_B, b_cache)]
 
     def __rms_prop(self, decay_rate, w_cache, b_cache):
-        w_cache = decay_rate * w_cache + (1 - decay_rate) * np.square(self.DE_W)
-        b_cache = decay_rate * b_cache + (1 - decay_rate) * np.square(self.DE_B)
+        w_first_term = list(map(np.multiply, [decay_rate for i in range(len(w_cache))], w_cache))
+        w_second_term = list(map(np.multiply, [1 - decay_rate for i in range(len(w_cache))], list(map(np.square, self.DE_W))))
+        w_cache = list(map(sum, w_first_term, w_second_term))
+
+        b_first_term = list(map(np.multiply, [decay_rate for i in range(len(b_cache))], b_cache))
+        b_second_term = list(map(np.multiply, [1 - decay_rate for i in range(len(b_cache))], list(map(np.square, self.DE_B))))
+        b_cache = list(map(sum, b_first_term, b_second_term))
+
         eta = self.hyper_parameters[1][1]
-        self.W = [W - (eta * self.DE_W) / (np.sqrt(w_cache) + self.eps) for W, DE_w in zip(self.W, self.DE_W)]
-        self.B = [b - (eta * self.DE_B) / (np.sqrt(b_cache) + self.eps) for b, DE_b in zip(self.B, self.DE_B)]
+        self.W = [W - np.multiply(eta, DE_w) / (np.sqrt(w) + self.eps) for W, DE_w, w in zip(self.W, self.DE_W, w_cache)]
+        self.B = [B - np.multiply(eta, DE_b) / (np.sqrt(b) + self.eps) for B, DE_b, b in zip(self.B, self.DE_B, b_cache)]
 
     # end: boolean function
     # training_input: array like
@@ -142,8 +147,8 @@ class Network:
 
         mini_batches = np.array(mini_batches, dtype=np.ndarray)
 
-        w_cache = np.array([np.zeros_like(DE_w) for DE_w in self.DE_W])
-        b_cache = np.array([np.zeros_like(DE_b) for DE_b in self.DE_B])
+        w_cache = [np.zeros_like(DE_w) for DE_w in self.DE_W]
+        b_cache = [np.zeros_like(DE_b) for DE_b in self.DE_B]
         # start training
         while not end():
             self.epochs += 1
@@ -152,8 +157,8 @@ class Network:
             self.errors_means.append(np.sum(self.errors) / len(self.errors))
 
     def stop(self):
-        # return self.epochs > 1000
-        return np.sum([np.linalg.norm(np.abs(m1 - m2)) for m1, m2 in zip(self.W, self.pred_W)]) / len(self.W) < 0.001
+        return self.epochs > 190
+        #return np.sum([np.linalg.norm(np.abs(m1 - m2)) for m1, m2 in zip(self.W, self.pred_W)]) / len(self.W) < 0.001
 
     def plot_learning_rate(self, problem_number):
         plt.plot(range(1, self.epochs + 1), self.errors_means)

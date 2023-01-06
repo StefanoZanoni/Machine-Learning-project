@@ -27,8 +27,12 @@ for i in range(1, 4):
     error_function = (ef.bce, ef.bce_derivative)
     hyper_parameters = [('leaky_relu_hp', 0.1), ('learning_rate', 0.01), ('huber_loss_hp', 0.1)]
 
-    network = nt.Network([6, 4, 1], activation_functions, error_function, hyper_parameters)
+    # initialize the network
+    # Pass optimizer func name just like TF
+    network = nt.Network([6, 4, 1], activation_functions, error_function, hyper_parameters, "AdaGrad")
+
     start = timer()
-    network.train(network.stop, training_input, training_output, len(training_output))
+
+    network.train(network.stop, training_input, training_output, 31)
     print("training time in seconds:", np.ceil(timer() - start))
     network.plot_learning_rate(i)
