@@ -5,20 +5,25 @@ from matplotlib import pyplot as plt
 
 
 class Network:
-    def __init__(self, structure, activation_functions, error_function, hyper_parameters):
+    def __init__(self, structure, activation_functions, error_function, hyper_parameters, optimizer="SGD", eps=1e-6):
         self.structure = structure
         self.activation_functions = activation_functions
         self.num_layers = len(structure)
         self.error_function = error_function
         self.hyper_parameters = hyper_parameters
+        self.gradient_descent = optimizer
+        self.eps = eps
+
         self.B = [np.random.randn(l, 1) for l in structure[1:]]
         self.W = [np.random.randn(l, next_l) for l, next_l in zip(structure[:-1], structure[1:])]
+        self.DE_B = [np.zeros(b.shape) for b in self.B]
+        self.DE_W = [np.zeros(W.shape) for W in self.W]
         self.pred_W = [np.zeros((l, next_l)) for l, next_l in zip(structure[:-1], structure[1:])]
         self.errors = []
         self.errors_means = []
         self.epochs = 0
 
-    def backpropagation(self, x, y):
+    def __backpropagation(self, x, y):
         pDE_B = [np.zeros(b.shape) for b in self.B]
         pDE_W = [np.zeros(w.shape) for w in self.W]
 
@@ -68,20 +73,47 @@ class Network:
 
         return pDE_B, pDE_W
 
-    def gradient_descent(self, mini_batch):
-        DE_B = [np.zeros(b.shape) for b in self.B]
-        DE_W = [np.zeros(W.shape) for W in self.W]
+    # Private func that updates the weights based upon the optimizer func
+
+    def __gradient_descent(self, mini_batch, w_cache, b_cache):
 
         for x, y in mini_batch:
-            pDE_B, pDE_W = self.backpropagation(np.asmatrix(x).T, y)
-            DE_B = [DE_b + pDE_b for DE_b, pDE_b in zip(DE_B, pDE_B)]
-            DE_W = [DE_w + pDE_w for DE_w, pDE_w in zip(DE_W, pDE_W)]
+            pDE_B, pDE_W = self.__backpropagation(np.asmatrix(x).T, y)
+            self.DE_B = [DE_b + pDE_b for DE_b, pDE_b in zip(self.DE_B, pDE_B)]
+            self.DE_W = [DE_w + pDE_w for DE_w, pDE_w in zip(self.DE_W, pDE_W)]
 
         eta = self.hyper_parameters[1][1]
         d = len(mini_batch)
         self.pred_W = self.W
-        self.W = [W - eta / d * DE_w for W, DE_w in zip(self.W, DE_W)]
-        self.B = [b - eta / d * DE_b for b, DE_b in zip(self.B, DE_B)]
+        # These two lines would be shifted in the private func and the private func needs to be called that
+        # updates the weights and biases
+        # self.W = [W - eta / d * DE_w for W, DE_w in zip(self.W, self.DE_W)]
+        # self.B = [b - eta / d * DE_b for b, DE_b in zip(self.B, self.DE_B)]
+
+        if self.gradient_descent == "SGD":
+            self.W = [W - eta / d * DE_w for W, DE_w in zip(self.W, self.DE_W)]
+            self.B = [b - eta / d * DE_b for b, DE_b in zip(self.B, self.DE_B)]
+        elif self.gradient_descent == "AdaGrad":
+            self.__ada_grad(w_cache, b_cache)
+        elif self.gradient_descent == "RMSProp":
+            self.__rms_prop(0.9, w_cache, b_cache)
+
+    def __ada_grad(self, w_cache, b_cache):
+        w_cache = list(map(np.add, w_cache, self.DE_W))
+        b_cache = list(map(np.add, b_cache, self.DE_B))
+        eta = self.hyper_parameters[1][1]
+        # self.W = [W - (eta * self.DE_W) / (np.sqrt(w_cache) + self.eps) for W, DE_w in zip(self.W, self.DE_W)]
+        # self.B = [b - (eta * self.DE_B) / (np.sqrt(b_cache) + self.eps) for b, DE_b in zip(self.B, self.DE_B)]
+        temp = map(np.sqrt, w_cache)
+        self.W = [W - np.multiply(eta, np.array(self.DE_W)) / (np.array(map(np.sqrt, w_cache)) + self.eps) for W, DE_w in zip(self.W, self.DE_W)]
+        self.B = [b - (eta * self.DE_B) / (np.sqrt(b_cache) + self.eps) for b, DE_b in zip(self.B, self.DE_B)]
+
+    def __rms_prop(self, decay_rate, w_cache, b_cache):
+        w_cache = decay_rate * w_cache + (1 - decay_rate) * np.square(self.DE_W)
+        b_cache = decay_rate * b_cache + (1 - decay_rate) * np.square(self.DE_B)
+        eta = self.hyper_parameters[1][1]
+        self.W = [W - (eta * self.DE_W) / (np.sqrt(w_cache) + self.eps) for W, DE_w in zip(self.W, self.DE_W)]
+        self.B = [b - (eta * self.DE_B) / (np.sqrt(b_cache) + self.eps) for b, DE_b in zip(self.B, self.DE_B)]
 
     # end: boolean function
     # training_input: array like
@@ -110,11 +142,13 @@ class Network:
 
         mini_batches = np.array(mini_batches, dtype=np.ndarray)
 
+        w_cache = np.array([np.zeros_like(DE_w) for DE_w in self.DE_W])
+        b_cache = np.array([np.zeros_like(DE_b) for DE_b in self.DE_B])
         # start training
         while not end():
             self.epochs += 1
             for mini_batch in mini_batches:
-                self.gradient_descent(mini_batch)
+                self.__gradient_descent(mini_batch, w_cache, b_cache)
             self.errors_means.append(np.sum(self.errors) / len(self.errors))
 
     def stop(self):
