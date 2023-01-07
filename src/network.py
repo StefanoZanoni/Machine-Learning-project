@@ -124,7 +124,6 @@ class Network:
     # training_input: array like
     # training_output: array like
     # mini_batch_size: int
-    # eta: float
     def train(self, end, training_input, training_output, mini_batch_size):
 
         # dividing training data into mini batch
