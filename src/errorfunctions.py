@@ -8,7 +8,7 @@ import numpy as np
 
 # mean squared error
 def mse(y, yx):
-    if isinstance(yx, (collections.abc.Sequence, np.ndarray)):
+    if np.shape(yx) != (1, 1):
         return np.sum(0.5 * np.square(np.subtract(yx, y))) / len(yx)
     else:
         return 0.5 * (yx - y) ** 2
@@ -16,7 +16,7 @@ def mse(y, yx):
 
 # mean squared error derivative
 def mse_derivative(y, yx):
-    if isinstance(yx, (collections.abc.Sequence, np.ndarray)):
+    if np.shape(yx) != (1, 1):
         return np.sum(np.subtract(yx, y)) / len(yx)
     else:
         return yx - y
@@ -24,7 +24,7 @@ def mse_derivative(y, yx):
 
 # mean absolute error
 def mae(y, yx):
-    if isinstance(yx, (collections.abc.Sequence, np.ndarray)):
+    if np.shape(yx) != (1, 1):
         return np.sum(np.abs(np.subtract(yx, y))) / len(yx)
     else:
         np.abs(yx - y)
@@ -32,7 +32,7 @@ def mae(y, yx):
 
 # mean absolute error derivative
 def mae_derivative(y, yx):
-    if isinstance(yx, (collections.abc.Sequence, np.ndarray)):
+    if np.shape(yx) != (1, 1):
         return np.sum(np.multiply(1 / len(yx), np.divide(np.subtract(yx, y), np.abs(np.subtract(yx, y))))) / len(yx)
     else:
         return (yx - y) / np.abs(yx - y)
@@ -41,7 +41,7 @@ def mae_derivative(y, yx):
 # huber loss
 # problems with dimensions
 def huber_loss(y, yx, delta):
-    if isinstance(yx, (collections.abc.Sequence, np.ndarray)):
+    if np.shape(yx) != (1, 1):
         hl = np.zeros_like(yx)
         hl[np.abs(np.subtract(yx, y)) <= delta] = mse(y, yx)
         hl[np.abs(np.subtract(yx, y)) > delta] = (np.multiply(delta,
@@ -57,7 +57,7 @@ def huber_loss(y, yx, delta):
 
 # huber loss derivative
 def huber_loss_derivative(y, yx, delta):
-    if isinstance(yx, (collections.abc.Sequence, np.ndarray)):
+    if np.shape(yx) != (1, 1):
         dhl = np.zeros_like(yx)
         dhl[np.abs(np.subtract(yx, y)) <= delta] = mse_derivative(y, yx)
         dhl[np.abs(np.subtract(yx, y)) > delta] = 1 / len(yx) * \
@@ -85,7 +85,7 @@ def bce(y, yx):
 
 # binary cross entropy derivative
 def bce_derivative(y, yx):
-    if isinstance(yx, (collections.abc.Sequence, np.ndarray)):
+    if np.shape(yx) != (1, 1):
         return np.sum(np.divide(np.subtract(yx, y), np.multiply(yx, np.subtract(np.ones_like(yx), yx)))) / len(yx)
     else:
         return (yx - y) / (yx * (1 - yx))
@@ -93,7 +93,7 @@ def bce_derivative(y, yx):
 
 # categorical cross entropy
 def cce(y, yx):
-    if isinstance(yx, (collections.abc.Sequence, np.ndarray)):
+    if np.shape(yx) != (1, 1):
         return np.sum(np.multiply(-y, np.log(yx))) / len(yx)
     else:
         return -y * np.log(yx)
@@ -101,7 +101,7 @@ def cce(y, yx):
 
 # categorical cross entropy derivative
 def cce_derivative(y, yx):
-    if isinstance(yx, (collections.abc.Sequence, np.ndarray)):
+    if np.shape(yx) != (1, 1):
         return np.sum(np.divide(-y, yx))
     else:
         return -y / yx
