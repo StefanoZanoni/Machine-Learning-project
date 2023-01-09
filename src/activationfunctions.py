@@ -120,8 +120,17 @@ def softplus_gradient(x):
 
 
 def sigmoid(x):
-    return np.divide(np.ones_like(x), np.add(np.ones_like(x), np.exp(-x)))
+    #result = np.divide(np.ones_like(x), np.add(np.ones_like(x), np.exp(-x)))
+    result = 1 / (1 + np.exp(-x))
+    # if 0 in result or 1 in result:
+    #     print(result)
+
+    # result[result == 0] = result[result == 0] + sys.float_info.min
+    # result[result == 1] = result[result == 1] - sys.float_info.min
+    return result
 
 
 def sigmoid_gradient(x):
-    return np.multiply(sigmoid(x), (np.ones_like(x) - sigmoid(x)))
+    #result = np.multiply(sigmoid(x), (np.ones_like(x) - sigmoid(x)))
+    result = sigmoid(x) * (1 - sigmoid(x))
+    return result
