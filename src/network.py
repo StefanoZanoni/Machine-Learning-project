@@ -1,5 +1,6 @@
 import numpy as np
 from inspect import signature
+import errorfunctions as ef
 
 from matplotlib import pyplot as plt
 
@@ -14,8 +15,11 @@ class Network:
         self.gradient_descent = optimizer
         self.eps = eps
 
-        self.B = [np.random.randn(l, 1) for l in structure[1:]]
-        self.W = [np.random.randn(l, next_l) for l, next_l in zip(structure[:-1], structure[1:])]
+        # self.B = [np.random.randn(l, 1) for l in structure[1:]]
+        # self.W = [np.random.randn(l, next_l) for l, next_l in zip(structure[:-1], structure[1:])]
+        self.B = [np.multiply(np.random.randn(l, 1), np.sqrt(2 / l)) for l in structure[1:]]
+        self.W = [np.multiply(np.random.randn(l, next_l), np.sqrt(2 / (l + next_l))) for l, next_l in
+                  zip(structure[:-1], structure[1:])]
         self.DE_B = [np.zeros(b.shape) for b in self.B]
         self.DE_W = [np.zeros(W.shape) for W in self.W]
         self.pred_W = [np.zeros((l, next_l)) for l, next_l in zip(structure[:-1], structure[1:])]
@@ -48,7 +52,10 @@ class Network:
         sig2 = signature(de)
         params2 = sig2.parameters
         error = e(y, OUTPUTs[last]) if len(params2) == 2 else e(y, OUTPUTs[last], beta)
-        self.errors.append(error)
+        if np.shape(error) == (1, 1):
+            self.errors.append(error.item())
+        else:
+            self.errors.append(error)
 
         # backward
         for layer in range(last, -1, -1):
@@ -73,8 +80,6 @@ class Network:
 
         return pDE_B, pDE_W
 
-    # Private func that updates the weights based upon the optimizer func
-
     def __gradient_descent(self, mini_batch, w_cache, b_cache):
 
         for x, y in mini_batch:
@@ -85,10 +90,6 @@ class Network:
         eta = self.hyper_parameters[1][1]
         d = len(mini_batch)
         self.pred_W = self.W
-        # These two lines would be shifted in the private func and the private func needs to be called that
-        # updates the weights and biases
-        # self.W = [W - eta / d * DE_w for W, DE_w in zip(self.W, self.DE_W)]
-        # self.B = [b - eta / d * DE_b for b, DE_b in zip(self.B, self.DE_B)]
 
         if self.gradient_descent == "SGD":
             self.W = [W - eta / d * DE_w for W, DE_w in zip(self.W, self.DE_W)]
@@ -102,23 +103,27 @@ class Network:
         w_cache = list(map(np.add, w_cache, list(map(np.square, self.DE_W))))
         b_cache = list(map(np.add, b_cache, list(map(np.square, self.DE_B))))
         eta = self.hyper_parameters[1][1]
-        # self.W = [W - (eta * self.DE_W) / (np.sqrt(w_cache) + self.eps) for W, DE_w in zip(self.W, self.DE_W)]
-        # self.B = [b - (eta * self.DE_B) / (np.sqrt(b_cache) + self.eps) for b, DE_b in zip(self.B, self.DE_B)]
-        self.W = [W - np.multiply(eta, DE_w) / (np.sqrt(w) + self.eps) for W, DE_w, w in zip(self.W, self.DE_W, w_cache)]
-        self.B = [B - np.multiply(eta, DE_b) / (np.sqrt(b) + self.eps) for B, DE_b, b in zip(self.B, self.DE_B, b_cache)]
+        self.W = [W - np.multiply(eta, DE_w) / (np.sqrt(w) + self.eps) for W, DE_w, w in
+                  zip(self.W, self.DE_W, w_cache)]
+        self.B = [B - np.multiply(eta, DE_b) / (np.sqrt(b) + self.eps) for B, DE_b, b in
+                  zip(self.B, self.DE_B, b_cache)]
 
     def __rms_prop(self, decay_rate, w_cache, b_cache):
         w_first_term = list(map(np.multiply, [decay_rate for i in range(len(w_cache))], w_cache))
-        w_second_term = list(map(np.multiply, [1 - decay_rate for i in range(len(w_cache))], list(map(np.square, self.DE_W))))
+        w_second_term = list(
+            map(np.multiply, [1 - decay_rate for i in range(len(w_cache))], list(map(np.square, self.DE_W))))
         w_cache = list(map(sum, w_first_term, w_second_term))
 
         b_first_term = list(map(np.multiply, [decay_rate for i in range(len(b_cache))], b_cache))
-        b_second_term = list(map(np.multiply, [1 - decay_rate for i in range(len(b_cache))], list(map(np.square, self.DE_B))))
+        b_second_term = list(
+            map(np.multiply, [1 - decay_rate for i in range(len(b_cache))], list(map(np.square, self.DE_B))))
         b_cache = list(map(sum, b_first_term, b_second_term))
 
         eta = self.hyper_parameters[1][1]
-        self.W = [W - np.multiply(eta, DE_w) / (np.sqrt(w) + self.eps) for W, DE_w, w in zip(self.W, self.DE_W, w_cache)]
-        self.B = [B - np.multiply(eta, DE_b) / (np.sqrt(b) + self.eps) for B, DE_b, b in zip(self.B, self.DE_B, b_cache)]
+        self.W = [W - np.multiply(eta, DE_w) / (np.sqrt(w) + self.eps) for W, DE_w, w in
+                  zip(self.W, self.DE_W, w_cache)]
+        self.B = [B - np.multiply(eta, DE_b) / (np.sqrt(b) + self.eps) for B, DE_b, b in
+                  zip(self.B, self.DE_B, b_cache)]
 
     # end: boolean function
     # training_input: array like
@@ -156,8 +161,8 @@ class Network:
             self.errors_means.append(np.sum(self.errors) / len(self.errors))
 
     def stop(self):
-        return self.epochs > 190
-        #return np.sum([np.linalg.norm(np.abs(m1 - m2)) for m1, m2 in zip(self.W, self.pred_W)]) / len(self.W) < 0.001
+        return self.epochs > 1000
+        # return np.sum([np.linalg.norm(np.abs(m1 - m2)) for m1, m2 in zip(self.W, self.pred_W)]) / len(self.W) < 0.001
 
     def plot_learning_rate(self, problem_number):
         plt.plot(range(1, self.epochs + 1), self.errors_means)

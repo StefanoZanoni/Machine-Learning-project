@@ -30,11 +30,10 @@ for i in range(1, 4):
 
     # initialize the network
     # Pass optimizer func name just like TF
-    network = nt.Network([6, 4, 2], activation_functions, error_function, hyper_parameters, "AdaGrad")
-
+    network = nt.Network([6, 4, 1], activation_functions, error_function, hyper_parameters, "AdaGrad")
     start = timer()
 
     training_input = pp.min_max_scaling(training_input)
-    network.train(network.stop, training_input, training_output, 31)
+    network.train(network.stop, training_input, training_output, len(training_output))
     print("training time in seconds:", np.ceil(timer() - start))
     network.plot_learning_rate(i)

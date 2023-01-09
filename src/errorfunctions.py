@@ -1,5 +1,3 @@
-import collections.abc
-
 import numpy as np
 
 
@@ -72,23 +70,37 @@ def huber_loss_derivative(y, yx, delta):
 
 
 # binary cross entropy
-# problems with NaN
+# problems with divide by zero
 def bce(y, yx):
-    if isinstance(yx, (collections.abc.Sequence, np.ndarray)):
-        return np.sum(-(np.add(np.multiply(y, np.log(yx)),
-                               np.multiply(np.subtract(np.ones_like(yx), y),
-                                           np.log(np.subtract(np.ones_like(yx), yx)))))) \
-            / len(yx)
-    else:
-        return -(y * np.log(yx) + (1 - y) * np.log(1 - yx))
+    # if np.shape(yx) != (1, 1):
+    #     yx[yx == 0] = 0
+    #     yx[yx == 1] = 0
+    #     bool0_yx = yx != 0
+    #     bool1_yx = yx != 1
+    #     bool_yx = np.logical_or(bool0_yx, bool1_yx)
+    #     return np.sum(-(np.add(np.multiply(y, np.log(yx), where=bool_yx),
+    #                            np.multiply(np.subtract(np.ones_like(yx), y, where=bool_yx),
+    #                                        np.log(np.subtract(np.ones_like(yx), yx), where=bool_yx), where=bool_yx),
+    #                            where=bool_yx))) \
+    #         / len(yx)
+    # else:
+    #     if yx == 0 or yx == 1:
+    #         return 0
+    return -(y * np.log(yx) + (1 - y) * np.log(1 - yx)).mean()
 
 
 # binary cross entropy derivative
 def bce_derivative(y, yx):
-    if np.shape(yx) != (1, 1):
-        return np.sum(np.divide(np.subtract(yx, y), np.multiply(yx, np.subtract(np.ones_like(yx), yx)))) / len(yx)
-    else:
-        return (yx - y) / (yx * (1 - yx))
+    # if np.shape(yx) != (1, 1):
+    #     yx[yx == 1] = 0
+    #     bool_yx = yx != 1
+    #     return np.sum(np.divide(np.subtract(yx, y, where=bool_yx),
+    #                             np.multiply(yx, np.subtract(np.ones_like(yx), yx, where=bool_yx), where=bool_yx),
+    #                             where=bool_yx)) / len(yx)
+    # else:
+    #     if yx == 1:
+    #         return 0
+    return (yx - y) / (yx * (1 - yx)).mean()
 
 
 # categorical cross entropy
