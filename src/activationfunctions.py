@@ -1,5 +1,3 @@
-import sys
-
 import numpy as np
 
 
@@ -29,17 +27,16 @@ def tanh_gradient(x):
     return np.square(tanh(x))
 
 
-# dimensions problems
 def elu(x, alpha):
     y = np.ravel(np.copy(x))
-    y[np.ravel(x) < 0] = alpha * np.subtract(np.ravel(np.exp(x)), 1)
-    return y
+    y[np.ravel(x) < 0] = alpha * (np.exp(np.ravel(x)[np.ravel(x) < 0]) - 1)
+    return np.array([y]).T
 
 
 def elu_gradient(x, alpha):
     dx = np.ones_like(np.ravel(x))
-    dx[np.ravel(x) < 0] = elu(x, alpha) + alpha
-    return dx
+    dx[np.ravel(x) < 0] = alpha * np.exp(np.ravel(x)[np.ravel(x) < 0])
+    return np.array([dx]).T
 
 
 # dimensions problems
@@ -52,7 +49,7 @@ def softmax(x):
 def softmax_gradient(x):
     sm = softmax(x)
     s = np.reshape(sm, (-1, 1))
-    return (np.diagflat(s) - np.dot(s, s.T))[0]
+    return np.diagflat(s) - np.dot(s, s.T)
 
 
 def swish(x):
@@ -68,9 +65,10 @@ def gelu(x):
 
 
 def gelu_gradient(x):
-    return 0.5 * (1 + tanh(np.sqrt(2 / np.pi) * np.add(x, 0.044715 * np.power(x, 3)))) + 0.5 * np.multiply(x, tanh(np.sqrt(2 / np.pi) *
-                                                                                             (np.add(x, 0.044715 * np.power(
-                                                                                                     x, 3))))) * np.sqrt(
+    return 0.5 * (1 + tanh(np.sqrt(2 / np.pi) * np.add(x, 0.044715 * np.power(x, 3)))) + 0.5 * np.multiply(x, tanh(
+        np.sqrt(2 / np.pi) *
+        (np.add(x, 0.044715 * np.power(
+            x, 3))))) * np.sqrt(
         2 / np.pi) * (1 + 3 * 0.044715 * np.square(x))
 
 
@@ -120,17 +118,13 @@ def softplus_gradient(x):
 
 
 def sigmoid(x):
-    #result = np.divide(np.ones_like(x), np.add(np.ones_like(x), np.exp(-x)))
-    result = 1 / (1 + np.exp(-x))
-    # if 0 in result or 1 in result:
-    #     print(result)
-
-    # result[result == 0] = result[result == 0] + sys.float_info.min
-    # result[result == 1] = result[result == 1] - sys.float_info.min
+    x = np.clip(x, -700, 700)
+    result = np.divide(np.ones_like(x), np.add(np.ones_like(x), np.exp(-x)))
+    result = np.minimum(result, 0.9999)
+    result = np.maximum(result, 1e-20)
     return result
 
 
 def sigmoid_gradient(x):
-    #result = np.multiply(sigmoid(x), (np.ones_like(x) - sigmoid(x)))
-    result = sigmoid(x) * (1 - sigmoid(x))
+    result = np.multiply(sigmoid(x), (np.ones_like(x) - sigmoid(x)))
     return result

@@ -1,3 +1,5 @@
+from random import random, randint
+
 import numpy as np
 from inspect import signature
 import errorfunctions as ef
@@ -15,17 +17,36 @@ class Network:
         self.gradient_descent = optimizer
         self.eps = eps
 
-        # self.B = [np.random.randn(l, 1) for l in structure[1:]]
-        # self.W = [np.random.randn(l, next_l) for l, next_l in zip(structure[:-1], structure[1:])]
-        self.B = [np.multiply(np.random.randn(l, 1), np.sqrt(2 / l)) for l in structure[1:]]
-        self.W = [np.multiply(np.random.randn(l, next_l), np.sqrt(2 / (l + next_l))) for l, next_l in
-                  zip(structure[:-1], structure[1:])]
+        self.B = [np.random.randn(l, 1) for l in structure[1:]]
+        self.W = [np.random.randn(l, next_l) for l, next_l in zip(structure[:-1], structure[1:])]
+        # self.B = [np.multiply(np.random.randn(l, 1), np.sqrt(2 / l)) for l in structure[1:]]
+        # self.W = [np.multiply(np.random.randn(l, next_l), np.sqrt(2 / (l + next_l))) for l, next_l in
+        #           zip(structure[:-1], structure[1:])]
         self.DE_B = [np.zeros(b.shape) for b in self.B]
         self.DE_W = [np.zeros(W.shape) for W in self.W]
         self.pred_W = [np.zeros((l, next_l)) for l, next_l in zip(structure[:-1], structure[1:])]
         self.errors = []
         self.errors_means = []
         self.epochs = 0
+
+    def forward(self, x, is_classification):
+        x = np.array([x]).T
+        alpha = self.hyper_parameters[0][1]
+        output = 0
+
+        for b, W, j, i in zip(self.B, self.W, range(len(self.B)), range(len(self.structure))):
+            f = self.activation_functions[j][0]
+            sig = signature(f)
+            params = sig.parameters
+            net = np.array(W.T @ output + b if i != 0 else W.T @ x + b)
+            output = f(net, alpha) if len(params) == 2 else f(net)
+
+        if is_classification:
+            output[output > 0.5] = 1
+            output[output < 0.5] = 0
+            output[output == 0.5] = randint(0, 1)
+
+        return int(output)
 
     def __backpropagation(self, x, y):
         pDE_B = [np.zeros(b.shape) for b in self.B]
@@ -164,9 +185,9 @@ class Network:
         return self.epochs > 1000
         # return np.sum([np.linalg.norm(np.abs(m1 - m2)) for m1, m2 in zip(self.W, self.pred_W)]) / len(self.W) < 0.001
 
-    def plot_learning_rate(self, problem_number):
+    def plot_learning_rate(self):
         plt.plot(range(1, self.epochs + 1), self.errors_means)
         plt.xlabel('epochs')
-        plt.ylabel('error')
-        plt.title('Monk' + str(problem_number) + ' learning rate')
+        plt.ylabel('loss')
+        plt.title('learning rate')
         plt.show()
