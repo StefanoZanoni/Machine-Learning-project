@@ -42,7 +42,7 @@ def min_max_scaling(*args):
 # x' = (x - mean) / standard deviation
 # x is the dataset
 # x' is the normalized data set
-def z_score(*args):
+def z_score_scaling(*args):
     training_input = np.array(args[0])
     normalized_dataset = []
 
@@ -60,3 +60,11 @@ def z_score(*args):
         normalized_dataset = np.divide(np.subtract(training_input, mu), sigma)
 
     return normalized_dataset
+
+
+def shuffle_data(input_data):
+    data = np.copy(input_data)
+    np.random.shuffle(data)
+    return data
+
+

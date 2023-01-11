@@ -1,8 +1,9 @@
-from random import random, randint
+from random import randint
 
 import numpy as np
 from inspect import signature
-import errorfunctions as ef
+import preprocessing
+import activationfunctions as af
 
 from matplotlib import pyplot as plt
 
@@ -17,17 +18,41 @@ class Network:
         self.gradient_descent = optimizer
         self.eps = eps
 
-        self.B = [np.random.randn(l, 1) for l in structure[1:]]
-        self.W = [np.random.randn(l, next_l) for l, next_l in zip(structure[:-1], structure[1:])]
-        # self.B = [np.multiply(np.random.randn(l, 1), np.sqrt(2 / l)) for l in structure[1:]]
-        # self.W = [np.multiply(np.random.randn(l, next_l), np.sqrt(2 / (l + next_l))) for l, next_l in
-        #           zip(structure[:-1], structure[1:])]
+        self.B = [np.zeros((l, 1)) for l in structure[1:]]
+        # self.W = [np.random.randn(l, next_l) for l, next_l in zip(structure[:-1], structure[1:])]
+        self.W = self.__weights_initialization()
+
         self.DE_B = [np.zeros(b.shape) for b in self.B]
         self.DE_W = [np.zeros(W.shape) for W in self.W]
         self.pred_W = [np.zeros((l, next_l)) for l, next_l in zip(structure[:-1], structure[1:])]
         self.errors = []
         self.errors_means = []
         self.epochs = 0
+
+    def __weights_initialization(self):
+        weights_list = []
+
+        for l, next_l, s, fun in zip(self.structure[:-1], self.structure[1:], self.structure,
+                                     self.activation_functions):
+
+            # He weights initialization for ReLu
+            if fun == af.relu or fun == af.leaky_relu:
+                std = np.sqrt(2.0 / s)
+                weights = np.random.randn(l, next_l)
+                scaled_weights = weights * std
+                weights_list.append(scaled_weights)
+
+            # Xavier/Glorot weight initialization for Sigmoid or Tanh
+            elif fun == af.sigmoid or fun == af.tanh:
+                lower, upper = -(1.0 / np.sqrt(s)), (1.0 / np.sqrt(s))
+                weights = np.random.randn(l, next_l)
+                scaled_weights = lower + weights * (upper - lower)
+                weights_list.append(weights)
+            else:
+                weights = np.random.randn(l, next_l)
+                weights_list.append(weights)
+
+        return weights_list
 
     def forward(self, x, is_classification):
         x = np.array([x]).T
@@ -174,19 +199,24 @@ class Network:
 
         w_cache = [np.zeros_like(DE_w) for DE_w in self.DE_W]
         b_cache = [np.zeros_like(DE_b) for DE_b in self.DE_B]
+
         # start training
         while not end():
             self.epochs += 1
+
+            if mini_batch_size == 1:
+                mini_batches = preprocessing.shuffle_data(mini_batches)
+
             for mini_batch in mini_batches:
                 self.__gradient_descent(mini_batch, w_cache, b_cache)
             self.errors_means.append(np.sum(self.errors) / len(self.errors))
 
     def stop(self):
-        return self.epochs > 1000
+        return self.epochs > 10
         # return np.sum([np.linalg.norm(np.abs(m1 - m2)) for m1, m2 in zip(self.W, self.pred_W)]) / len(self.W) < 0.001
 
     def plot_learning_rate(self):
-        plt.plot(range(1, self.epochs + 1), self.errors_means)
+        plt.plot(range(1, self.epochs + 1), self.errors_means, color='red')
         plt.xlabel('epochs')
         plt.ylabel('loss')
         plt.title('learning rate')

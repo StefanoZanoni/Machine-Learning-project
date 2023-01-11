@@ -5,8 +5,8 @@ import errorfunctions as ef
 import preprocessing as pp
 import validationtechniques as vt
 
-# np.random.seed(0)
 
+# np.random.seed(0)
 
 def read_data_set(problem):
     training_df = pd.read_csv("../Monks_problem/monks-" + str(problem) + ".train", index_col=False, sep=" ",
@@ -32,9 +32,9 @@ training_output1 = data[1]
 testing_input1 = data[2]
 testing_output1 = data[3]
 
-activation_functions1 = [(af.leaky_relu, af.leaky_relu_gradient), (af.sigmoid, af.sigmoid_gradient)]
-activation_functions2 = [(af.relu, af.relu_gradient), (af.sigmoid, af.sigmoid_gradient)]
-activation_functions3 = [(af.linear, af.linear_gradient), (af.sigmoid, af.sigmoid_gradient)]
+activation_functions = [[(af.leaky_relu, af.leaky_relu_gradient), (af.sigmoid, af.sigmoid_gradient)],
+                        [(af.relu, af.relu_gradient), (af.sigmoid, af.sigmoid_gradient)],
+                        [(af.linear, af.linear_gradient), (af.sigmoid, af.sigmoid_gradient)]]
 error_function1 = (ef.bce, ef.bce_derivative)
 hyper_parameters1 = [('leaky_relu_hp', 0.1), ('learning_rate', 0.01), ('huber_loss_hp', 0.1)]
 hyper_parameters2 = [('leaky_relu_hp', 0.2), ('learning_rate', 0.1), ('huber_loss_hp', 0.1)]
@@ -42,37 +42,35 @@ hyper_parameters3 = [('leaky_relu_hp', 0.15), ('learning_rate', 0.001), ('huber_
 
 training_input1 = pp.min_max_scaling(training_input1)
 vt.holdout_validation(training_input1, training_output1, [("structures", [[6, 4, 1], [6, 2, 1], [6, 3, 1], [6, 1, 1]]),
-                                                          ("activation_funtions", [activation_functions1,
-                                                                                   activation_functions2, activation_functions3]),
+                                                          ("activation_functions", activation_functions),
                                                           ("error_functions", [error_function1]),
-                                                          ("hyper_parameters", [hyper_parameters1,
-                                                                                hyper_parameters2, hyper_parameters3]),
-                                                          ("gradient_descend_techniques", ["AdaGrad", "RMSProp", "SGD"])], 70)
+                                                          ("hyper_parameters", hyper_parameters),
+                                                          ("gradient_descend_techniques",
+                                                           ["AdaGrad", "RMSProp", "SGD"]),
+                                                          ("mini_batch_sizes", [1, 85, 5, 17])], 70, True, "../Monk1_models.txt")
 
-
-# MONK2
-data = read_data_set(2)
-training_input2 = data[0]
-training_output2 = data[1]
-testing_input2 = data[2]
-testing_output2 = data[3]
-
-activation_functions2 = [(af.leaky_relu, af.leaky_relu_gradient), (af.sigmoid, af.sigmoid_gradient)]
-error_function2 = (ef.bce, ef.bce_derivative)
-hyper_parameters2 = [('leaky_relu_hp', 0.1), ('learning_rate', 0.01), ('huber_loss_hp', 0.1)]
-
-training_input2 = pp.z_score(training_input2)
-
-
-# MONK3
-data = read_data_set(3)
-training_input3 = data[0]
-training_output3 = data[1]
-testing_input3 = data[2]
-testing_output3 = data[3]
-
-activation_functions3 = [(af.leaky_relu, af.leaky_relu_gradient), (af.sigmoid, af.sigmoid_gradient)]
-error_function3 = (ef.bce, ef.bce_derivative)
-hyper_parameters3 = [('leaky_relu_hp', 0.1), ('learning_rate', 0.01), ('huber_loss_hp', 0.1)]
-
-training_input3 = pp.z_score(training_input3)
+# # MONK2
+# data = read_data_set(2)
+# training_input2 = data[0]
+# training_output2 = data[1]
+# testing_input2 = data[2]
+# testing_output2 = data[3]
+#
+# activation_functions2 = [(af.leaky_relu, af.leaky_relu_gradient), (af.sigmoid, af.sigmoid_gradient)]
+# error_function2 = (ef.bce, ef.bce_derivative)
+# hyper_parameters2 = [('leaky_relu_hp', 0.1), ('learning_rate', 0.01), ('huber_loss_hp', 0.1)]
+#
+# training_input2 = pp.z_score_scaling(training_input2)
+#
+# # MONK3
+# data = read_data_set(3)
+# training_input3 = data[0]
+# training_output3 = data[1]
+# testing_input3 = data[2]
+# testing_output3 = data[3]
+#
+# activation_functions3 = [(af.leaky_relu, af.leaky_relu_gradient), (af.sigmoid, af.sigmoid_gradient)]
+# error_function3 = (ef.bce, ef.bce_derivative)
+# hyper_parameters3 = [('leaky_relu_hp', 0.1), ('learning_rate', 0.01), ('huber_loss_hp', 0.1)]
+#
+# training_input3 = pp.z_score_scaling(training_input3)
