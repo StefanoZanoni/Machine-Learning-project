@@ -154,20 +154,30 @@ def dump_on_json(accuracy, hyper_parameters, filename):
 
     # if not os.path.exists(filename):
     #     file = open(filename, "x")
-        
-    
-    with open(filename, "r") as openfile:
-        # Reading from json file
-        read_models = json.load(openfile)
-        for single_model in read_models:
-            models.append(single_model)
 
-    models.append(model)
-    json_object = json.dumps(models, indent=4)
+    file_exists = os.path.exists(filename)
+    is_file_empty = file_exists and os.stat(filename).st_size == 0
 
-    # Writing to sample.json
-    with open(filename, "w") as outfile:
-        outfile.write(json_object)
+    print(file_exists, is_file_empty)
+
+    if file_exists and not is_file_empty:
+        with open(filename, "r") as open_file:
+            read_models = json.load(open_file)
+            for single_model in read_models:
+                models.append(single_model)
+            open_file.close()
+
+        with open(filename, "w") as open_file:
+            models.append(model)
+            json_object = json.dumps(models, indent=4)
+            open_file.write(json_object)
+            open_file.close()
+    else:
+        with open(filename, "w+") as open_file:
+            models.append(model)
+            json_object = json.dumps(models, indent=4)
+            open_file.write(json_object)
+            open_file.close()
 
 
 def k_fold_cross_validation(data_set, output_data_set, hyper_parameters_set):

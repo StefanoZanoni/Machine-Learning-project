@@ -48,7 +48,7 @@ vt.holdout_validation(training_input1, training_output1, [("structures", [[6, 4,
                                                           ("hyper_parameters", hyper_parameters),
                                                           ("gradient_descend_techniques",
                                                            ["AdaGrad", "RMSProp", "SGD"]),
-                                                          ("mini_batch_sizes", [1, 85, 5, 17])], 70, True, "../Monk1_models.txt")
+                                                          ("mini_batch_sizes", [1, 85, 5, 17])], 70, True, "../Monk1_models.json")
 
 # # MONK2
 # data = read_data_set(2)
