@@ -13,13 +13,22 @@ import numpy as np
 # AS
 
 
-def min_max_scaling(training_input):
-    training_input = np.array(training_input)
+def min_max_scaling(*args):
+    training_input = np.array(args[0])
+    normalized_dataset = []
 
-    min_val = np.amin(training_input, axis=0)
-    max_val = np.amax(training_input, axis=0)
-
-    normalized_dataset = (training_input - min_val) / (max_val - min_val)
+    if len(args) == 2:
+        columns = args[1]
+        min_val = np.amin(training_input[:, columns], axis=0)
+        max_val = np.amax(training_input[:, columns], axis=0)
+        normalized_dataset = (training_input[:, columns] - min_val) / (max_val - min_val)
+        for column, i in zip(range(normalized_dataset.shape[1]), columns):
+            training_input[:, i] = normalized_dataset[:, column]
+        normalized_dataset = training_input
+    else:
+        min_val = np.amin(training_input, axis=0)
+        max_val = np.amax(training_input, axis=0)
+        normalized_dataset = (training_input - min_val) / (max_val - min_val)
 
     return normalized_dataset
 
@@ -33,8 +42,21 @@ def min_max_scaling(training_input):
 # x' = (x - mean) / standard deviation
 # x is the dataset
 # x' is the normalized data set
-def z_score(training_input):
-    training_input = np.array(training_input)
-    mu = np.mean(training_input, axis=0)
-    sigma = np.std(training_input, axis=0)
-    return np.divide(np.subtract(training_input, mu), sigma)
+def z_score(*args):
+    training_input = np.array(args[0])
+    normalized_dataset = []
+
+    if len(args) == 2:
+        columns = args[1]
+        mu = np.mean(training_input[:, columns], axis=0)
+        sigma = np.std(training_input[:, columns], axis=0)
+        normalized_dataset = np.divide(np.subtract(training_input[:, columns], mu), sigma)
+        for column, i in zip(range(normalized_dataset.shape[1]), columns):
+            training_input[:, i] = normalized_dataset[:, column]
+        normalized_dataset = training_input
+    else:
+        mu = np.mean(training_input, axis=0)
+        sigma = np.std(training_input, axis=0)
+        normalized_dataset = np.divide(np.subtract(training_input, mu), sigma)
+
+    return normalized_dataset
