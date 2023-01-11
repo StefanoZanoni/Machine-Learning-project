@@ -3,7 +3,7 @@ from random import randint
 import numpy as np
 from inspect import signature
 import preprocessing
-import activationfunctions as af
+import activation_functions as af
 
 from matplotlib import pyplot as plt
 

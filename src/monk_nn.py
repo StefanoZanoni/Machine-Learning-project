@@ -1,9 +1,9 @@
 import numpy as np
 import pandas as pd
-import activationfunctions as af
-import errorfunctions as ef
+import activation_functions as af
+import error_functions as ef
 import preprocessing as pp
-import validationtechniques as vt
+import validation_techniques as vt
 
 
 # np.random.seed(0)
