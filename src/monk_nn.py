@@ -36,9 +36,10 @@ activation_functions = [[(af.leaky_relu, af.leaky_relu_gradient), (af.sigmoid, a
                         [(af.relu, af.relu_gradient), (af.sigmoid, af.sigmoid_gradient)],
                         [(af.linear, af.linear_gradient), (af.sigmoid, af.sigmoid_gradient)]]
 error_function1 = (ef.bce, ef.bce_derivative)
-hyper_parameters1 = [('leaky_relu_hp', 0.1), ('learning_rate', 0.01), ('huber_loss_hp', 0.1)]
-hyper_parameters2 = [('leaky_relu_hp', 0.2), ('learning_rate', 0.1), ('huber_loss_hp', 0.1)]
-hyper_parameters3 = [('leaky_relu_hp', 0.15), ('learning_rate', 0.001), ('huber_loss_hp', 0.1)]
+hyper_parameters = [[('leaky_relu_hp', 0.1), ('learning_rate', 0.1), ('huber_loss_hp', 0.1)],
+                    [('leaky_relu_hp', 0.2), ('learning_rate', 0.01), ('huber_loss_hp', 0.01)],
+                    [('leaky_relu_hp', 0.25), ('learning_rate', 0.001), ('huber_loss_hp', 0.01)],
+                    [('leaky_relu_hp', 0.3), ('learning_rate', 0.0001), ('huber_loss_hp', 0.01)]]
 
 training_input1 = pp.min_max_scaling(training_input1)
 vt.holdout_validation(training_input1, training_output1, [("structures", [[6, 4, 1], [6, 2, 1], [6, 3, 1], [6, 1, 1]]),

@@ -70,8 +70,9 @@ class Network:
             output[output > 0.5] = 1
             output[output < 0.5] = 0
             output[output == 0.5] = randint(0, 1)
+            return int(output)
 
-        return int(output)
+        return output
 
     def __backpropagation(self, x, y):
         pDE_B = [np.zeros(b.shape) for b in self.B]

@@ -5,6 +5,8 @@ from timeit import default_timer as timer
 import numpy as np
 import network as nt
 import multiprocessing
+import json
+import os
 
 
 def threaded_training(list):
@@ -38,7 +40,44 @@ def threaded_training(list):
     return accuracy, list
 
 
-def holdout_validation(data_set, output_data_set, hyper_parameters_set, split_percentage):
+def randomized_grid_search(structures, activation_functions_list, error_functions, hyper_parameters_list,
+                           gradient_descent_techniques, mini_batch_sizes, output_training_set, training_set,
+                           validation_set,
+                           output_validation_set, validation_set_len):
+    hp = []
+    for i in range(10):
+        structure = structures[random.randint(0, len(structures) - 1)]
+        activation_functions = activation_functions_list[random.randint(0, len(activation_functions_list) - 1)]
+        error_function = error_functions[random.randint(0, len(error_functions) - 1)]
+        hyper_parameters = hyper_parameters_list[random.randint(0, len(hyper_parameters_list) - 1)]
+        gradient_descent_technique = gradient_descent_techniques[
+            random.randint(0, len(gradient_descent_techniques) - 1)]
+        mini_batch_size = mini_batch_sizes[random.randint(0, len(mini_batch_sizes) - 1)]
+
+        hp.append([structure, activation_functions, error_function, hyper_parameters, gradient_descent_technique,
+                   mini_batch_size, training_set, output_training_set, validation_set, output_validation_set,
+                   validation_set_len])
+    return hp
+
+
+def exhaustive_grid_search(structures, activation_functions_list, error_functions, hyper_parameters_list,
+                           gradient_descent_techniques, mini_batch_sizes, output_training_set, training_set,
+                           validation_set,
+                           output_validation_set, validation_set_len):
+    hp = []
+    for structure in structures:
+        for activation_functions in activation_functions_list:
+            for error_function in error_functions:
+                for hyper_parameters in hyper_parameters_list:
+                    for gradient_descent_technique in gradient_descent_techniques:
+                        for mini_batch_size in mini_batch_sizes:
+                            hp.append([structure, activation_functions, error_function, hyper_parameters,
+                                       gradient_descent_technique, mini_batch_size, training_set,
+                                       output_training_set, validation_set, output_validation_set, validation_set_len])
+    return hp
+
+
+def holdout_validation(data_set, output_data_set, hyper_parameters_set, split_percentage, randomized_search, filename):
     validation_set_len = int(np.ceil((100 - split_percentage) * data_set.shape[0] / 100))
     validation_set = data_set[:validation_set_len]
     training_set = data_set[validation_set_len:]
