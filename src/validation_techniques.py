@@ -45,7 +45,7 @@ def randomized_grid_search(structures, activation_functions_list, error_function
                            validation_set,
                            output_validation_set, validation_set_len):
     hp = []
-    for i in range(10):
+    for i in range(32):
         structure = structures[random.randint(0, len(structures) - 1)]
         activation_functions = activation_functions_list[random.randint(0, len(activation_functions_list) - 1)]
         error_function = error_functions[random.randint(0, len(error_functions) - 1)]
@@ -111,16 +111,16 @@ def holdout_validation(data_set, output_data_set, hyper_parameters_set, split_pe
     best_hyper_parameters_found_max = []
     best_hyper_parameters_found_min = []
     for result in pool.map(threaded_training, hp):
-       if result[0] > max_accuracy_achieved:
-           max_accuracy_achieved = result[0]
-           best_hyper_parameters_found_max = result[1]
-       if result[0] < min_accuracy_achieved:
-           min_accuracy_achieved = result[0]
-           best_hyper_parameters_found_min = result[1]
+        if result[0] > max_accuracy_achieved:
+            max_accuracy_achieved = result[0]
+            best_hyper_parameters_found_max = result[1]
+        if result[0] < min_accuracy_achieved:
+            min_accuracy_achieved = result[0]
+            best_hyper_parameters_found_min = result[1]
 
     if (100 - min_accuracy_achieved) > max_accuracy_achieved:
-       max_accuracy_achieved = (100 - min_accuracy_achieved)
-       best_hyper_parameters_found_max = best_hyper_parameters_found_min
+        max_accuracy_achieved = (100 - min_accuracy_achieved)
+        best_hyper_parameters_found_max = best_hyper_parameters_found_min
 
     print("Best accuracy: " + str(max_accuracy_achieved) + " | List of hyperparameters used: " + str(
         best_hyper_parameters_found_max[:6]))
@@ -157,8 +157,6 @@ def dump_on_json(accuracy, hyper_parameters, filename):
 
     file_exists = os.path.exists(filename)
     is_file_empty = file_exists and os.stat(filename).st_size == 0
-
-    print(file_exists, is_file_empty)
 
     if file_exists and not is_file_empty:
         with open(filename, "r") as open_file:
