@@ -1,6 +1,5 @@
 import random
 from multiprocessing.pool import ThreadPool
-from timeit import default_timer as timer
 
 import numpy as np
 import network as nt
@@ -8,37 +7,37 @@ import multiprocessing
 import json
 import os
 
+from src import preprocessing
 
-def threaded_training(list):
-    structure = list[0]
-    activation_functions = list[1]
-    error_function = list[2]
-    hyper_parameters = list[3]
-    gradient_descent_technique = list[4]
-    mini_batch_size = list[5]
-    regularization_technique = list[6]
-    training_set = list[7]
-    output_training_set = list[8]
-    validation_set = list[9]
-    output_validation_set = list[10]
-    validation_set_len = list[11]
+
+def threaded_training(arguments):
+    structure = arguments[0]
+    activation_functions = arguments[1]
+    error_function = arguments[2]
+    hyper_parameters = arguments[3]
+    gradient_descent_technique = arguments[4]
+    mini_batch_size = arguments[5]
+    regularization_technique = arguments[6]
+    training_set = arguments[7]
+    output_training_set = arguments[8]
+    validation_set = arguments[9]
+    output_validation_set = arguments[10]
+    validation_set_len = arguments[11]
 
     network = nt.Network(structure, activation_functions, error_function, hyper_parameters, regularization_technique, gradient_descent_technique)
-    # start = timer()
     network.train(network.stop, training_set, output_training_set, mini_batch_size)
-    # print("Training time in seconds:", np.ceil(timer() - start))
     # network.plot_learning_rate()
 
     correct_prevision = 0
     for x, y in zip(validation_set, output_validation_set):
-        predicted_output = network.forward(x, True)
+        predicted_output = network.forward(x)
         if predicted_output == y:
             correct_prevision += 1
 
     accuracy = correct_prevision * 100 / validation_set_len
     # print(f'Accuracy: {accuracy:.2f}%\n')
 
-    return accuracy, list
+    return accuracy, arguments
 
 
 def randomized_grid_search(structures, activation_functions_list, error_functions, hyper_parameters_list,
@@ -46,7 +45,8 @@ def randomized_grid_search(structures, activation_functions_list, error_function
                            validation_set,
                            output_validation_set, validation_set_len):
     hp = []
-    for i in range(64):
+    for i in range(20):
+
         structure = structures[random.randint(0, len(structures) - 1)]
         activation_functions = activation_functions_list[random.randint(0, len(activation_functions_list) - 1)]
         error_function = error_functions[random.randint(0, len(error_functions) - 1)]
@@ -75,13 +75,14 @@ def exhaustive_grid_search(structures, activation_functions_list, error_function
                         for mini_batch_size in mini_batch_sizes:
                             for regularization_technique in regularization_techniques:
                                 hp.append([structure, activation_functions, error_function, hyper_parameters,
-                                           gradient_descent_technique, mini_batch_size, regularization_technique, training_set,
-                                           output_training_set, validation_set, output_validation_set, validation_set_len])
+                                            gradient_descent_technique, mini_batch_size, regularization_technique, training_set,
+                                            output_training_set, validation_set, output_validation_set, validation_set_len])
     return hp
 
 
 def holdout_validation(data_set, output_data_set, hyper_parameters_set,  split_percentage, randomized_search, filename):
     validation_set_len = int(np.ceil((100 - split_percentage) * data_set.shape[0] / 100))
+    data_set = preprocessing.shuffle_data(data_set)
     validation_set = data_set[:validation_set_len]
     training_set = data_set[validation_set_len:]
     output_validation_set = output_data_set[:validation_set_len]
@@ -129,6 +130,18 @@ def holdout_validation(data_set, output_data_set, hyper_parameters_set,  split_p
     print("Best accuracy: " + str(max_accuracy_achieved) + " | List of hyperparameters used: " + str(
         best_hyper_parameters_found_max[:7]))
     dump_on_json(max_accuracy_achieved, best_hyper_parameters_found_max, filename)
+
+    # best_hyper_parameters_found_max[:7]
+    nn_model = nt.Network(best_hyper_parameters_found_max[0], best_hyper_parameters_found_max[1],
+                          best_hyper_parameters_found_max[2], best_hyper_parameters_found_max[3], best_hyper_parameters_found_max[6],
+                          best_hyper_parameters_found_max[4])
+
+    nn_model.train(nn_model.stop, data_set, output_data_set, best_hyper_parameters_found_max[5])
+
+    return nn_model
+
+
+
 
 
 def dump_on_json(accuracy, hyper_parameters, filename):
@@ -184,7 +197,7 @@ def dump_on_json(accuracy, hyper_parameters, filename):
 
 
 def k_fold_cross_validation(data_set, output_data_set, hyper_parameters_set):
-    # grid search
+    # grid search over k
     pass
 
 

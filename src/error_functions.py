@@ -7,17 +7,17 @@ import numpy as np
 # mean squared error
 def mse(y, yx):
     if np.shape(yx) != (1, 1):
-        return np.sum(0.5 * np.square(np.subtract(yx, y))) / len(yx)
+        return np.sum(np.square(np.subtract(yx, y))) / len(yx)
     else:
-        return 0.5 * (yx - y) ** 2
+        return (yx - y) ** 2
 
 
 # mean squared error derivative
 def mse_derivative(y, yx):
     if np.shape(yx) != (1, 1):
-        return np.sum(np.subtract(yx, y)) / len(yx)
+        return 2 * (np.sum(np.subtract(yx, y)) / len(yx))
     else:
-        return yx - y
+        return 2 * (yx - y)
 
 
 # mean absolute error

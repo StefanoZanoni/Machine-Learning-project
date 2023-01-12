@@ -66,5 +66,3 @@ def shuffle_data(input_data):
     data = np.copy(input_data)
     np.random.shuffle(data)
     return data
-
-

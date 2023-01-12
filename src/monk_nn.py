@@ -4,9 +4,10 @@ import activation_functions as af
 import error_functions as ef
 import preprocessing as pp
 import validation_techniques as vt
+from timeit import default_timer as timer
 
+#np.random.seed(0)
 
-# np.random.seed(0)
 
 def read_data_set(problem):
     training_df = pd.read_csv("../Monks_problem/monks-" + str(problem) + ".train", index_col=False, sep=" ",
@@ -32,9 +33,8 @@ training_output1 = data[1]
 testing_input1 = data[2]
 testing_output1 = data[3]
 
-activation_functions = [[(af.leaky_relu, af.leaky_relu_gradient), (af.sigmoid, af.sigmoid_gradient)],
-                        [(af.relu, af.relu_gradient), (af.sigmoid, af.sigmoid_gradient)],
-                        [(af.linear, af.linear_gradient), (af.sigmoid, af.sigmoid_gradient)]]
+activation_functions = [[(af. leaky_relu, af.leaky_relu_gradient), (af.sigmoid, af.sigmoid_gradient)],
+                        [(af. relu, af.relu_gradient), (af.sigmoid, af.sigmoid_gradient)]]
 
 error_function1 = (ef.bce, ef.bce_derivative)
 
@@ -43,21 +43,33 @@ error_function1 = (ef.bce, ef.bce_derivative)
 #
 # if huber loss error function was chosen then huber loss hyperparameter must be the third tuple of the hyperparameters list
 hyper_parameters = [[('leaky_relu_hp', 0.1), ('learning_rate', 0.1)],
-                    [('leaky_relu_hp', 0.2), ('learning_rate', 0.01)],
-                    [('leaky_relu_hp', 0.25), ('learning_rate', 0.001)],
-                    [('leaky_relu_hp', 0.3), ('learning_rate', 0.0001)]]
+                    [('leaky_relu_hp', 0.2), ('learning_rate', 0.3)],
+                    [('leaky_relu_hp', 0.25), ('learning_rate', 0.01)],
+                    [('leaky_relu_hp', 0.15), ('learning_rate', 0.5)]]
 
-regularization_techniques = [("L1", 0.1), ("L2", 0.1), ("L1", 0.3), ("L2", 0.4), ("L1", 0.5)]
+regularization_techniques = [("L1", 1.5), ("L2", 2), ("L1", 0.3), ("L2", 0.4), ("L1", 0.5), ("L1", 0.2), ("None", 0)]
 
 training_input1 = pp.min_max_scaling(training_input1)
-vt.holdout_validation(training_input1, training_output1, [("structures", [[6, 4, 1], [6, 2, 1], [6, 3, 1], [6, 1, 1]]),
+
+start = timer()
+
+optimal_model = vt.holdout_validation(training_input1, training_output1, [("structures", [[6, 2, 1], [6, 1, 1],
+                                                                                          [6, 3, 1], [6, 4, 1]]),
                                                           ("activation_functions", activation_functions),
                                                           ("error_functions", [error_function1]),
                                                           ("hyper_parameters", hyper_parameters),
-                                                          ("gradient_descend_techniques",
-                                                          ["AdaGrad", "RMSProp", "SGD"]),
+                                                          ("gradient_descend_techniques", ["AdaGrad", "RMSProp", "SGD"]),
                                                           ("mini_batch_sizes", [1, 85, 5, 17]),
-                                                          ("regularization_techniques", regularization_techniques)], 70, False, "../Monk1_models.json")
+                                                          ("regularization_techniques", regularization_techniques)],
+                                                           70, True, "../Monk1_models.json")
+
+print("Model selection in seconds:", np.ceil(timer() - start))
+
+optimal_model.test_set_accuracy(testing_input1, testing_output1)
+
+# TODO plot only the best model
+# TODO re-training after validation and then test, multiple output forward
+# TODO add epochs and preprocessing to model description, FIX OVERFLOW ERROR, early stopping
 
 # # MONK2
 # data = read_data_set(2)
