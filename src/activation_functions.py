@@ -20,11 +20,11 @@ def linear_gradient(x):
 
 
 def tanh(x):
-    return np.divide(np.subtract(np.exp(x), np.exp(-x)), np.add(np.exp(x), np.exp(-x)))
+    return np.tanh(x)
 
 
 def tanh_gradient(x):
-    return np.square(tanh(x))
+    return 1 - np.square(np.tanh(x))
 
 
 def elu(x, alpha):
@@ -39,13 +39,14 @@ def elu_gradient(x, alpha):
     return np.array([dx]).T
 
 
-# dimensions problems
 def softmax(x):
-    y = np.copy(x)
-    y -= np.max(y)
-    return (np.exp(y).T / np.sum(np.exp(y), axis=0)).T
+    z = np.subtract(x, np.max(x))
+    numerator = np.exp(z)
+    denominator = np.sum(numerator)
+    return np.divide(numerator, denominator)
 
 
+# dimensions problems
 def softmax_gradient(x):
     sm = softmax(x)
     s = np.reshape(sm, (-1, 1))
@@ -72,14 +73,14 @@ def gelu_gradient(x):
         2 / np.pi) * (1 + 3 * 0.044715 * np.square(x))
 
 
-# dimensions problems
 def selu(x):
     lambd_a = 1.0507009873554804934193349852946
     alpha = 1.6732632423543772848170429916717
-    y = np.copy(np.ravel(x))
-    y[np.ravel(x) > 0] = lambd_a * np.ravel(x)
-    y[np.ravel(x) <= 0] = alpha * lambd_a * (np.exp(np.ravel(x)) - 1)
-    return y
+    # y = np.copy(np.ravel(x))
+    # y[np.ravel(x) > 0] = lambd_a * np.ravel(x)
+    # y[np.ravel(x) <= 0] = alpha * lambd_a * (np.exp(np.ravel(x)) - 1)
+    # return y
+    return lambd_a * (np.maximum(0, x) + np.minimum(0, alpha * (np.exp(x) - 1)))
 
 
 def selu_gradient(x):
@@ -87,8 +88,8 @@ def selu_gradient(x):
     alpha = 1.6732632423543772848170429916717
     y = np.copy(np.ravel(x))
     y[np.ravel(x) > 0] = lambd_a
-    y[np.ravel(x) <= 0] = lambd_a * alpha * np.exp(np.ravel(x))
-    return y
+    y[np.ravel(x) <= 0] = lambd_a * alpha * np.exp(np.ravel(x[np.ravel(x) < 0]))
+    return np.array([y]).T
 
 
 def relu(x):
@@ -96,7 +97,9 @@ def relu(x):
 
 
 def relu_gradient(x):
-    return (x > 0) * 1
+    y = np.ones_like(x)
+    y[x < 0] = 0
+    return y
 
 
 def leaky_relu(x, alpha):
@@ -110,21 +113,21 @@ def leaky_relu_gradient(x, alpha):
 
 
 def softplus(x):
-    return np.log(np.add(np.ones_like(x), np.exp(x)))
+    return np.log1p(np.exp(-np.abs(x))) + np.maximum(x, 0)
 
 
 def softplus_gradient(x):
-    return np.multiply(np.divide(np.ones_like(x), np.add(np.ones_like(x), np.exp(x))), np.exp(x))
+    return sigmoid(x)
 
 
 def sigmoid(x):
-    x = np.clip(x, -700, 700)
-    result = np.divide(np.ones_like(x), np.add(np.ones_like(x), np.exp(-x)))
-    result = np.minimum(result, 0.9999)
-    result = np.maximum(result, 1e-20)
-    return result
+    # x = np.clip(x, -700, 700)
+    # result = np.divide(np.ones_like(x), np.add(np.ones_like(x), np.exp(-x)))
+    # result = np.minimum(result, 0.9999)
+    # result = np.maximum(result, 1e-20)
+    # return result
+    return np.exp(-np.logaddexp(0., -x))
 
 
 def sigmoid_gradient(x):
-    result = np.multiply(sigmoid(x), (np.ones_like(x) - sigmoid(x)))
-    return result
+    return np.multiply(sigmoid(x), (np.ones_like(x) - sigmoid(x)))

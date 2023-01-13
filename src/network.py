@@ -59,15 +59,17 @@ class Network:
 
     def forward(self, x):
         x = np.array([x]).T
-        alpha = self.hyper_parameters[0][1]
-        output = 0
 
         for b, W, j, i in zip(self.B, self.W, range(len(self.B)), range(len(self.structure))):
             f = self.activation_functions[j][0]
             sig = signature(f)
             params = sig.parameters
-            net = np.array(W.T @ output + b if i != 0 else W.T @ x + b)
-            output = f(net, alpha) if len(params) == 2 else f(net)
+            net = W.T @ output + b if i != 0 else W.T @ x + b
+            if len(params) == 2:
+                alpha = self.hyper_parameters[1][1]
+                output = f(net, alpha)
+            else:
+                output = f(net)
 
         if self.is_classification:
             output[output > 0.5] = 1
@@ -90,7 +92,7 @@ class Network:
             params = sig.parameters
             net = W.T @ output + b if NETs else W.T @ x + b
             if len(params) == 2:
-                alpha = self.hyper_parameters[0][1]
+                alpha = self.hyper_parameters[1][1]
                 output = f(net, alpha)
             else:
                 output = f(net)
@@ -129,7 +131,7 @@ class Network:
                 if len(params1) == 1:
                     delta = np.multiply(f1(NETs[layer]), (self.W[layer + 1] @ delta))
                 else:
-                    alpha = self.hyper_parameters[0][1]
+                    alpha = self.hyper_parameters[1][1]
                     delta = np.multiply(f1(NETs[layer], alpha), (self.W[layer + 1] @ delta))
 
             pDE_B[layer] = delta
@@ -144,7 +146,7 @@ class Network:
             self.DE_B = [DE_b + pDE_b for DE_b, pDE_b in zip(self.DE_B, pDE_B)]
             self.DE_W = [DE_w + pDE_w for DE_w, pDE_w in zip(self.DE_W, pDE_W)]
 
-        eta = self.hyper_parameters[1][1]
+        eta = self.hyper_parameters[0][1]
         d = len(mini_batch)
         self.pred_W = self.W
 
@@ -170,7 +172,7 @@ class Network:
     def __ada_grad(self, w_cache, b_cache, regularization, lambda_hp):
         w_cache = list(map(np.add, w_cache, list(map(np.square, self.DE_W))))
         b_cache = list(map(np.add, b_cache, list(map(np.square, self.DE_B))))
-        eta = self.hyper_parameters[1][1]
+        eta = self.hyper_parameters[0][1]
         if regularization == "None":
             self.W = [W - np.multiply(eta, DE_w) / (np.sqrt(w) + self.eps) for W, DE_w, w in
                       zip(self.W, self.DE_W, w_cache)]
@@ -200,7 +202,7 @@ class Network:
             map(np.multiply, [1 - decay_rate for i in range(len(b_cache))], list(map(np.square, self.DE_B))))
         b_cache = list(map(sum, b_first_term, b_second_term))
 
-        eta = self.hyper_parameters[1][1]
+        eta = self.hyper_parameters[0][1]
 
         if regularization == "None":
             self.W = [W - np.multiply(eta, DE_w) / (np.sqrt(w) + self.eps) for W, DE_w, w in
@@ -282,10 +284,10 @@ class Network:
             mean_absolute_error = error_functions.mae(test_data_output, predicted_output)
             print("MSE: {}, RMSE: {}, MAE: {}".format(str(mean_squared_error), str(root_mean_squared_error), str(mean_absolute_error)))
 
-            return (mean_squared_error, root_mean_squared_error, mean_absolute_error)
+            return mean_squared_error, root_mean_squared_error, mean_absolute_error
 
     def stop(self):
-        return self.epochs > 50
+        return self.epochs > 100
         # return np.sum([np.linalg.norm(np.abs(m1 - m2)) for m1, m2 in zip(self.W, self.pred_W)]) / len(self.W) < 0.001
 
     def plot_learning_rate(self):
