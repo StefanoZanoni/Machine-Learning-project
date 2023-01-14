@@ -26,7 +26,7 @@ def threaded_training(arguments):
 
     network = nt.Network(structure, activation_functions, error_function, hyper_parameters, regularization_technique, gradient_descent_technique)
     network.train(network.stop, training_set, output_training_set, mini_batch_size)
-    # network.plot_learning_rate()
+    network.plot_learning_rate()
 
     correct_prevision = 0
     for x, y in zip(validation_set, output_validation_set):
@@ -132,15 +132,15 @@ def holdout_validation(data_set, output_data_set, hyper_parameters_set,  split_p
     dump_on_json(max_accuracy_achieved, best_hyper_parameters_found_max, filename)
 
     # best_hyper_parameters_found_max[:7]
-    nn_model = nt.Network(best_hyper_parameters_found_max[0], best_hyper_parameters_found_max[1],
-                          best_hyper_parameters_found_max[2], best_hyper_parameters_found_max[3], best_hyper_parameters_found_max[6],
-                          best_hyper_parameters_found_max[4])
+    #nn_model = nt.Network(best_hyper_parameters_found_max[0], best_hyper_parameters_found_max[1],
+    #                      best_hyper_parameters_found_max[2], best_hyper_parameters_found_max[3], best_hyper_parameters_found_max[6],
+    #                      best_hyper_parameters_found_max[4])
 
-    nn_model.train(nn_model.stop, data_set, output_data_set, best_hyper_parameters_found_max[5])
+    #nn_model.train(nn_model.stop, data_set, output_data_set, best_hyper_parameters_found_max[5])
 
-    return nn_model
+    #return nn_model
 
-
+    return None
 
 
 

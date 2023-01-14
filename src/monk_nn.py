@@ -41,7 +41,7 @@ error_function1 = (ef.bce, ef.bce_derivative)
 # then leaky relu hyperparameter must be the second tuple in the hyperparameters list
 #
 # if huber loss error function was chosen then huber loss hyperparameter must be the third tuple of the hyperparameters list
-hyper_parameters = [[('learning_rate', 1)]]
+hyper_parameters = [[('learning_rate', 0.1)]]
 
 regularization_techniques = [("None", 0)]
 
@@ -50,16 +50,18 @@ regularization_techniques = [("None", 0)]
 start = timer()
 
 optimal_model = vt.holdout_validation(training_input1, training_output1, [("structures", [[6, 2, 1]]),
-                                                          ("activation_functions", activation_functions),
-                                                          ("error_functions", [error_function1]),
-                                                          ("hyper_parameters", hyper_parameters),
-                                                          ("gradient_descend_techniques", ["SGD"]),
-                                                          ("mini_batch_sizes", [85]),
-                                                          ("regularization_techniques", regularization_techniques)],
-                                                           70, False, "../Monk1_models.json")
+                                                                          (
+                                                                          "activation_functions", activation_functions),
+                                                                          ("error_functions", [error_function1]),
+                                                                          ("hyper_parameters", hyper_parameters),
+                                                                          ("gradient_descend_techniques", ["SGD"]),
+                                                                          ("mini_batch_sizes", [85]),
+                                                                          ("regularization_techniques",
+                                                                           regularization_techniques)],
+                                      70, False, "../Monk1_models.json")
 
-print("Model selection in seconds:", np.ceil(timer() - start))
-optimal_model.plot_learning_rate()
+#print("Model selection in seconds:", np.ceil(timer() - start))
+#optimal_model.plot_learning_rate()
 
 # optimal_model.test_set_accuracy(testing_input1, testing_output1)
 
