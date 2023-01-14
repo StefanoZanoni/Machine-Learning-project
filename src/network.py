@@ -254,13 +254,21 @@ class Network:
         # start training
         while not end():
             self.epochs += 1
+            print("Epochs: " + str(self.epochs))
 
             if mini_batch_size == 1:
                 mini_batches = preprocessing.shuffle_data(mini_batches)
 
             for mini_batch in mini_batches:
                 self.__gradient_descent(mini_batch, w_cache, b_cache)
+
             self.errors_means.append(np.sum(self.errors) / len(self.errors))
+            print("Sum of all error at epoch " + str(self.epochs) + ": " + str(np.sum(self.errors)))
+            print("Error mean at epoch " + str(self.epochs) + ": " + str(np.sum(self.errors) / len(self.errors)))
+            print("DE_W: " + str(self.DE_W))
+            self.errors = []  # TODO Discuss with Stefano if it is correct
+            self.DE_B = [np.zeros(b.shape) for b in self.B]  # TODO Discuss with Stefano if it is correct
+            self.DE_W = [np.zeros(W.shape) for W in self.W]  # TODO Discuss with Stefano if it is correct
 
     def test_set_accuracy(self, test_data_input, test_data_output):
 
@@ -282,12 +290,13 @@ class Network:
             mean_squared_error = error_functions.mse(test_data_output, predicted_output)
             root_mean_squared_error = np.sqrt(mean_squared_error)
             mean_absolute_error = error_functions.mae(test_data_output, predicted_output)
-            print("MSE: {}, RMSE: {}, MAE: {}".format(str(mean_squared_error), str(root_mean_squared_error), str(mean_absolute_error)))
+            print("MSE: {}, RMSE: {}, MAE: {}".format(str(mean_squared_error), str(root_mean_squared_error),
+                                                      str(mean_absolute_error)))
 
             return mean_squared_error, root_mean_squared_error, mean_absolute_error
 
     def stop(self):
-        return self.epochs > 100
+        return self.epochs > 1000
         # return np.sum([np.linalg.norm(np.abs(m1 - m2)) for m1, m2 in zip(self.W, self.pred_W)]) / len(self.W) < 0.001
 
     def plot_learning_rate(self):
