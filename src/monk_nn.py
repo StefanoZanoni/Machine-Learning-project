@@ -58,13 +58,13 @@ optimal_model = vt.holdout_validation(training_input1, training_output1, [("stru
                                                                           ("error_functions", [error_function1]),
                                                                           ("hyper_parameters", hyper_parameters),
                                                                           ("gradient_descend_techniques", ["SGD"]),
-                                                                          ("mini_batch_sizes", [85]),
+                                                                          ("mini_batch_sizes", [5]),
                                                                           ("regularization_techniques",
                                                                            regularization_techniques)],
                                       70, False, "../Monk1_models.json")
 
-#print("Model selection in seconds:", np.ceil(timer() - start))
-#optimal_model.plot_learning_rate()
+print("Model selection in seconds:", np.ceil(timer() - start))
+optimal_model.plot_learning_rate()
 
 # optimal_model.test_set_accuracy(testing_input1, testing_output1)
 

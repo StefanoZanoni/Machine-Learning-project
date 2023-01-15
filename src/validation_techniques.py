@@ -126,6 +126,7 @@ def holdout_validation(data_set, output_data_set, hyper_parameters_set, split_pe
     best_hyper_parameters_found_max = []
     best_hyper_parameters_found_min = []
     for result in pool.map(threaded_training, hp):
+        print("Result sbarazzino: " + str(result[0]))
         if result[0] > max_accuracy_achieved:
             max_accuracy_achieved = result[0]
             best_hyper_parameters_found_max = result[1]
@@ -146,7 +147,7 @@ def holdout_validation(data_set, output_data_set, hyper_parameters_set, split_pe
                           best_hyper_parameters_found_max[2], best_hyper_parameters_found_max[3], best_hyper_parameters_found_max[6],
                           best_hyper_parameters_found_max[4])
 
-    #nn_model.train(nn_model.stop, data_set, output_data_set, best_hyper_parameters_found_max[5])
+    nn_model.train(nn_model.stop, data_set, output_data_set, best_hyper_parameters_found_max[5])
 
     return nn_model
 

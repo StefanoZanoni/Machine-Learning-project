@@ -142,7 +142,11 @@ class Network:
 
         return pDE_B, pDE_W
 
-    def __gradient_descent(self, mini_batch, w_cache, b_cache):
+    def __gradient_descent(self, mini_batch, training_set_len):
+        self.DE_B = [np.zeros(b.shape) for b in self.B]
+        self.DE_W = [np.zeros(W.shape) for W in self.W]
+        w_cache = [np.zeros_like(DE_w) for DE_w in self.DE_W]
+        b_cache = [np.zeros_like(DE_b) for DE_b in self.DE_B]
 
         for x, y in mini_batch:
             pDE_B, pDE_W = self.__backpropagation(np.asmatrix(x).T, y)
@@ -150,9 +154,9 @@ class Network:
             self.DE_W = [DE_w + pDE_w for DE_w, pDE_w in zip(self.DE_W, pDE_W)]
 
         eta = self.hyper_parameters[0][1]
-        d = len(mini_batch)
-        self.pred_W = self.W
-
+        d = 1
+        if len(mini_batch) != training_set_len:
+            d = len(mini_batch)
         regularization, lambda_hp = self.regularization
 
         # l1 regularization
@@ -194,10 +198,10 @@ class Network:
         # self.W = [W - np.multiply(eta, DE_w) / (np.sqrt(w) + self.eps) for W, DE_w, w in
         #           zip(self.W, self.DE_W, w_cache)]
 
-        self.B = [B - np.multiply(eta, DE_b) / (np.sqrt(b) + self.eps) for B, DE_b, b in
+        self.B = [B - np.multiply(eta / d, DE_b) / (np.sqrt(b) + self.eps) for B, DE_b, b in
                   zip(self.B, self.DE_B, b_cache)]
 
-    def __rms_prop(self, decay_rate, w_cache, b_cache, regularization, lambda_hp):
+    def __rms_prop(self, decay_rate, w_cache, b_cache, regularization, lambda_hp, d):
         w_first_term = list(map(np.multiply, [decay_rate for i in range(len(w_cache))], w_cache))
         w_second_term = list(
             map(np.multiply, [1 - decay_rate for i in range(len(w_cache))], list(map(np.square, self.DE_W))))
@@ -211,10 +215,11 @@ class Network:
         eta = self.hyper_parameters[0][1]
 
         if regularization == "None":
-            self.W = [W - np.multiply(eta, DE_w) / (np.sqrt(w) + self.eps) for W, DE_w, w in
+            self.W = [W - np.multiply(eta / d, DE_w) / (np.sqrt(w) + self.eps) for W, DE_w, w in
                       zip(self.W, self.DE_W, w_cache)]
         if regularization == "L1":
-            self.W = [W - (eta * lambda_hp * np.sign(W)) - np.multiply(eta, DE_w) / (np.sqrt(w) + self.eps) for
+            self.W = [W - ((eta / d) * lambda_hp * np.sign(W)) - (np.multiply(eta / d, DE_w) / (np.sqrt(w) + self.eps))
+                      for
                       W, DE_w, w in
                       zip(self.W, self.DE_W, w_cache)]
         if regularization == "L2":
@@ -234,7 +239,6 @@ class Network:
     # training_output: array like
     # mini_batch_size: int
     def train(self, end, training_input, training_output, mini_batch_size):
-
         # dividing training data into mini batch
         training_input = np.array(training_input)
         training_output = np.array(training_output)
@@ -265,7 +269,9 @@ class Network:
             # print("Epochs: " + str(self.epochs))
 
             for mini_batch in mini_batches:
-                self.__gradient_descent(mini_batch, w_cache, b_cache)
+                # mini_batch = preprocessing.shuffle_data(mini_batch)
+                self.__gradient_descent(mini_batch, n)
+                # print("DE_W: " + str(self.DE_W))
 
             self.errors_means.append(np.sum(self.errors) / len(self.errors))
             # print("Sum of all error at epoch " + str(self.epochs) + ": " + str(np.sum(self.errors)))
