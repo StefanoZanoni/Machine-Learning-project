@@ -1,4 +1,5 @@
 from random import randint
+from typing import Type
 
 import numpy as np
 from inspect import signature
@@ -39,14 +40,16 @@ class Network:
                                      self.activation_functions):
 
             # He weights initialization for ReLu
-            if fun[0].__code__.co_code == af.relu.__code__.co_code or fun[0].__code__.co_code == af.leaky_relu.__code__.co_code:
+            if fun[0].__code__.co_code == af.relu.__code__.co_code or fun[
+                0].__code__.co_code == af.leaky_relu.__code__.co_code:
                 std = np.sqrt(2.0 / s)
                 weights = np.random.randn(l, next_l)
                 scaled_weights = weights * std
                 weights_list.append(scaled_weights)
 
             # Xavier/Glorot weight initialization for Sigmoid or Tanh
-            elif fun[0].__code__.co_code == af.sigmoid.__code__.co_code or fun[0].__code__.co_code == af.tanh.__code__.co_code:
+            elif fun[0].__code__.co_code == af.sigmoid.__code__.co_code or fun[
+                0].__code__.co_code == af.tanh.__code__.co_code:
                 lower, upper = -(1.0 / np.sqrt(s)), (1.0 / np.sqrt(s))
                 weights = np.random.randn(l, next_l)
                 scaled_weights = lower + weights * (upper - lower)
@@ -102,7 +105,7 @@ class Network:
         # storing the error for the current pattern
         last = self.num_layers - 2
         e, de = self.error_function
-        sig2 = signature(de)
+        sig2 = signature(e)
         params2 = sig2.parameters
         if len(params2) == 2:
             error = e(y, OUTPUTs[last])
@@ -157,31 +160,34 @@ class Network:
         #
         if self.gradient_descent == "SGD":
             if regularization == "None":
-                self.W = [W - eta / d * DE_w for W, DE_w in zip(self.W, self.DE_W)]
+                self.W = [W - ((eta / d) * DE_w) for W, DE_w in zip(self.W, self.DE_W)]
             if regularization == "L1":
-                self.W = [W - (eta * lambda_hp * np.sign(W)) - (eta / d) * DE_w for W, DE_w in zip(self.W, self.DE_W)]
+                self.W = [W - ((eta / d) * lambda_hp * np.sign(W)) - ((eta / d) * DE_w) for W, DE_w in
+                          zip(self.W, self.DE_W)]
             if regularization == "L2":
-                self.W = [W - (2 * eta * lambda_hp * W) - (eta / d) * DE_w for W, DE_w in zip(self.W, self.DE_W)]
+                self.W = [W - (2 * (eta / d) * lambda_hp * W) - ((eta / d) * DE_w) for W, DE_w in
+                          zip(self.W, self.DE_W)]
 
-            self.B = [b - eta / d * DE_b for b, DE_b in zip(self.B, self.DE_B)]
+            self.B = [b - ((eta / d) * DE_b) for b, DE_b in zip(self.B, self.DE_B)]
         elif self.gradient_descent == "AdaGrad":
-            self.__ada_grad(w_cache, b_cache, regularization, lambda_hp)
+            self.__ada_grad(w_cache, b_cache, regularization, lambda_hp, d)
         elif self.gradient_descent == "RMSProp":
-            self.__rms_prop(0.9, w_cache, b_cache, regularization, lambda_hp)
+            self.__rms_prop(0.9, w_cache, b_cache, regularization, lambda_hp, d)
 
-    def __ada_grad(self, w_cache, b_cache, regularization, lambda_hp):
+    def __ada_grad(self, w_cache, b_cache, regularization, lambda_hp, d):
         w_cache = list(map(np.add, w_cache, list(map(np.square, self.DE_W))))
         b_cache = list(map(np.add, b_cache, list(map(np.square, self.DE_B))))
         eta = self.hyper_parameters[0][1]
         if regularization == "None":
-            self.W = [W - np.multiply(eta, DE_w) / (np.sqrt(w) + self.eps) for W, DE_w, w in
+            self.W = [W - (np.multiply(eta / d, DE_w) / (np.sqrt(w) + self.eps)) for W, DE_w, w in
                       zip(self.W, self.DE_W, w_cache)]
         if regularization == "L1":
-            self.W = [W - (eta * lambda_hp * np.sign(W)) - np.multiply(eta, DE_w) / (np.sqrt(w) + self.eps) for
+            self.W = [W - ((eta / d) * lambda_hp * np.sign(W)) - (np.multiply(eta / d, DE_w) / (np.sqrt(w) + self.eps))
+                      for
                       W, DE_w, w in
                       zip(self.W, self.DE_W, w_cache)]
         if regularization == "L2":
-            self.W = [W - (2 * eta * lambda_hp * W) - np.multiply(eta, DE_w) / (np.sqrt(w) + self.eps) for
+            self.W = [W - (2 * (eta / d) * lambda_hp * W) - (np.multiply(eta / d, DE_w) / (np.sqrt(w) + self.eps)) for
                       W, DE_w, w in
                       zip(self.W, self.DE_W, w_cache)]
 
@@ -212,14 +218,15 @@ class Network:
                       W, DE_w, w in
                       zip(self.W, self.DE_W, w_cache)]
         if regularization == "L2":
-            self.W = [W - (2 * eta * lambda_hp * W) - np.multiply(eta, DE_w) / (np.sqrt(w) + self.eps) for W, DE_w, w
+            self.W = [W - (2 * (eta / d) * lambda_hp * W) - (np.multiply(eta / d, DE_w) / (np.sqrt(w) + self.eps)) for
+                      W, DE_w, w
                       in
                       zip(self.W, self.DE_W, w_cache)]
 
         # self.W = [W - np.multiply(eta, DE_w) / (np.sqrt(w) + self.eps) for W, DE_w, w in
         #           zip(self.W, self.DE_W, w_cache)]
 
-        self.B = [B - np.multiply(eta, DE_b) / (np.sqrt(b) + self.eps) for B, DE_b, b in
+        self.B = [B - (np.multiply(eta / d, DE_b) / (np.sqrt(b) + self.eps)) for B, DE_b, b in
                   zip(self.B, self.DE_B, b_cache)]
 
     # end: boolean function
@@ -235,40 +242,34 @@ class Network:
         mini_batches = []
         mini_batch = []
 
+        dt = np.dtype(np.ndarray, Type[int])
+
         if mini_batch_size == n:
-            mini_batch = [(training_input[i], training_output[i]) for i in range(1, n)]
+            mini_batch = np.array([(inp, output) for inp, output in zip(training_input, training_output)], dtype=dt)
             mini_batches = [mini_batch]
         else:
             for i in range(1, n):
                 mini_batch.append((training_input[i], training_output[i]))
                 if i % mini_batch_size == 0 and i >= mini_batch_size:
                     temp = mini_batch.copy()
+                    temp = np.array(temp, dtype=dt)
                     mini_batches.append(temp)
                     mini_batch.clear()
 
         mini_batches = np.array(mini_batches, dtype=np.ndarray)
 
-        w_cache = [np.zeros_like(DE_w) for DE_w in self.DE_W]
-        b_cache = [np.zeros_like(DE_b) for DE_b in self.DE_B]
-
         # start training
         while not end():
+            self.errors = []
             self.epochs += 1
-            print("Epochs: " + str(self.epochs))
-
-            if mini_batch_size == 1:
-                mini_batches = preprocessing.shuffle_data(mini_batches)
+            # print("Epochs: " + str(self.epochs))
 
             for mini_batch in mini_batches:
                 self.__gradient_descent(mini_batch, w_cache, b_cache)
 
             self.errors_means.append(np.sum(self.errors) / len(self.errors))
-            print("Sum of all error at epoch " + str(self.epochs) + ": " + str(np.sum(self.errors)))
-            print("Error mean at epoch " + str(self.epochs) + ": " + str(np.sum(self.errors) / len(self.errors)))
-            print("DE_W: " + str(self.DE_W))
-            self.errors = []  # TODO Discuss with Stefano if it is correct
-            self.DE_B = [np.zeros(b.shape) for b in self.B]  # TODO Discuss with Stefano if it is correct
-            self.DE_W = [np.zeros(W.shape) for W in self.W]  # TODO Discuss with Stefano if it is correct
+            # print("Sum of all error at epoch " + str(self.epochs) + ": " + str(np.sum(self.errors)))
+            # print("Error mean at epoch " + str(self.epochs) + ": " + str(np.sum(self.errors) / len(self.errors)))
 
     def test_set_accuracy(self, test_data_input, test_data_output):
 
@@ -296,7 +297,7 @@ class Network:
             return mean_squared_error, root_mean_squared_error, mean_absolute_error
 
     def stop(self):
-        return self.epochs > 1000
+        return self.epochs > 50
         # return np.sum([np.linalg.norm(np.abs(m1 - m2)) for m1, m2 in zip(self.W, self.pred_W)]) / len(self.W) < 0.001
 
     def plot_learning_rate(self):

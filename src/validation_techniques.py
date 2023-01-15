@@ -1,5 +1,6 @@
 import random
 from multiprocessing.pool import ThreadPool
+from typing import Type
 
 import numpy as np
 import network as nt
@@ -24,9 +25,10 @@ def threaded_training(arguments):
     output_validation_set = arguments[10]
     validation_set_len = arguments[11]
 
-    network = nt.Network(structure, activation_functions, error_function, hyper_parameters, regularization_technique, gradient_descent_technique)
+    network = nt.Network(structure, activation_functions, error_function, hyper_parameters, regularization_technique,
+                         gradient_descent_technique)
     network.train(network.stop, training_set, output_training_set, mini_batch_size)
-    network.plot_learning_rate()
+    # network.plot_learning_rate()
 
     correct_prevision = 0
     for x, y in zip(validation_set, output_validation_set):
@@ -41,12 +43,12 @@ def threaded_training(arguments):
 
 
 def randomized_grid_search(structures, activation_functions_list, error_functions, hyper_parameters_list,
-                           gradient_descent_techniques, mini_batch_sizes, regularization_techniques, output_training_set, training_set,
+                           gradient_descent_techniques, mini_batch_sizes, regularization_techniques,
+                           output_training_set, training_set,
                            validation_set,
                            output_validation_set, validation_set_len):
     hp = []
     for i in range(20):
-
         structure = structures[random.randint(0, len(structures) - 1)]
         activation_functions = activation_functions_list[random.randint(0, len(activation_functions_list) - 1)]
         error_function = error_functions[random.randint(0, len(error_functions) - 1)]
@@ -57,13 +59,15 @@ def randomized_grid_search(structures, activation_functions_list, error_function
         regularization_technique = regularization_techniques[random.randint(0, len(regularization_techniques) - 1)]
 
         hp.append([structure, activation_functions, error_function, hyper_parameters, gradient_descent_technique,
-                   mini_batch_size, regularization_technique, training_set, output_training_set, validation_set, output_validation_set,
+                   mini_batch_size, regularization_technique, training_set, output_training_set, validation_set,
+                   output_validation_set,
                    validation_set_len])
     return hp
 
 
 def exhaustive_grid_search(structures, activation_functions_list, error_functions, hyper_parameters_list,
-                           gradient_descent_techniques, mini_batch_sizes, regularization_techniques, output_training_set, training_set,
+                           gradient_descent_techniques, mini_batch_sizes, regularization_techniques,
+                           output_training_set, training_set,
                            validation_set,
                            output_validation_set, validation_set_len):
     hp = []
@@ -75,18 +79,22 @@ def exhaustive_grid_search(structures, activation_functions_list, error_function
                         for mini_batch_size in mini_batch_sizes:
                             for regularization_technique in regularization_techniques:
                                 hp.append([structure, activation_functions, error_function, hyper_parameters,
-                                            gradient_descent_technique, mini_batch_size, regularization_technique, training_set,
-                                            output_training_set, validation_set, output_validation_set, validation_set_len])
+                                           gradient_descent_technique, mini_batch_size, regularization_technique,
+                                           training_set,
+                                           output_training_set, validation_set, output_validation_set,
+                                           validation_set_len])
     return hp
 
 
-def holdout_validation(data_set, output_data_set, hyper_parameters_set,  split_percentage, randomized_search, filename):
+def holdout_validation(data_set, output_data_set, hyper_parameters_set, split_percentage, randomized_search, filename):
     validation_set_len = int(np.ceil((100 - split_percentage) * data_set.shape[0] / 100))
-    data_set = preprocessing.shuffle_data(data_set)
-    validation_set = data_set[:validation_set_len]
-    training_set = data_set[validation_set_len:]
-    output_validation_set = output_data_set[:validation_set_len]
-    output_training_set = output_data_set[validation_set_len:]
+    dt = np.dtype(np.ndarray, Type[int])
+    temp_data = np.array([(inp, out) for inp, out in zip(data_set, output_data_set)], dtype=dt)
+    temp_data = preprocessing.shuffle_data(temp_data)
+    validation_set = temp_data[:validation_set_len, 0]
+    training_set = temp_data[validation_set_len:, 0]
+    output_validation_set = temp_data[:validation_set_len, 1]
+    output_training_set = temp_data[validation_set_len:, 1]
 
     # [(structures, [[s1], [s2]]), (af, [[lr, sg], [r, sg]]), (ef, []), (hp, [(lr, []), (), ()]), (gdt, [""]), (batch, [])]
     structures = hyper_parameters_set[0][1]
@@ -101,12 +109,14 @@ def holdout_validation(data_set, output_data_set, hyper_parameters_set,  split_p
 
     if randomized_search:
         hp = randomized_grid_search(structures, activation_functions_list, error_functions, hyper_parameters_list,
-                                    gradient_descent_techniques, mini_batch_sizes, regularization_techniques, output_training_set, training_set,
+                                    gradient_descent_techniques, mini_batch_sizes, regularization_techniques,
+                                    output_training_set, training_set,
                                     validation_set,
                                     output_validation_set, validation_set_len)
     else:
         hp = exhaustive_grid_search(structures, activation_functions_list, error_functions, hyper_parameters_list,
-                                    gradient_descent_techniques, mini_batch_sizes, regularization_techniques, output_training_set, training_set,
+                                    gradient_descent_techniques, mini_batch_sizes, regularization_techniques,
+                                    output_training_set, training_set,
                                     validation_set,
                                     output_validation_set, validation_set_len)
 
@@ -132,15 +142,13 @@ def holdout_validation(data_set, output_data_set, hyper_parameters_set,  split_p
     dump_on_json(max_accuracy_achieved, best_hyper_parameters_found_max, filename)
 
     # best_hyper_parameters_found_max[:7]
-    #nn_model = nt.Network(best_hyper_parameters_found_max[0], best_hyper_parameters_found_max[1],
-    #                      best_hyper_parameters_found_max[2], best_hyper_parameters_found_max[3], best_hyper_parameters_found_max[6],
-    #                      best_hyper_parameters_found_max[4])
+    nn_model = nt.Network(best_hyper_parameters_found_max[0], best_hyper_parameters_found_max[1],
+                          best_hyper_parameters_found_max[2], best_hyper_parameters_found_max[3], best_hyper_parameters_found_max[6],
+                          best_hyper_parameters_found_max[4])
 
     #nn_model.train(nn_model.stop, data_set, output_data_set, best_hyper_parameters_found_max[5])
 
-    #return nn_model
-
-    return None
+    return nn_model
 
 
 
