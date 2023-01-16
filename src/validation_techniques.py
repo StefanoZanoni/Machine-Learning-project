@@ -39,7 +39,7 @@ def threaded_training(arguments):
     accuracy = correct_prevision * 100 / validation_set_len
     # print(f'Accuracy: {accuracy:.2f}%\n')
 
-    return accuracy, arguments
+    return accuracy, arguments, network
 
 
 def randomized_grid_search(structures, activation_functions_list, error_functions, hyper_parameters_list,
@@ -130,9 +130,11 @@ def holdout_validation(data_set, output_data_set, hyper_parameters_set, split_pe
         if result[0] > max_accuracy_achieved:
             max_accuracy_achieved = result[0]
             best_hyper_parameters_found_max = result[1]
+            network_max = result[2]
         if result[0] < min_accuracy_achieved:
             min_accuracy_achieved = result[0]
             best_hyper_parameters_found_min = result[1]
+            network_min = result[2]
 
     if (100 - min_accuracy_achieved) > max_accuracy_achieved:
         max_accuracy_achieved = (100 - min_accuracy_achieved)

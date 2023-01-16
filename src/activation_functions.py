@@ -122,11 +122,10 @@ def softplus_gradient(x):
 
 def sigmoid(x):
     # x = np.clip(x, -700, 700)
-    # result = np.divide(np.ones_like(x), np.add(np.ones_like(x), np.exp(-x)))
-    # result = np.minimum(result, 0.9999)
-    # result = np.maximum(result, 1e-20)
-    # return result
-    return np.exp(-np.logaddexp(0., -x))
+    result = np.exp(-np.logaddexp(0., -x))
+    result = np.minimum(result, 0.9999)
+    result = np.maximum(result, 1e-20)
+    return result
 
 
 def sigmoid_gradient(x):

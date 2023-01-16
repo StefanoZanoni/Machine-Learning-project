@@ -33,7 +33,7 @@ training_output1 = data[1]
 testing_input1 = data[2]
 testing_output1 = data[3]
 
-activation_functions = [[(af.tanh, af.tanh_gradient), (af.sigmoid, af.sigmoid_gradient)]]
+activation_functions = [[(af.tanh, af.tanh_gradient), (af.tanh, af.tanh_gradient), (af.sigmoid, af.sigmoid_gradient)]]
 
 # [(af.leaky_relu, af.leaky_relu_gradient), (af.leaky_relu, af.leaky_relu_gradient), (af.sigmoid, af.sigmoid_gradient)],
 #                         [(af.tanh, af.tanh_gradient), (af.leaky_relu, af.leaky_relu_gradient), (af.sigmoid, af.sigmoid_gradient)],
@@ -44,20 +44,20 @@ error_function1 = (ef.bce, ef.bce_derivative)
 # then leaky relu hyperparameter must be the second tuple in the hyperparameters list
 #
 # if huber loss error function was chosen then huber loss hyperparameter must be the third tuple of the hyperparameters list
-hyper_parameters = [[('learning_rate', 0.01), ('leaky_hp', 0.1)]]
+hyper_parameters = [[('learning_rate', 0.2), ('leaky_hp', 0.1)]]
 
-regularization_techniques = [("L1", 0.2)]
+regularization_techniques = [("L1", 0.01)]
 
 training_input1 = pp.min_max_scaling(training_input1)
 
 start = timer()
 
-optimal_model = vt.holdout_validation(training_input1, training_output1, [("structures", [[6, 3, 1]]),
+optimal_model = vt.holdout_validation(training_input1, training_output1, [("structures", [[6, 3, 2, 1]]),
                                                                           (
                                                                           "activation_functions", activation_functions),
                                                                           ("error_functions", [error_function1]),
                                                                           ("hyper_parameters", hyper_parameters),
-                                                                          ("gradient_descend_techniques", ["SGD"]),
+                                                                          ("gradient_descend_techniques", ["None"]),
                                                                           ("mini_batch_sizes", [5]),
                                                                           ("regularization_techniques",
                                                                            regularization_techniques)],
@@ -66,7 +66,7 @@ optimal_model = vt.holdout_validation(training_input1, training_output1, [("stru
 print("Model selection in seconds:", np.ceil(timer() - start))
 optimal_model.plot_learning_rate()
 
-# optimal_model.test_set_accuracy(testing_input1, testing_output1)
+optimal_model.test_set_accuracy(testing_input1, testing_output1)
 
 # TODO multiple output forward
 # TODO add epochs and preprocessing to model description, FIX OVERFLOW ERROR, early stopping

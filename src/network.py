@@ -12,7 +12,7 @@ from matplotlib import pyplot as plt
 
 class Network:
     def __init__(self, structure, activation_functions, error_function, hyper_parameters, regularization=("None", 0),
-                 optimizer="SGD", is_classification=True, eps=1e-6):
+                 optimizer="None", is_classification=True, eps=1e-6):
         self.structure = structure
         self.activation_functions = activation_functions
         self.num_layers = len(structure)
@@ -162,7 +162,7 @@ class Network:
         # l1 regularization
         # self.W = [W - eta * lambda * np.sign(W) - (eta / d) * DE_w for W, DE_w in zip(self.W, self.DE_W)]
         #
-        if self.gradient_descent == "SGD":
+        if self.gradient_descent == "None":
             if regularization == "None":
                 self.W = [W - ((eta / d) * DE_w) for W, DE_w in zip(self.W, self.DE_W)]
             if regularization == "L1":
@@ -303,8 +303,8 @@ class Network:
             return mean_squared_error, root_mean_squared_error, mean_absolute_error
 
     def stop(self):
-        return self.epochs > 50
-        # return np.sum([np.linalg.norm(np.abs(m1 - m2)) for m1, m2 in zip(self.W, self.pred_W)]) / len(self.W) < 0.001
+        return self.epochs > 700
+        # return np.sum([np.linalg.norm(np.abs(m1 - m2)) for m1, m2 in zip(self.W, self.pred_W)]) / len(self.W) < 0.1
 
     def plot_learning_rate(self):
         plt.plot(range(1, self.epochs + 1), self.errors_means, color='red')
