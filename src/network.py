@@ -306,8 +306,8 @@ class Network:
         return self.epochs > 700
         # return np.sum([np.linalg.norm(np.abs(m1 - m2)) for m1, m2 in zip(self.W, self.pred_W)]) / len(self.W) < 0.1
 
-    def plot_learning_rate(self):
-        plt.plot(range(1, self.epochs + 1), self.errors_means, color='red')
+    def plot_learning_rate(self, color='red'):
+        plt.plot(range(1, self.epochs + 1), self.errors_means, color=color)
         plt.xlabel('Epochs')
         plt.ylabel('Loss')
         plt.title('Learning curve')

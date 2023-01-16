@@ -64,7 +64,7 @@ optimal_model = vt.holdout_validation(training_input1, training_output1, [("stru
                                       70, False, "../Monk1_models.json")
 
 print("Model selection in seconds:", np.ceil(timer() - start))
-optimal_model.plot_learning_rate()
+optimal_model.plot_learning_rate('green')
 
 optimal_model.test_set_accuracy(testing_input1, testing_output1)
 

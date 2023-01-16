@@ -126,7 +126,6 @@ def holdout_validation(data_set, output_data_set, hyper_parameters_set, split_pe
     best_hyper_parameters_found_max = []
     best_hyper_parameters_found_min = []
     for result in pool.map(threaded_training, hp):
-        print("Result sbarazzino: " + str(result[0]))
         if result[0] > max_accuracy_achieved:
             max_accuracy_achieved = result[0]
             best_hyper_parameters_found_max = result[1]
@@ -139,6 +138,9 @@ def holdout_validation(data_set, output_data_set, hyper_parameters_set, split_pe
     if (100 - min_accuracy_achieved) > max_accuracy_achieved:
         max_accuracy_achieved = (100 - min_accuracy_achieved)
         best_hyper_parameters_found_max = best_hyper_parameters_found_min
+        network_max = network_min
+
+    network_max.plot_learning_rate('red')
 
     print("Best accuracy: " + str(max_accuracy_achieved) + " | List of hyperparameters used: " + str(
         best_hyper_parameters_found_max[:7]))
