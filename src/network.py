@@ -3,7 +3,6 @@ from typing import Type
 
 import numpy as np
 from inspect import signature
-import preprocessing
 import activation_functions as af
 import error_functions
 
@@ -11,8 +10,8 @@ from matplotlib import pyplot as plt
 
 
 class Network:
-    def __init__(self, structure, activation_functions, error_function, hyper_parameters, regularization=("None", 0),
-                 optimizer="None", is_classification=True, eps=1e-6):
+    def __init__(self, structure, activation_functions, error_function, hyper_parameters, is_classification,
+                 regularization=("None", 0), optimizer="None", eps=1e-6):
         self.structure = structure
         self.activation_functions = activation_functions
         self.num_layers = len(structure)
@@ -74,17 +73,12 @@ class Network:
             else:
                 output = f(net)
 
-# 1-0 [0.98 0.2]
-
-
-
         if self.is_classification:
             if len(output) > 1:
-                # multiclass
-                index = output.argmax(axis=1)
-                mask = [1 if index == i else 0 for i in range(output[0])]
+                index = output.argmax(axis=0)
+                index = index.item()
+                mask = [1 if index == i else 0 for i in range(output.shape[0])]
                 return np.array(mask)
-                # pass [0, 0, 1, 0] != [0, 0, 0, 1]
             elif len(output) == 1:
                 output[output > 0.5] = 1
                 output[output < 0.5] = 0
@@ -122,7 +116,7 @@ class Network:
             error = e(y, OUTPUTs[last])
         else:
             beta = self.hyper_parameters[2][1]
-            e(y, OUTPUTs[last], beta)
+            error = e(y, OUTPUTs[last], beta)
         if np.shape(error) == (1, 1):
             self.errors.append(error.item())
         else:
@@ -214,9 +208,6 @@ class Network:
                       W, DE_w, w in
                       zip(self.W, self.DE_W, w_cache)]
 
-        # self.W = [W - np.multiply(eta, DE_w) / (np.sqrt(w) + self.eps) for W, DE_w, w in
-        #           zip(self.W, self.DE_W, w_cache)]
-
         self.B = [B - np.multiply(eta / d, DE_b) / (np.sqrt(b) + self.eps) for B, DE_b, b in
                   zip(self.B, self.DE_B, b_cache)]
 
@@ -245,9 +236,6 @@ class Network:
                       W, DE_w, w
                       in
                       zip(self.W, self.DE_W, w_cache)]
-
-        # self.W = [W - np.multiply(eta, DE_w) / (np.sqrt(w) + self.eps) for W, DE_w, w in
-        #           zip(self.W, self.DE_W, w_cache)]
 
         self.B = [B - (np.multiply(eta / d, DE_b) / (np.sqrt(b) + self.eps)) for B, DE_b, b in
                   zip(self.B, self.DE_B, b_cache)]
@@ -295,30 +283,45 @@ class Network:
             # print("Sum of all error at epoch " + str(self.epochs) + ": " + str(np.sum(self.errors)))
             # print("Error mean at epoch " + str(self.epochs) + ": " + str(np.sum(self.errors) / len(self.errors)))
 
-    def test_set_accuracy(self, test_data_input, test_data_output):
-
-        correct_prevision = 0
-
-        for x, y in zip(test_data_input, test_data_output):
-            predicted_output = self.forward(x)
-            if predicted_output == y:
-                correct_prevision += 1
+    def compute_performance(self, input_data, output_data):
 
         if self.is_classification:
+            correct_prevision = 0
 
-            accuracy = correct_prevision * 100 / len(test_data_output)
+            for x, y in zip(input_data, output_data):
+                predicted_output = self.forward(x)
+
+                # multi-class classification
+                if not isinstance(predicted_output, int):
+                    if np.array_equal(predicted_output, y):
+                        correct_prevision += 1
+                # binary classification
+                else:
+                    if predicted_output == y:
+                        correct_prevision += 1
+
+            accuracy = correct_prevision * 100 / len(output_data)
             print("Accuracy: ", accuracy)
 
             return accuracy
 
         else:
-            mean_squared_error = error_functions.mse(test_data_output, predicted_output)
-            root_mean_squared_error = np.sqrt(mean_squared_error)
-            mean_absolute_error = error_functions.mae(test_data_output, predicted_output)
-            print("MSE: {}, RMSE: {}, MAE: {}".format(str(mean_squared_error), str(root_mean_squared_error),
-                                                      str(mean_absolute_error)))
+            predicted_output = []
+            for x, y in zip(input_data, output_data):
+                predicted_output.append(self.forward(x))
+            predicted_output = np.array(predicted_output)
 
-            return mean_squared_error, root_mean_squared_error, mean_absolute_error
+            if self.error_function.__code__.co_code == error_functions.mse.__code__.co_code:
+                error = error_functions.mse(output_data, predicted_output)
+                print("MSE: {}".format(error))
+            elif self.error_function.__code__.co_code == error_functions.mae.__code__.co_code:
+                error = error_functions.mae(output_data, predicted_output)
+                print("MAE: {}".format(error))
+            elif self.error_function.__code__.co_code == error_functions.rmse.__code__.co_code:
+                error = error_functions.rmse(output_data, predicted_output)
+                print("RMSE: {}".format(error))
+
+            return error
 
     def stop(self):
         return self.epochs > 700

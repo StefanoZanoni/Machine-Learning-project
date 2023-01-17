@@ -52,7 +52,7 @@ training_input1 = pp.min_max_scaling(training_input1)
 
 start = timer()
 
-optimal_model = vt.holdout_validation(training_input1, training_output1, [("structures", [[6, 3, 2, 2]]),
+optimal_model = vt.holdout_validation(training_input1, training_output1, [("structures", [[6, 3, 2, 1]]),
                                                                                (
                                                                                    "activation_functions",
                                                                                    activation_functions),
@@ -63,12 +63,12 @@ optimal_model = vt.holdout_validation(training_input1, training_output1, [("stru
                                                                                ("mini_batch_sizes", [5]),
                                                                                ("regularization_techniques",
                                                                                 regularization_techniques)],
-                                           70, False, "../Monk1_models.json")
+                                           70, False, "../Monk1_models.json", True)
 
-#print("Model selection in seconds:", np.ceil(timer() - start))
-#.plot_learning_rate('green')
+print("Model selection in seconds:", np.ceil(timer() - start))
+optimal_model.plot_learning_rate('green')
 
-#optimal_model.test_set_accuracy(testing_input1, testing_output1)
+optimal_model.compute_performance(testing_input1, testing_output1)
 
 # TODO multiple output forward, early stopping, Nesterov momentum, K-fold
 

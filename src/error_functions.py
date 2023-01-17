@@ -3,6 +3,13 @@ import numpy as np
 
 # all the derivatives were computed with respect to the output (yx)
 
+def rmse(y, yx):
+    return np.sqrt(mse(y, yx))
+
+
+def rmse_derivative(y, yx):
+    return (1 / 2) * np.sqrt(mse(y, yx)) * mse_derivative(y, yx)
+
 
 # mean squared error
 def mse(y, yx):
@@ -100,7 +107,7 @@ def bce_derivative(y, yx):
     # else:
     #     if yx == 1:
     #         return 0
-    return (yx - y) / (yx * (1 - yx)).mean()
+    return np.divide((yx - y), np.multiply(yx, (1 - yx))).mean()
 
 
 # categorical cross entropy
