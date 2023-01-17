@@ -74,11 +74,22 @@ class Network:
             else:
                 output = f(net)
 
+# 1-0 [0.98 0.2]
+
+
+
         if self.is_classification:
-            output[output > 0.5] = 1
-            output[output < 0.5] = 0
-            output[output == 0.5] = randint(0, 1)
-            return int(output)
+            if len(output) > 1:
+                # multiclass
+                index = output.argmax(axis=1)
+                mask = [1 if index == i else 0 for i in range(output[0])]
+                return np.array(mask)
+                # pass [0, 0, 1, 0] != [0, 0, 0, 1]
+            elif len(output) == 1:
+                output[output > 0.5] = 1
+                output[output < 0.5] = 0
+                output[output == 0.5] = randint(0, 1)
+                return int(output)
 
         return output
 
@@ -153,35 +164,43 @@ class Network:
             self.DE_B = [DE_b + pDE_b for DE_b, pDE_b in zip(self.DE_B, pDE_B)]
             self.DE_W = [DE_w + pDE_w for DE_w, pDE_w in zip(self.DE_W, pDE_W)]
 
-        eta = self.hyper_parameters[0][1]
         d = 1
         if len(mini_batch) != training_set_len:
             d = len(mini_batch)
         regularization, lambda_hp = self.regularization
 
-        # l1 regularization
-        # self.W = [W - eta * lambda * np.sign(W) - (eta / d) * DE_w for W, DE_w in zip(self.W, self.DE_W)]
-        #
         if self.gradient_descent == "None":
-            if regularization == "None":
-                self.W = [W - ((eta / d) * DE_w) for W, DE_w in zip(self.W, self.DE_W)]
-            if regularization == "L1":
-                self.W = [W - ((eta / d) * lambda_hp * np.sign(W)) - ((eta / d) * DE_w) for W, DE_w in
-                          zip(self.W, self.DE_W)]
-            if regularization == "L2":
-                self.W = [W - (2 * (eta / d) * lambda_hp * W) - ((eta / d) * DE_w) for W, DE_w in
-                          zip(self.W, self.DE_W)]
-
-            self.B = [b - ((eta / d) * DE_b) for b, DE_b in zip(self.B, self.DE_B)]
+            self.__standard_gradient_descent(regularization, lambda_hp, d)
+        elif self.gradient_descent == "NesterovM":
+            self.__nesterov_momentum(regularization, lambda_hp, d)
         elif self.gradient_descent == "AdaGrad":
             self.__ada_grad(w_cache, b_cache, regularization, lambda_hp, d)
         elif self.gradient_descent == "RMSProp":
             self.__rms_prop(0.9, w_cache, b_cache, regularization, lambda_hp, d)
 
+    def __standard_gradient_descent(self, regularization, lambda_hp, d):
+        eta = self.hyper_parameters[0][1]
+        if regularization == "None":
+            self.W = [W - ((eta / d) * DE_w) for W, DE_w in zip(self.W, self.DE_W)]
+        if regularization == "L1":
+            self.W = [W - ((eta / d) * lambda_hp * np.sign(W)) - ((eta / d) * DE_w) for W, DE_w in
+                      zip(self.W, self.DE_W)]
+        if regularization == "L2":
+            self.W = [W - (2 * (eta / d) * lambda_hp * W) - ((eta / d) * DE_w) for W, DE_w in
+                      zip(self.W, self.DE_W)]
+
+        self.B = [b - ((eta / d) * DE_b) for b, DE_b in zip(self.B, self.DE_B)]
+
+    def __nesterov_momentum(self, regularization, lambda_hp, d):
+        eta = self.hyper_parameters[0][1]
+        # if regularization == "None":
+        # self.W = [W - ((eta / d) * DE_w) + v]
+        pass
+
     def __ada_grad(self, w_cache, b_cache, regularization, lambda_hp, d):
+        eta = self.hyper_parameters[0][1]
         w_cache = list(map(np.add, w_cache, list(map(np.square, self.DE_W))))
         b_cache = list(map(np.add, b_cache, list(map(np.square, self.DE_B))))
-        eta = self.hyper_parameters[0][1]
         if regularization == "None":
             self.W = [W - (np.multiply(eta / d, DE_w) / (np.sqrt(w) + self.eps)) for W, DE_w, w in
                       zip(self.W, self.DE_W, w_cache)]
@@ -202,6 +221,7 @@ class Network:
                   zip(self.B, self.DE_B, b_cache)]
 
     def __rms_prop(self, decay_rate, w_cache, b_cache, regularization, lambda_hp, d):
+        eta = self.hyper_parameters[0][1]
         w_first_term = list(map(np.multiply, [decay_rate for i in range(len(w_cache))], w_cache))
         w_second_term = list(
             map(np.multiply, [1 - decay_rate for i in range(len(w_cache))], list(map(np.square, self.DE_W))))
@@ -211,8 +231,6 @@ class Network:
         b_second_term = list(
             map(np.multiply, [1 - decay_rate for i in range(len(b_cache))], list(map(np.square, self.DE_B))))
         b_cache = list(map(sum, b_first_term, b_second_term))
-
-        eta = self.hyper_parameters[0][1]
 
         if regularization == "None":
             self.W = [W - np.multiply(eta / d, DE_w) / (np.sqrt(w) + self.eps) for W, DE_w, w in

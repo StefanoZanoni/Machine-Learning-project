@@ -120,6 +120,31 @@ def holdout_validation(data_set, output_data_set, hyper_parameters_set, split_pe
                                     validation_set,
                                     output_validation_set, validation_set_len)
 
+    best_model, mini_batch_size = search_best_model(hp, filename)
+    best_model.train(best_model.stop, data_set, output_data_set, mini_batch_size)
+
+
+def get_hyper_parameters(hyper_parameters_set, randomized_search):
+    # [(structures, [[s1], [s2]]), (af, [[lr, sg], [r, sg]]), (ef, []), (hp, [(lr, []), (), ()]), (gdt, [""]), (batch, [])]
+    structures = hyper_parameters_set[0][1]
+    activation_functions_list = hyper_parameters_set[1][1]
+    error_functions = hyper_parameters_set[2][1]
+    hyper_parameters_list = hyper_parameters_set[3][1]
+    gradient_descent_techniques = hyper_parameters_set[4][1]
+    mini_batch_sizes = hyper_parameters_set[5][1]
+    regularization_techniques = hyper_parameters_set[6][1]
+
+    if randomized_search:
+        hp = randomized_grid_search(structures, activation_functions_list, error_functions, hyper_parameters_list,
+                                    gradient_descent_techniques, mini_batch_sizes, regularization_techniques)
+    else:
+        hp = exhaustive_grid_search(structures, activation_functions_list, error_functions, hyper_parameters_list,
+                                    gradient_descent_techniques, mini_batch_sizes, regularization_techniques)
+    return hp
+
+
+def search_best_model(parameters, filename):
+    core_count = multiprocessing.cpu_count()
     pool = ThreadPool(processes=core_count)
     max_accuracy_achieved = 0
     min_accuracy_achieved = 101
@@ -148,13 +173,13 @@ def holdout_validation(data_set, output_data_set, hyper_parameters_set, split_pe
 
     # best_hyper_parameters_found_max[:7]
     nn_model = nt.Network(best_hyper_parameters_found_max[0], best_hyper_parameters_found_max[1],
-                          best_hyper_parameters_found_max[2], best_hyper_parameters_found_max[3], best_hyper_parameters_found_max[6],
+                          best_hyper_parameters_found_max[2], best_hyper_parameters_found_max[3],
+                          best_hyper_parameters_found_max[6],
                           best_hyper_parameters_found_max[4])
 
     nn_model.train(nn_model.stop, data_set, output_data_set, best_hyper_parameters_found_max[5])
 
     return nn_model
-
 
 
 def dump_on_json(accuracy, hyper_parameters, filename):

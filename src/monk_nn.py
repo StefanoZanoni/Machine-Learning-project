@@ -68,8 +68,7 @@ optimal_model.plot_learning_rate('green')
 
 optimal_model.test_set_accuracy(testing_input1, testing_output1)
 
-# TODO multiple output forward
-# TODO add epochs and preprocessing to model description, FIX OVERFLOW ERROR, early stopping
+# TODO multiple output forward, early stopping, Nesterov momentum, K-fold
 
 # # MONK2
 # data = read_data_set(2)
