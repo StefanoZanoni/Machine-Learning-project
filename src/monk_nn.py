@@ -33,7 +33,7 @@ training_output1 = data[1]
 testing_input1 = data[2]
 testing_output1 = data[3]
 
-activation_functions = [[(af.tanh, af.tanh_gradient), (af.tanh, af.tanh_gradient), (af.sigmoid, af.sigmoid_gradient)]]
+activation_functions = [[(af.tanh, af.tanh_gradient), (af.leaky_relu, af.leaky_relu_gradient), (af.sigmoid, af.sigmoid_gradient)]]
 
 # [(af.leaky_relu, af.leaky_relu_gradient), (af.leaky_relu, af.leaky_relu_gradient), (af.sigmoid, af.sigmoid_gradient)],
 #                         [(af.tanh, af.tanh_gradient), (af.leaky_relu, af.leaky_relu_gradient), (af.sigmoid, af.sigmoid_gradient)],
@@ -44,9 +44,9 @@ error_function1 = (ef.bce, ef.bce_derivative)
 # then leaky relu hyperparameter must be the second tuple in the hyperparameters list
 #
 # if huber loss error function was chosen then huber loss hyperparameter must be the third tuple of the hyperparameters list
-hyper_parameters = [[('learning_rate', 0.2), ('leaky_hp', 0.1)]]
+hyper_parameters = [[('learning_rate', 0.1), ('leaky_hp', 0.1)]]
 
-regularization_techniques = [("L1", 0.01)]
+regularization_techniques = [("L2", 0.01)]
 
 training_input1 = pp.min_max_scaling(training_input1)
 

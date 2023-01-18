@@ -147,21 +147,19 @@ class Network:
 
         return pDE_B, pDE_W
 
-    def __gradient_descent(self, mini_batch, training_set_len):
+    def __gradient_descent(self, mini_batch, training_set_len, w_cache, b_cache):
         self.DE_B = [np.zeros(b.shape) for b in self.B]
         self.DE_W = [np.zeros(W.shape) for W in self.W]
-        w_cache = [np.zeros_like(DE_w) for DE_w in self.DE_W]
-        b_cache = [np.zeros_like(DE_b) for DE_b in self.DE_B]
-
-        for x, y in mini_batch:
-            pDE_B, pDE_W = self.__backpropagation(np.asmatrix(x).T, y)
-            self.DE_B = [DE_b + pDE_b for DE_b, pDE_b in zip(self.DE_B, pDE_B)]
-            self.DE_W = [DE_w + pDE_w for DE_w, pDE_w in zip(self.DE_W, pDE_W)]
 
         d = 1
         if len(mini_batch) != training_set_len:
             d = len(mini_batch)
         regularization, lambda_hp = self.regularization
+
+        for x, y in mini_batch:
+            pDE_B, pDE_W = self.__backpropagation(np.asmatrix(x).T, y)
+            self.DE_B = [DE_b + pDE_b for DE_b, pDE_b in zip(self.DE_B, pDE_B)]
+            self.DE_W = [DE_w + pDE_w for DE_w, pDE_w in zip(self.DE_W, pDE_W)]
 
         if self.gradient_descent == "None":
             self.__standard_gradient_descent(regularization, lambda_hp, d)
@@ -267,21 +265,18 @@ class Network:
                     mini_batch.clear()
 
         mini_batches = np.array(mini_batches, dtype=np.ndarray)
+        w_cache = [np.zeros_like(DE_w) for DE_w in self.DE_W]
+        b_cache = [np.zeros_like(DE_b) for DE_b in self.DE_B]
 
         # start training
         while not end():
-            self.errors = []
             self.epochs += 1
-            # print("Epochs: " + str(self.epochs))
+            self.errors = []
 
             for mini_batch in mini_batches:
-                # mini_batch = preprocessing.shuffle_data(mini_batch)
-                self.__gradient_descent(mini_batch, n)
-                # print("DE_W: " + str(self.DE_W))
+                self.__gradient_descent(mini_batch, n, w_cache, b_cache)
 
             self.errors_means.append(np.sum(self.errors) / len(self.errors))
-            # print("Sum of all error at epoch " + str(self.epochs) + ": " + str(np.sum(self.errors)))
-            # print("Error mean at epoch " + str(self.epochs) + ": " + str(np.sum(self.errors) / len(self.errors)))
 
     def compute_performance(self, input_data, output_data):
 
