@@ -65,9 +65,9 @@ def huber_loss_derivative(y, yx, delta):
     if np.shape(yx) != (1, 1):
         dhl = np.zeros_like(yx)
         dhl[np.abs(np.subtract(yx, y)) <= delta] = mse_derivative(y, yx)
-        dhl[np.abs(np.subtract(yx, y)) > delta] = 1 / len(yx) * \
-                                                  (np.multiply(delta, np.divide(np.subtract(yx, y),
-                                                                                np.abs(np.subtract(yx, y)))))
+        dhl[np.abs(np.subtract(yx, y)) > delta] = 1 / len(yx) * (np.multiply(delta, np.divide(np.subtract(yx, y),
+                                                                                              np.abs(
+                                                                                                  np.subtract(yx, y)))))
         return np.sum(dhl) / len(yx)
     else:
         if np.abs(yx - y) <= delta:

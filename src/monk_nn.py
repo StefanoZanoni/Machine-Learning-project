@@ -1,12 +1,16 @@
+from typing import Type
+
 import numpy as np
 import pandas as pd
 import activation_functions as af
 import error_functions as ef
 import preprocessing as pp
-import validation_techniques as vt
+import holdout
 from timeit import default_timer as timer
 
 np.random.seed(0)
+# (input, output) type
+dt = np.dtype(np.ndarray, Type[int])
 
 
 def read_data_set(problem):
@@ -52,25 +56,26 @@ training_input1 = pp.min_max_scaling(training_input1)
 
 start = timer()
 
-optimal_model = vt.holdout_validation(training_input1, training_output1, [("structures", [[6, 3, 2, 1]]),
-                                                                               (
+optimal_model = holdout.holdout_selection(training_input1, training_output1, [("structures", [[6, 3, 2, 1]]),
+                                                                              (
                                                                                    "activation_functions",
                                                                                    activation_functions),
-                                                                               ("error_functions", [error_function1]),
-                                                                               ("hyper_parameters", hyper_parameters),
-                                                                               (
-                                                                               "gradient_descend_techniques", ["None"]),
-                                                                               ("mini_batch_sizes", [5]),
-                                                                               ("regularization_techniques",
+                                                                              ("error_functions", [error_function1]),
+                                                                              ("hyper_parameters", hyper_parameters),
+                                                                              (
+                                                                               "gradient_descent_techniques", ["None"]),
+                                                                              ("mini_batch_sizes", [5]),
+                                                                              ("regularization_techniques",
                                                                                 regularization_techniques)],
-                                           70, False, "../Monk1_models.json", True)
+                                          70, False, "../Monk1_models.json", True, dt)
 
 print("Model selection in seconds:", np.ceil(timer() - start))
 optimal_model.plot_learning_rate('green')
 
-optimal_model.compute_performance(testing_input1, testing_output1)
+estimated_performance = optimal_model.compute_performance(testing_input1, testing_output1)
+print(estimated_performance)
 
-# TODO multiple output forward, early stopping, Nesterov momentum, K-fold
+# TODO early stopping
 
 # # MONK2
 # data = read_data_set(2)

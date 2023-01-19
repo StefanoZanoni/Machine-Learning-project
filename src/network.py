@@ -27,10 +27,9 @@ class Network:
 
         self.DE_B = [np.zeros(b.shape) for b in self.B]
         self.DE_W = [np.zeros(W.shape) for W in self.W]
-        self.pred_W = [np.zeros((l, next_l)) for l, next_l in zip(structure[:-1], structure[1:])]
         self.errors = []
         self.errors_means = []
-        self.epochs = 0
+        self.epoch = 0
 
     def __weights_initialization(self):
         weights_list = []
@@ -39,16 +38,16 @@ class Network:
                                      self.activation_functions):
 
             # He weights initialization for ReLu
-            if fun[0].__code__.co_code == af.relu.__code__.co_code or fun[
-                0].__code__.co_code == af.leaky_relu.__code__.co_code:
+            if fun[0].__code__.co_code == af.relu.__code__.co_code or \
+                    fun[0].__code__.co_code == af.leaky_relu.__code__.co_code:
                 std = np.sqrt(2.0 / s)
                 weights = np.random.randn(l, next_l)
                 scaled_weights = weights * std
                 weights_list.append(scaled_weights)
 
             # Xavier/Glorot weight initialization for Sigmoid or Tanh
-            elif fun[0].__code__.co_code == af.sigmoid.__code__.co_code or fun[
-                0].__code__.co_code == af.tanh.__code__.co_code:
+            elif fun[0].__code__.co_code == af.sigmoid.__code__.co_code or \
+                    fun[0].__code__.co_code == af.tanh.__code__.co_code:
                 lower, upper = -(1.0 / np.sqrt(s)), (1.0 / np.sqrt(s))
                 weights = np.random.randn(l, next_l)
                 scaled_weights = lower + weights * (upper - lower)
@@ -87,7 +86,7 @@ class Network:
 
         return output
 
-    def __backpropagation(self, x, y):
+    def __backpropagation(self, x, y, *args):
         pDE_B = [np.zeros(b.shape) for b in self.B]
         pDE_W = [np.zeros(w.shape) for w in self.W]
 
@@ -137,19 +136,39 @@ class Network:
                     delta = np.multiply(de(y, OUTPUTs[layer], beta), f1(NETs[layer]))
             else:
                 if len(params1) == 1:
-                    delta = np.multiply(f1(NETs[layer]), (self.W[layer + 1] @ delta))
+                    if self.gradient_descent == "NesterovM":
+                        nesterov_vw = args[0]
+                        delta = np.multiply(f1(NETs[layer]), (self.__get_weights(self.W[layer + 1], nesterov_vw[layer + 1]) @ delta))
+                    else:
+                        delta = np.multiply(f1(NETs[layer]),
+                                            (self.__get_weights(self.W[layer + 1]) @ delta))
                 else:
                     alpha = self.hyper_parameters[1][1]
-                    delta = np.multiply(f1(NETs[layer], alpha), (self.W[layer + 1] @ delta))
+                    if self.gradient_descent == "NesterovM":
+                        nesterov_vw = args[0]
+                        delta = np.multiply(f1(NETs[layer], alpha), (self.__get_weights(self.W[layer + 1], nesterov_vw[layer + 1]) @ delta))
+                    else:
+                        delta = np.multiply(f1(NETs[layer], alpha), (self.__get_weights(self.W[layer + 1]) @ delta))
 
             pDE_B[layer] = delta
             pDE_W[layer] = OUTPUTs[layer - 1] @ delta.T if layer != 0 else x @ delta.T
 
         return pDE_B, pDE_W
 
-    def __gradient_descent(self, mini_batch, training_set_len, w_cache, b_cache):
+    def __get_weights(self, w, *v):
+        gamma = 0.9
+        if self.gradient_descent == "NesterovM":
+            w_look_ahead = w - gamma * v[0]
+            return w_look_ahead
+        else:
+            return w
+
+    def __gradient_descent(self, mini_batch, training_set_len, *args):
         self.DE_B = [np.zeros(b.shape) for b in self.B]
         self.DE_W = [np.zeros(W.shape) for W in self.W]
+        if self.gradient_descent == "NesterovM":
+            nesterov_vw = args[0]
+            nesterov_vb = args[1]
 
         d = 1
         if len(mini_batch) != training_set_len:
@@ -157,17 +176,24 @@ class Network:
         regularization, lambda_hp = self.regularization
 
         for x, y in mini_batch:
-            pDE_B, pDE_W = self.__backpropagation(np.asmatrix(x).T, y)
+            if self.gradient_descent == "NesterovM":
+                pDE_B, pDE_W = self.__backpropagation(np.asmatrix(x).T, y, nesterov_vw, nesterov_vb)
+            else:
+                pDE_B, pDE_W = self.__backpropagation(np.asmatrix(x).T, y)
             self.DE_B = [DE_b + pDE_b for DE_b, pDE_b in zip(self.DE_B, pDE_B)]
             self.DE_W = [DE_w + pDE_w for DE_w, pDE_w in zip(self.DE_W, pDE_W)]
 
         if self.gradient_descent == "None":
             self.__standard_gradient_descent(regularization, lambda_hp, d)
         elif self.gradient_descent == "NesterovM":
-            self.__nesterov_momentum(regularization, lambda_hp, d)
+            self.__nesterov_momentum(regularization, lambda_hp, d, nesterov_vw, nesterov_vb)
         elif self.gradient_descent == "AdaGrad":
+            w_cache = args[0]
+            b_cache = args[1]
             self.__ada_grad(w_cache, b_cache, regularization, lambda_hp, d)
         elif self.gradient_descent == "RMSProp":
+            w_cache = args[0]
+            b_cache = args[1]
             self.__rms_prop(0.9, w_cache, b_cache, regularization, lambda_hp, d)
 
     def __standard_gradient_descent(self, regularization, lambda_hp, d):
@@ -183,11 +209,19 @@ class Network:
 
         self.B = [b - ((eta / d) * DE_b) for b, DE_b in zip(self.B, self.DE_B)]
 
-    def __nesterov_momentum(self, regularization, lambda_hp, d):
+    def __nesterov_momentum(self, regularization, lambda_hp, d, nesterov_vw, nesterov_vb):
         eta = self.hyper_parameters[0][1]
-        # if regularization == "None":
-        # self.W = [W - ((eta / d) * DE_w) + v]
-        pass
+        gamma = 0.9
+        nesterov_vw = [gamma * v + (eta / d) * DE_w for v, DE_w in zip(nesterov_vw, self.DE_W)]
+        nesterov_vb = [gamma * v + (eta / d) * DE_b for v, DE_b in zip(nesterov_vb, self.DE_B)]
+        if regularization == "None":
+            self.W = [W - v for v, W in zip(nesterov_vw, self.W)]
+        elif regularization == "L1":
+            self.W = [W - v - ((eta / d) * lambda_hp * np.sign(W)) for v, W in zip(nesterov_vw, self.W)]
+        elif regularization == "L2":
+            self.W = [W - v - (2 * (eta / d) * lambda_hp * W) for v, W in zip(nesterov_vw, self.W)]
+
+        self.B = [B - v for v, B in zip(nesterov_vb, self.B)]
 
     def __ada_grad(self, w_cache, b_cache, regularization, lambda_hp, d):
         eta = self.hyper_parameters[0][1]
@@ -265,18 +299,35 @@ class Network:
                     mini_batch.clear()
 
         mini_batches = np.array(mini_batches, dtype=np.ndarray)
-        w_cache = [np.zeros_like(DE_w) for DE_w in self.DE_W]
-        b_cache = [np.zeros_like(DE_b) for DE_b in self.DE_B]
+
+        if self.gradient_descent == "AdaGrad" or self.gradient_descent == "RMSProp":
+            w_cache = [np.zeros_like(DE_w) for DE_w in self.DE_W]
+            b_cache = [np.zeros_like(DE_b) for DE_b in self.DE_B]
+        if self.gradient_descent == "NesterovM":
+            nesterov_vw = [np.zeros_like(W) for W in self.W]
+            nesterov_vb = [np.zeros_like(B)for B in self.B]
 
         # start training
-        while not end():
-            self.epochs += 1
+        while not end(50):
+            self.epoch += 1
             self.errors = []
 
             for mini_batch in mini_batches:
-                self.__gradient_descent(mini_batch, n, w_cache, b_cache)
+                if self.gradient_descent == "AdaGrad" or self.gradient_descent == "RMSProp":
+                    self.__gradient_descent(mini_batch, n, w_cache, b_cache)
+                elif self.gradient_descent == "NesterovM":
+                    self.__gradient_descent(mini_batch, n, nesterov_vw, nesterov_vb)
+                else:
+                    self.__gradient_descent(mini_batch, n)
 
             self.errors_means.append(np.sum(self.errors) / len(self.errors))
+
+    def stop(self, patience=1, max_epoch=1000):
+        if self.epoch > 1:
+            if self.errors_means[self.epoch - 1] - self.errors_means[self.epoch - 2] >= 0:
+                patience -= 1
+
+        return patience == 0 or self.epoch > max_epoch
 
     def compute_performance(self, input_data, output_data):
 
@@ -296,7 +347,6 @@ class Network:
                         correct_prevision += 1
 
             accuracy = correct_prevision * 100 / len(output_data)
-            print("Accuracy: ", accuracy)
 
             return accuracy
 
@@ -308,22 +358,15 @@ class Network:
 
             if self.error_function.__code__.co_code == error_functions.mse.__code__.co_code:
                 error = error_functions.mse(output_data, predicted_output)
-                print("MSE: {}".format(error))
             elif self.error_function.__code__.co_code == error_functions.mae.__code__.co_code:
                 error = error_functions.mae(output_data, predicted_output)
-                print("MAE: {}".format(error))
             elif self.error_function.__code__.co_code == error_functions.rmse.__code__.co_code:
                 error = error_functions.rmse(output_data, predicted_output)
-                print("RMSE: {}".format(error))
 
             return error
 
-    def stop(self):
-        return self.epochs > 700
-        # return np.sum([np.linalg.norm(np.abs(m1 - m2)) for m1, m2 in zip(self.W, self.pred_W)]) / len(self.W) < 0.1
-
     def plot_learning_rate(self, color='red'):
-        plt.plot(range(1, self.epochs + 1), self.errors_means, color=color)
+        plt.plot(range(1, self.epoch + 1), self.errors_means, color=color)
         plt.xlabel('Epochs')
         plt.ylabel('Loss')
         plt.title('Learning curve')
