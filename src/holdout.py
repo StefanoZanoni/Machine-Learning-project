@@ -12,7 +12,7 @@ from src import preprocessing
 def holdout_selection(data_set, output_data_set, hyper_parameters_set, split_percentage, randomized_search, filename,
                       is_classification, dt):
     validation_set_len = int(np.ceil((100 - split_percentage) * data_set.shape[0] / 100))
-    temp_data = np.array([(inp, out) for inp, out in zip(data_set, output_data_set)], dtype=dt)
+    temp_data = np.array([[inp, out] for inp, out in zip(data_set, output_data_set)], dtype=dt)
     temp_data = preprocessing.shuffle_data(temp_data)
     validation_set = temp_data[:validation_set_len, 0]
     training_set = temp_data[validation_set_len:, 0]
@@ -25,14 +25,15 @@ def holdout_selection(data_set, output_data_set, hyper_parameters_set, split_per
 
     best_model, mini_batch_size = search_best_model(hp, filename, is_classification)
     best_model.train(best_model.stop, data_set, output_data_set, mini_batch_size)
+    best_model.plot_learning_rate('green')
 
     return best_model
 
 
 def holdout_selection_assessment(data_set, output_data_set, hyper_parameters_set, test_split_percentage,
                                  selection_split_percentage, randomized_search, filename, is_classification, dt):
-    selection_set_len = int(np.ceil((100 - test_split_percentage) * data_set.shape[0] / 100))
-    temp_data = np.array([(inp, out) for inp, out in zip(data_set, output_data_set)], dtype=dt)
+    selection_set_len = int(np.ceil(test_split_percentage * data_set.shape[0] / 100))
+    temp_data = np.array([[inp, out] for inp, out in zip(data_set, output_data_set)], dtype=dt)
     temp_data = preprocessing.shuffle_data(temp_data)
     selection_set = temp_data[:selection_set_len, 0]
     test_set = temp_data[selection_set_len:, 0]
@@ -88,11 +89,13 @@ def search_best_model(parameters, filename, is_classification):
     if is_classification:
         print("Best accuracy: " + str(max_accuracy_achieved) + " | List of hyperparameters used: " + str(
             best_hyper_parameters_found[:7]))
+        validation_utilities.dump_on_json(max_accuracy_achieved, best_hyper_parameters_found, filename,
+                                          is_classification)
     else:
-        print("Best error: " + str(max_accuracy_achieved) + " | List of hyperparameters used: " + str(
+        print("Best error: " + str(error_min) + " | List of hyperparameters used: " + str(
             best_hyper_parameters_found[:7]))
-
-    validation_utilities.dump_on_json(max_accuracy_achieved, best_hyper_parameters_found, filename, is_classification)
+        validation_utilities.dump_on_json(error_min, best_hyper_parameters_found, filename,
+                                          is_classification)
 
     nn_model = nt.Network(best_hyper_parameters_found[0], best_hyper_parameters_found[1],
                           best_hyper_parameters_found[2], best_hyper_parameters_found[3],

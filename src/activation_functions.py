@@ -76,10 +76,6 @@ def gelu_gradient(x):
 def selu(x):
     lambd_a = 1.0507009873554804934193349852946
     alpha = 1.6732632423543772848170429916717
-    # y = np.copy(np.ravel(x))
-    # y[np.ravel(x) > 0] = lambd_a * np.ravel(x)
-    # y[np.ravel(x) <= 0] = alpha * lambd_a * (np.exp(np.ravel(x)) - 1)
-    # return y
     return lambd_a * (np.maximum(0, x) + np.minimum(0, alpha * (np.exp(x) - 1)))
 
 
@@ -121,7 +117,6 @@ def softplus_gradient(x):
 
 
 def sigmoid(x):
-    # x = np.clip(x, -700, 700)
     result = np.exp(-np.logaddexp(0., -x))
     result = np.minimum(result, 0.9999)
     result = np.maximum(result, 1e-20)

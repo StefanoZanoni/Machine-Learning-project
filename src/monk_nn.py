@@ -57,16 +57,12 @@ training_input1 = pp.min_max_scaling(training_input1)
 start = timer()
 
 optimal_model = holdout.holdout_selection(training_input1, training_output1, [("structures", [[6, 3, 2, 1]]),
-                                                                              (
-                                                                                   "activation_functions",
-                                                                                   activation_functions),
+                                                                              ("activation_functions", activation_functions),
                                                                               ("error_functions", [error_function1]),
                                                                               ("hyper_parameters", hyper_parameters),
-                                                                              (
-                                                                               "gradient_descent_techniques", ["None"]),
+                                                                              ("gradient_descent_techniques", ["None"]),
                                                                               ("mini_batch_sizes", [5]),
-                                                                              ("regularization_techniques",
-                                                                                regularization_techniques)],
+                                                                              ("regularization_techniques", regularization_techniques)],
                                           70, False, "../Monk1_models.json", True, dt)
 
 print("Model selection in seconds:", np.ceil(timer() - start))

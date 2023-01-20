@@ -323,11 +323,12 @@ class Network:
             self.errors_means.append(np.sum(self.errors) / len(self.errors))
 
     def stop(self, patience=1, max_epoch=1000):
-        if self.epoch > 1:
-            if self.errors_means[self.epoch - 1] - self.errors_means[self.epoch - 2] >= 0:
-                patience -= 1
-
-        return patience == 0 or self.epoch > max_epoch
+        # if self.epoch > 1:
+        #     if self.errors_means[self.epoch - 1] - self.errors_means[self.epoch - 2] >= 0:
+        #         patience -= 1
+        #
+        # return patience == 0 or self.epoch > max_epoch
+        return self.epoch > 100
 
     def compute_performance(self, input_data, output_data):
 
@@ -351,17 +352,24 @@ class Network:
             return accuracy
 
         else:
-            predicted_output = []
+            predicted_outputs = []
             for x, y in zip(input_data, output_data):
-                predicted_output.append(self.forward(x))
-            predicted_output = np.array(predicted_output)
+                predicted_outputs.append(self.forward(x))
+            predicted_outputs = np.array(predicted_outputs)
 
-            if self.error_function.__code__.co_code == error_functions.mse.__code__.co_code:
-                error = error_functions.mse(output_data, predicted_output)
-            elif self.error_function.__code__.co_code == error_functions.mae.__code__.co_code:
-                error = error_functions.mae(output_data, predicted_output)
-            elif self.error_function.__code__.co_code == error_functions.rmse.__code__.co_code:
-                error = error_functions.rmse(output_data, predicted_output)
+            errors = []
+            if self.error_function[0].__code__.co_code == error_functions.mse.__code__.co_code:
+                for predicted_output, output in zip(predicted_outputs, output_data):
+                    errors.append(error_functions.mse(output, predicted_output))
+                error = np.mean(errors)
+            elif self.error_function[0].__code__.co_code == error_functions.mae.__code__.co_code:
+                for predicted_output, output in zip(predicted_outputs, output_data):
+                    errors.append(error_functions.mse(output, predicted_output))
+                error = np.mean(errors)
+            elif self.error_function[0].__code__.co_code == error_functions.rmse.__code__.co_code:
+                for predicted_output, output in zip(predicted_outputs, output_data):
+                    errors.append(error_functions.mse(output, predicted_output))
+                error = np.mean(errors)
 
             return error
 

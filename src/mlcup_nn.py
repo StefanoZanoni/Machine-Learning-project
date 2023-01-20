@@ -20,20 +20,16 @@ training_output = np.array(training_df[['o1', 'o2']])
 
 blind_testing_input = np.array(blind_testing_df[['a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9']])
 
-activation_functions = [[(af.leaky_relu, af.leaky_relu_gradient), (af.leaky_relu, af.leaky_relu_gradient), (af.linear, af.linear_gradient)]]
+activation_functions = [[(af.leaky_relu, af.leaky_relu_gradient), (af.leaky_relu, af.leaky_relu_gradient), (af.relu, af.relu_gradient)]]
 error_function = (ef.mse, ef.mse_derivative)
 hyper_parameters = [[('learning_rate', 0.1), ('leaky_hp', 0.1)]]
-regularization_techniques = [("None", 0)]
+regularization_techniques = [("L2", 0.01)]
 
-training_input = pp.min_max_scaling(training_input)
-
-performance = holdout.holdout_selection_assessment(training_input, training_output, [("structures", [[9, 3, 2, 2]]),
+performance = holdout.holdout_selection_assessment(training_input, training_output, [("structures", [[9, 9, 2]]),
                                                                               ("activation_functions", activation_functions),
                                                                               ("error_functions", [error_function]),
                                                                               ("hyper_parameters", hyper_parameters),
                                                                               ("gradient_descent_techniques", ["None"]),
-                                                                              ("mini_batch_sizes", [5]),
+                                                                              ("mini_batch_sizes", [1]),
                                                                               ("regularization_techniques", regularization_techniques)],
-                                                                                70, 70, False, "../Monk1_models.json", False, dt)
-
-print(performance)
+                                                                               70, 70, False, "../Monk1_models.json", False, dt)
