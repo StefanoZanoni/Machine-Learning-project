@@ -308,7 +308,7 @@ class Network:
             nesterov_vb = [np.zeros_like(B)for B in self.B]
 
         # start training
-        while not end(50):
+        while not end(50, 2000):
             self.epoch += 1
             self.errors = []
 
@@ -323,12 +323,12 @@ class Network:
             self.errors_means.append(np.sum(self.errors) / len(self.errors))
 
     def stop(self, patience=1, max_epoch=1000):
-        # if self.epoch > 1:
-        #     if self.errors_means[self.epoch - 1] - self.errors_means[self.epoch - 2] >= 0:
-        #         patience -= 1
-        #
-        # return patience == 0 or self.epoch > max_epoch
-        return self.epoch > 100
+        if self.epoch > 1:
+            if self.errors_means[self.epoch - 1] - self.errors_means[self.epoch - 2] >= 0:
+                patience -= 1
+
+        return patience == 0 or self.epoch > max_epoch
+        # return self.epoch > 1000
 
     def compute_performance(self, input_data, output_data):
 
