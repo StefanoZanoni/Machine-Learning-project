@@ -7,7 +7,6 @@ import preprocessing as pp
 from src import holdout
 
 
-np.random.seed(0)
 # (input, output) type
 dt = object
 

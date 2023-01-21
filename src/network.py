@@ -32,6 +32,7 @@ class Network:
         self.epoch = 0
 
     def __weights_initialization(self):
+        np.random.seed(0)
         weights_list = []
 
         for l, next_l, s, fun in zip(self.structure[:-1], self.structure[1:], self.structure,

@@ -53,6 +53,7 @@ def search_best_model(parameters, filename, is_classification):
     pool = ThreadPool(processes=core_count)
 
     if is_classification:
+        take_opposite = False
         max_accuracy_achieved = 0
         min_accuracy_achieved = 100
         best_hyper_parameters_found_max = []
@@ -72,13 +73,15 @@ def search_best_model(parameters, filename, is_classification):
             max_accuracy_achieved = (100 - min_accuracy_achieved)
             best_hyper_parameters_found_max = best_hyper_parameters_found_min
             network_max = network_min
+            take_opposite = True
 
         best_network = network_max
         best_hyper_parameters_found = best_hyper_parameters_found_max
     else:
         error_min = sys.float_info.max
         best_hyper_parameters_found = []
-        for result in pool.map(threaded_training, parameters):
+        for hp in parameters:
+            result = training(hp)
             if result[0] < error_min:
                 error_min = result[0]
                 best_hyper_parameters_found = result[1]
@@ -101,10 +104,12 @@ def search_best_model(parameters, filename, is_classification):
                           best_hyper_parameters_found[2], best_hyper_parameters_found[3],
                           is_classification, best_hyper_parameters_found[6], best_hyper_parameters_found[4])
 
+    nn_model.take_opposite = take_opposite
+
     return nn_model, best_hyper_parameters_found[5]
 
 
-def threaded_training(arguments):
+def training(arguments):
     structure = arguments[0]
     activation_functions = arguments[1]
     error_function = arguments[2]

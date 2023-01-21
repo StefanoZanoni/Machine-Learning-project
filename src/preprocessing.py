@@ -1,18 +1,9 @@
 import numpy as np
 
-# axis = 0 in numpy (column wise)
-# |
-# V
-
-# axis = 1 (row wise)
-#  -->
 
 # Also known as linear scaling
 # x' = (x - min(x)) / (max(x) - min(x))
 # where x is data and x' is the normalized data
-# AS
-
-
 def min_max_scaling(*args):
     training_input = np.array(args[0])
     normalized_dataset = []
@@ -60,6 +51,31 @@ def z_score_scaling(*args):
         normalized_dataset = np.divide(np.subtract(training_input, mu), sigma)
 
     return normalized_dataset
+
+
+def one_hot_encoding(input_data):
+    max_values = np.max(input_data, axis=0)
+    dictionaries = []
+    # [{}, {}, {}]
+    for value in max_values:
+        encoding = np.zeros(value, dtype=max_values.dtype)
+        dictionary_entry = {}
+        for i in range(1, value + 1):
+            tmp = encoding.copy()
+            tmp[i - 1] = 1
+            dictionary_entry[i] = tmp
+        dictionaries.append(dictionary_entry)
+
+    result_data = []
+    for row in input_data:
+        new_row = []
+        for column, i in zip(row, range(len(row))):
+            dic = dictionaries[i]
+            new_row = np.concatenate((new_row, dic[column]), axis=None)
+        result_data.append(new_row)
+        # [[0, 0 ,1] , [1, 1, 0]]
+
+    return np.array(result_data, dtype=max_values.dtype)
 
 
 def shuffle_data(input_data):
