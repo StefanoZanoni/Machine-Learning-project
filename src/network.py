@@ -105,7 +105,6 @@ class Network:
             sig = signature(f)
             params = sig.parameters
             net = W.T @ output + b if NETs else W.T @ x + b
-            print(net)
             if len(params) == 2:
                 alpha = self.hyper_parameters[1][1]
                 output = f(net, alpha)
