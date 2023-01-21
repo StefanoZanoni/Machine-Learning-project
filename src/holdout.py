@@ -104,7 +104,8 @@ def search_best_model(parameters, filename, is_classification):
                           best_hyper_parameters_found[2], best_hyper_parameters_found[3],
                           is_classification, best_hyper_parameters_found[6], best_hyper_parameters_found[4])
 
-    nn_model.take_opposite = take_opposite
+    if is_classification:
+        nn_model.take_opposite = take_opposite
 
     return nn_model, best_hyper_parameters_found[5]
 

@@ -27,40 +27,40 @@ def read_data_set(problem):
 
 
 # MONK1
-data = read_data_set(1)
-training_input1 = data[0]
-training_output1 = data[1]
-testing_input1 = data[2]
-testing_output1 = data[3]
-
-activation_functions = [[(af.tanh, af.tanh_gradient), (af.sigmoid, af.sigmoid_gradient)]]
-error_function1 = (ef.bce, ef.bce_derivative)
-hyper_parameters = [[('learning_rate', 0.01), ('leaky_hp', 0.1)]]
-regularization_techniques1 = [("None", 0)]
-
-# 121 data
-training_input1 = pp.one_hot_encoding(training_input1)
-testing_input1 = pp.one_hot_encoding(testing_input1)
-
-start = timer()
-
-optimal_model = holdout.holdout_selection(training_input1, training_output1, [("structures", [[17, 4, 1]]),
-                                                                               (
-                                                                                   "activation_functions",
-                                                                                   activation_functions),
-                                                                               ("error_functions", [error_function1]),
-                                                                               ("hyper_parameters", hyper_parameters),
-                                                                               (
-                                                                               "gradient_descend_techniques", ["NesterovM"]),
-                                                                               ("mini_batch_sizes", [1]),
-                                                                               ("regularization_techniques",
-                                                                                regularization_techniques1)],
-                                           70, False, "../Monk1_models.json", True, dt)
-
-print("Model selection in seconds:", np.ceil(timer() - start))
-
-performance = optimal_model.compute_performance(testing_input1, testing_output1)
-print(performance)
+# data = read_data_set(1)
+# training_input1 = data[0]
+# training_output1 = data[1]
+# testing_input1 = data[2]
+# testing_output1 = data[3]
+#
+# activation_functions = [[(af.tanh, af.tanh_gradient), (af.sigmoid, af.sigmoid_gradient)]]
+# error_function1 = (ef.bce, ef.bce_derivative)
+# hyper_parameters = [[('learning_rate', 0.01), ('leaky_hp', 0.1)]]
+# regularization_techniques1 = [("None", 0)]
+#
+# # 121 data
+# training_input1 = pp.one_hot_encoding(training_input1)
+# testing_input1 = pp.one_hot_encoding(testing_input1)
+#
+# start = timer()
+#
+# optimal_model = holdout.holdout_selection(training_input1, training_output1, [("structures", [[17, 4, 1]]),
+#                                                                                (
+#                                                                                    "activation_functions",
+#                                                                                    activation_functions),
+#                                                                                ("error_functions", [error_function1]),
+#                                                                                ("hyper_parameters", hyper_parameters),
+#                                                                                (
+#                                                                                "gradient_descend_techniques", ["NesterovM"]),
+#                                                                                ("mini_batch_sizes", [1]),
+#                                                                                ("regularization_techniques",
+#                                                                                 regularization_techniques1)],
+#                                            70, False, "../Monk1_models.json", True, dt)
+#
+# print("Model selection in seconds:", np.ceil(timer() - start))
+#
+# performance = optimal_model.compute_performance(testing_input1, testing_output1)
+# print(performance)
 
 # # MONK2
 # data = read_data_set(2)
@@ -101,15 +101,41 @@ print(performance)
 
 
 # MONK3
-# data = read_data_set(3)
-# training_input3 = data[0]
-# training_output3 = data[1]
-# testing_input3 = data[2]
-# testing_output3 = data[3]
-#
-# activation_functions3 = [(af.leaky_relu, af.leaky_relu_gradient), (af.sigmoid, af.sigmoid_gradient)]
-# error_function3 = (ef.bce, ef.bce_derivative)
-# hyper_parameters3 = [('leaky_relu_hp', 0.1), ('learning_rate', 0.01), ('huber_loss_hp', 0.1)]
-#
-# 119 data
-# training_input3 = pp.z_score_scaling(training_input3)
+data = read_data_set(3)
+training_input3 = data[0]
+training_output3 = data[1]
+testing_input3 = data[2]
+testing_output3 = data[3]
+
+activation_functions3 = [[(af.tanh, af.tanh_gradient), (af.leaky_relu, af.leaky_relu_gradient), (af.sigmoid, af.sigmoid_gradient)]]
+error_function3 = (ef.bce, ef.bce_derivative)
+hyper_parameters3 = [[('learning_rate', 0.032), ('leaky', 0.1)], [('learning_rate', 0.032), ('leaky', 0.05)],
+                     [('learning_rate', 0.032), ('leaky', 0.08)], [('learning_rate', 0.027), ('leaky', 0.1)],
+                     [('learning_rate', 0.03), ('leaky', 0.1)]]
+regularization_techniques3 = [("L2", 0.015), ("L2", 0.01), ("L2", 0.02), ("None", 0)]
+
+# 122 data
+training_input3 = pp.one_hot_encoding(training_input3)
+testing_input3 = pp.one_hot_encoding(testing_input3)
+
+start = timer()
+
+optimal_model = holdout.holdout_selection(training_input3, training_output3, [("structures", [[17, 6, 4, 1], [17, 4, 4, 1],
+                                                                                              [17, 6, 2, 1], [17, 8, 4, 1],
+                                                                                                [17, 8, 6, 1]]),
+                                                                               (
+                                                                                   "activation_functions",
+                                                                                   activation_functions3),
+                                                                               ("error_functions", [error_function3]),
+                                                                               ("hyper_parameters", hyper_parameters3),
+                                                                               (
+                                                                               "gradient_descend_techniques", ["None"]),
+                                                                               ("mini_batch_sizes", [1, 2, 43, 85]),
+                                                                               ("regularization_techniques",
+                                                                                regularization_techniques3)],
+                                           70, False, "../Monk3_models.json", True, dt)
+
+print("Model selection in seconds:", np.ceil(timer() - start))
+
+performance = optimal_model.compute_performance(testing_input3, testing_output3)
+print(performance)

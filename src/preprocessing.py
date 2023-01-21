@@ -79,6 +79,7 @@ def one_hot_encoding(input_data):
 
 
 def shuffle_data(input_data):
+    np.random.seed(0)
     data = np.copy(input_data)
     np.random.shuffle(data)
     return data

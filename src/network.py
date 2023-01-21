@@ -42,7 +42,7 @@ class Network:
             if fun[0].__code__.co_code == af.relu.__code__.co_code or \
                     fun[0].__code__.co_code == af.leaky_relu.__code__.co_code:
                 std = np.sqrt(2.0 / s)
-                weights = np.random.randn(l, next_l)
+                weights = np.random.uniform(-0.7, 0.7000001, (l, next_l))
                 scaled_weights = weights * std
                 weights_list.append(scaled_weights)
 
@@ -50,11 +50,11 @@ class Network:
             elif fun[0].__code__.co_code == af.sigmoid.__code__.co_code or \
                     fun[0].__code__.co_code == af.tanh.__code__.co_code:
                 lower, upper = -(1.0 / np.sqrt(s)), (1.0 / np.sqrt(s))
-                weights = np.random.randn(l, next_l)
+                weights = np.random.uniform(-0.7, 0.7000001, (l, next_l))
                 scaled_weights = lower + weights * (upper - lower)
                 weights_list.append(scaled_weights)
             else:
-                weights = np.random.randn(l, next_l)
+                weights = np.random.uniform(-0.7, 0.7000001, (l, next_l))
                 weights_list.append(weights)
 
         return weights_list
@@ -99,6 +99,7 @@ class Network:
             sig = signature(f)
             params = sig.parameters
             net = W.T @ output + b if NETs else W.T @ x + b
+            print(net)
             if len(params) == 2:
                 alpha = self.hyper_parameters[1][1]
                 output = f(net, alpha)
