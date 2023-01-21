@@ -307,8 +307,11 @@ class Network:
             nesterov_vw = [np.zeros_like(W) for W in self.W]
             nesterov_vb = [np.zeros_like(B)for B in self.B]
 
+        patience = [20]
+        patience_starting_point = patience
+
         # start training
-        while not end(50, 2000):
+        while not end(patience_starting_point, patience, 800):
             self.epoch += 1
             self.errors = []
 
@@ -320,14 +323,16 @@ class Network:
                 else:
                     self.__gradient_descent(mini_batch, n)
 
-            self.errors_means.append(np.sum(self.errors) / len(self.errors))
+            self.errors_means.append(np.mean(self.errors))
 
-    def stop(self, patience=1, max_epoch=1000):
+    def stop(self, patience_starting_point, patience=[1], max_epoch=1000):
         if self.epoch > 1:
             if self.errors_means[self.epoch - 1] - self.errors_means[self.epoch - 2] >= 0:
-                patience -= 1
+                patience[0] -= 1
+            else:
+                patience = patience_starting_point
 
-        return patience == 0 or self.epoch > max_epoch
+        return patience[0] == 0 or self.epoch > max_epoch
         # return self.epoch > 1000
 
     def compute_performance(self, input_data, output_data):
