@@ -58,7 +58,8 @@ def search_best_model(parameters, filename, is_classification):
         min_accuracy_achieved = 100
         best_hyper_parameters_found_max = []
         best_hyper_parameters_found_min = []
-        for result in pool.map(threaded_training, parameters):
+        for result in pool.map(training, parameters):
+            # result = training(hp)
             accuracy = result[0]
             if accuracy > max_accuracy_achieved:
                 max_accuracy_achieved = accuracy

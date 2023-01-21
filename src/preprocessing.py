@@ -25,10 +25,10 @@ def min_max_scaling(*args):
 
 
 # def clipping_scaling(training_input, max_value, min_value):
-    # greater_boolean_matrix = np.greater(training_input, max_value)
-    # less_boolean_matrix = np.less(training_input, min_value)
-    # training_input[greater_boolean_matrix] = max
-    # training_input[less_boolean_matrix] = min
+# greater_boolean_matrix = np.greater(training_input, max_value)
+# less_boolean_matrix = np.less(training_input, min_value)
+# training_input[greater_boolean_matrix] = max
+# training_input[less_boolean_matrix] = min
 
 # x' = (x - mean) / standard deviation
 # x is the dataset

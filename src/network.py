@@ -31,6 +31,8 @@ class Network:
         self.errors_means = []
         self.epoch = 0
 
+        self.take_opposite = False
+
     def __weights_initialization(self):
         np.random.seed(0)
         weights_list = []
@@ -80,8 +82,12 @@ class Network:
                 mask = [1 if index == i else 0 for i in range(output.shape[0])]
                 return np.array(mask)
             elif len(output) == 1:
-                output[output > 0.5] = 1
-                output[output < 0.5] = 0
+                if self.take_opposite:
+                    output[output > 0.5] = 0
+                    output[output < 0.5] = 1
+                else:
+                    output[output > 0.5] = 1
+                    output[output < 0.5] = 0
                 output[output == 0.5] = randint(0, 1)
                 return int(output)
 
