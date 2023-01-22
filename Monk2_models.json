@@ -3406,5 +3406,220 @@
             "None",
             0
         ]
+    },
+    {
+        "accuracy": 100.0,
+        "structure": [
+            17,
+            4,
+            2,
+            1
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ]
+        ],
+        "error_function": [
+            "bce",
+            "bce_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.001
+            ],
+            [
+                "leaky",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "None",
+            0
+        ]
+    },
+    {
+        "accuracy": 100.0,
+        "structure": [
+            17,
+            4,
+            2,
+            1
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ]
+        ],
+        "error_function": [
+            "bce",
+            "bce_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.001
+            ],
+            [
+                "leaky",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "None",
+            0
+        ]
+    },
+    {
+        "accuracy": 100.0,
+        "structure": [
+            17,
+            4,
+            2,
+            1
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ]
+        ],
+        "error_function": [
+            "bce",
+            "bce_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.001
+            ],
+            [
+                "leaky",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "None",
+            0
+        ]
+    },
+    {
+        "accuracy": 100.0,
+        "structure": [
+            17,
+            4,
+            2,
+            1
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ]
+        ],
+        "error_function": [
+            "bce",
+            "bce_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.001
+            ],
+            [
+                "leaky",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "None",
+            0
+        ]
+    },
+    {
+        "accuracy": 100.0,
+        "structure": [
+            17,
+            4,
+            2,
+            1
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ]
+        ],
+        "error_function": [
+            "bce",
+            "bce_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.001
+            ],
+            [
+                "leaky",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "None",
+            0
+        ]
     }
 ]

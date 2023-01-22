@@ -37,26 +37,26 @@ class Network:
         np.random.seed(0)
         weights_list = []
 
-        for l, next_l, s, fun in zip(self.structure[:-1], self.structure[1:], self.structure,
+        for l, next_l, s, fun in zip(self.structure[:-1], self.structure[1:], range(len(self.structure)),
                                      self.activation_functions):
 
             # He weights initialization for ReLu
             if fun[0].__code__.co_code == af.relu.__code__.co_code or \
                     fun[0].__code__.co_code == af.leaky_relu.__code__.co_code:
-                std = np.sqrt(2.0 / s)
-                weights = np.random.uniform(-0.7, 0.7000001, (l, next_l))
+                std = np.sqrt(2.0 / self.structure[s])
+                weights = np.random.rand(l, next_l)
                 scaled_weights = weights * std
                 weights_list.append(scaled_weights)
 
-            # Xavier/Glorot weight initialization for Sigmoid or Tanh
+            # normalized Xavier/Glorot weight initialization for Sigmoid or Tanh
             elif fun[0].__code__.co_code == af.sigmoid.__code__.co_code or \
                     fun[0].__code__.co_code == af.tanh.__code__.co_code:
-                lower, upper = -(1.0 / np.sqrt(s)), (1.0 / np.sqrt(s))
-                weights = np.random.uniform(-0.7, 0.7000001, (l, next_l))
+                lower, upper = -(np.sqrt(6.0) / np.sqrt(self.structure[s] + self.structure[s + 1])), (np.sqrt(6.0) / np.sqrt(self.structure[s] + self.structure[s + 1]))
+                weights = np.random.rand(l, next_l)
                 scaled_weights = lower + weights * (upper - lower)
                 weights_list.append(scaled_weights)
             else:
-                weights = np.random.uniform(-0.7, 0.7000001, (l, next_l))
+                weights = np.random.uniform(-0.7, 0.7001, (l, next_l))
                 weights_list.append(weights)
 
         return weights_list
@@ -104,6 +104,7 @@ class Network:
             f = self.activation_functions[j][0]
             sig = signature(f)
             params = sig.parameters
+            # print(str(W) + '\n')
             net = W.T @ output + b if NETs else W.T @ x + b
             if len(params) == 2:
                 alpha = self.hyper_parameters[1][1]
@@ -170,6 +171,7 @@ class Network:
         else:
             return w
 
+    # TODO fix nesterov_vw, nesterov_vb not updated
     def __gradient_descent(self, mini_batch, training_set_len, *args):
         self.DE_B = [np.zeros(b.shape) for b in self.B]
         self.DE_W = [np.zeros(W.shape) for W in self.W]
@@ -229,6 +231,8 @@ class Network:
             self.W = [W - v - (2 * (eta / d) * lambda_hp * W) for v, W in zip(nesterov_vw, self.W)]
 
         self.B = [B - v for v, B in zip(nesterov_vb, self.B)]
+
+        return nesterov_vw, nesterov_vb
 
     def __ada_grad(self, w_cache, b_cache, regularization, lambda_hp, d):
         eta = self.hyper_parameters[0][1]
@@ -318,7 +322,7 @@ class Network:
         patience_starting_point = patience
 
         # start training
-        while not end(patience_starting_point, patience, 800):
+        while not end(patience_starting_point, patience, 200):
             self.epoch += 1
             self.errors = []
 
@@ -376,11 +380,11 @@ class Network:
                 error = np.mean(errors)
             elif self.error_function[0].__code__.co_code == error_functions.mae.__code__.co_code:
                 for predicted_output, output in zip(predicted_outputs, output_data):
-                    errors.append(error_functions.mse(output, predicted_output))
+                    errors.append(error_functions.mae(output, predicted_output))
                 error = np.mean(errors)
             elif self.error_function[0].__code__.co_code == error_functions.rmse.__code__.co_code:
                 for predicted_output, output in zip(predicted_outputs, output_data):
-                    errors.append(error_functions.mse(output, predicted_output))
+                    errors.append(error_functions.rmse(output, predicted_output))
                 error = np.mean(errors)
 
             return error

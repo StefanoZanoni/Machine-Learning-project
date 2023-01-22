@@ -803,5 +803,6090 @@
             "L1",
             0.2
         ]
+    },
+    {
+        "error": 378.1332238513191,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                1e-05
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 731,
+        "regularization_technique": [
+            "L1",
+            0.0
+        ]
+    },
+    {
+        "error": 379.2600387897554,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.0001
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 731,
+        "regularization_technique": [
+            "L1",
+            0.0
+        ]
+    },
+    {
+        "error": 379.2600387897554,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.0001
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 731,
+        "regularization_technique": [
+            "L1",
+            0.0
+        ]
+    },
+    {
+        "error": 381.26164245099477,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.0001
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 731,
+        "regularization_technique": [
+            "L1",
+            0.0
+        ]
+    },
+    {
+        "error": 4.138602314572246e+50,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.001
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 731,
+        "regularization_technique": [
+            "L1",
+            0.0
+        ]
+    },
+    {
+        "error": 9.178905340599561e+96,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 731,
+        "regularization_technique": [
+            "L1",
+            0.0
+        ]
+    },
+    {
+        "error": 1.259012288236443e+99,
+        "structure": [
+            9,
+            64,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 731,
+        "regularization_technique": [
+            "L1",
+            0.0
+        ]
+    },
+    {
+        "error": 4.808555533725424e+109,
+        "structure": [
+            9,
+            64,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 731,
+        "regularization_technique": [
+            "L1",
+            0.01
+        ]
+    },
+    {
+        "error": 2.971406129647205e+102,
+        "structure": [
+            9,
+            64,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 731,
+        "regularization_technique": [
+            "L1",
+            0.01
+        ]
+    },
+    {
+        "error": 1.6752920320283356e+64,
+        "structure": [
+            9,
+            64,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.001
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 731,
+        "regularization_technique": [
+            "L1",
+            0.01
+        ]
+    },
+    {
+        "error": 14264681593123.04,
+        "structure": [
+            9,
+            64,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.0001
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 731,
+        "regularization_technique": [
+            "L1",
+            0.01
+        ]
+    },
+    {
+        "error": 382.379413293606,
+        "structure": [
+            9,
+            64,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                1e-05
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 731,
+        "regularization_technique": [
+            "L1",
+            0.01
+        ]
+    },
+    {
+        "error": 381.3313124928266,
+        "structure": [
+            9,
+            64,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                1e-05
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.01
+        ]
+    },
+    {
+        "error": 378.48609358699616,
+        "structure": [
+            9,
+            64,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.0001
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.01
+        ]
+    },
+    {
+        "error": 378.0054057927492,
+        "structure": [
+            9,
+            64,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.001
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.01
+        ]
+    },
+    {
+        "error": 378.1228571752073,
+        "structure": [
+            9,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.01
+        ]
+    },
+    {
+        "error": 378.0964752593433,
+        "structure": [
+            9,
+            64,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.01
+        ]
+    },
+    {
+        "error": 378.24814973276676,
+        "structure": [
+            9,
+            64,
+            64,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.01
+        ]
+    },
+    {
+        "error": 378.2093881715516,
+        "structure": [
+            9,
+            64,
+            64,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.01
+        ]
+    },
+    {
+        "error": 378.9855245698726,
+        "structure": [
+            9,
+            64,
+            128,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 379.3505803166234,
+        "structure": [
+            9,
+            64,
+            128,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.2
+        ]
+    },
+    {
+        "error": 379.44465667027004,
+        "structure": [
+            9,
+            64,
+            128,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.2
+        ]
+    },
+    {
+        "error": 379.3007647301339,
+        "structure": [
+            9,
+            128,
+            128,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.2
+        ]
+    },
+    {
+        "error": 384.6771602629204,
+        "structure": [
+            9,
+            128,
+            128,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.2
+        ]
+    },
+    {
+        "error": 380.4609801877731,
+        "structure": [
+            9,
+            128,
+            128,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "RMSProp",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.2
+        ]
+    },
+    {
+        "error": 381.80056118198206,
+        "structure": [
+            9,
+            128,
+            128,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "RMSProp",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.2
+        ]
+    },
+    {
+        "error": 381.9172506150709,
+        "structure": [
+            9,
+            128,
+            128,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "RMSProp",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.2
+        ]
+    },
+    {
+        "error": 879.5380938140183,
+        "structure": [
+            9,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "RMSProp",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.2
+        ]
+    },
+    {
+        "error": 12013.677099034825,
+        "structure": [
+            9,
+            256,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "RMSProp",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.2
+        ]
+    },
+    {
+        "error": 508.27902740369063,
+        "structure": [
+            9,
+            256,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.2
+        ]
+    },
+    {
+        "error": 673.9009242663707,
+        "structure": [
+            9,
+            256,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.2
+        ]
+    },
+    {
+        "error": 508.27902740369063,
+        "structure": [
+            9,
+            256,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.2
+        ]
+    },
+    {
+        "error": 380.63041977993475,
+        "structure": [
+            9,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.2
+        ]
+    },
+    {
+        "error": 390.1728159715188,
+        "structure": [
+            9,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.3
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.2
+        ]
+    },
+    {
+        "error": 382.0485578304281,
+        "structure": [
+            9,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.2
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.2
+        ]
+    },
+    {
+        "error": 379.27497706908304,
+        "structure": [
+            9,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.2
+        ]
+    },
+    {
+        "error": 378.9040496594643,
+        "structure": [
+            9,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 379.28577941508473,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 379.17910452856165,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 379.3500101780021,
+        "structure": [
+            9,
+            16,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 380.1212926078625,
+        "structure": [
+            9,
+            16,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 380.59251106098696,
+        "structure": [
+            9,
+            16,
+            16,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 381.0599738094987,
+        "structure": [
+            9,
+            32,
+            16,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 380.4959811788691,
+        "structure": [
+            9,
+            32,
+            32,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 380.53430208843173,
+        "structure": [
+            9,
+            32,
+            32,
+            32,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 379.9176411289487,
+        "structure": [
+            9,
+            32,
+            32,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 380.47616169997576,
+        "structure": [
+            9,
+            32,
+            32,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 379.3530088097331,
+        "structure": [
+            9,
+            32,
+            32,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 380.11725895615524,
+        "structure": [
+            9,
+            32,
+            32,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 389.86530950471774,
+        "structure": [
+            9,
+            32,
+            32,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 10,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 426.2872433112884,
+        "structure": [
+            9,
+            32,
+            32,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 731,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 1796990414.291865,
+        "structure": [
+            9,
+            32,
+            32,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.9
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 731,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 418.34736970821575,
+        "structure": [
+            9,
+            32,
+            32,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.9
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 700,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 420.8571833719647,
+        "structure": [
+            9,
+            32,
+            32,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.9
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 350,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 424.4662948860919,
+        "structure": [
+            9,
+            32,
+            32,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.5
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 350,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 415.02258163522913,
+        "structure": [
+            9,
+            32,
+            32,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.5
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 100,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 404.42289386719557,
+        "structure": [
+            9,
+            32,
+            32,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.3
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 50,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 380.03483065136857,
+        "structure": [
+            9,
+            32,
+            32,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.3
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 50,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 383.22663641662405,
+        "structure": [
+            9,
+            32,
+            32,
+            32,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.3
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 50,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 380.9764402628575,
+        "structure": [
+            9,
+            32,
+            32,
+            32,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.3
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 50,
+        "regularization_technique": [
+            "L1",
+            0.01
+        ]
+    },
+    {
+        "error": 382.10239280790887,
+        "structure": [
+            9,
+            32,
+            32,
+            32,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.3
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 50,
+        "regularization_technique": [
+            "L2",
+            0.01
+        ]
+    },
+    {
+        "error": 384.5603934445983,
+        "structure": [
+            9,
+            64,
+            64,
+            64,
+            64,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.3
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 50,
+        "regularization_technique": [
+            "L1",
+            0.01
+        ]
+    },
+    {
+        "error": 405.86755197896906,
+        "structure": [
+            9,
+            64,
+            64,
+            64,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.3
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 50,
+        "regularization_technique": [
+            "L1",
+            0.01
+        ]
+    },
+    {
+        "error": 380.8754075265468,
+        "structure": [
+            9,
+            64,
+            64,
+            64,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.3
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 50,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 380.391280355087,
+        "structure": [
+            9,
+            64,
+            64,
+            64,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.3
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 100,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 379.21137737336403,
+        "structure": [
+            9,
+            64,
+            64,
+            64,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.5
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 100,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 379.41553539197434,
+        "structure": [
+            9,
+            64,
+            64,
+            64,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.5
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L1",
+            0.1
+        ]
+    },
+    {
+        "error": 378.8736982827712,
+        "structure": [
+            9,
+            64,
+            64,
+            64,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.5
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.1
+        ]
+    },
+    {
+        "error": 378.99330447482726,
+        "structure": [
+            9,
+            64,
+            64,
+            64,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.6
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.1
+        ]
+    },
+    {
+        "error": 378.7404406566066,
+        "structure": [
+            9,
+            64,
+            64,
+            64,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.6
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 407.0026822195949,
+        "structure": [
+            9,
+            128,
+            64,
+            64,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.6
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 379.3878879971078,
+        "structure": [
+            9,
+            128,
+            64,
+            64,
+            128,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.6
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 398.053829641948,
+        "structure": [
+            9,
+            128,
+            64,
+            64,
+            128,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.6
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 380.8745080622202,
+        "structure": [
+            9,
+            128,
+            64,
+            64,
+            128,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.6
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 382.7010265610264,
+        "structure": [
+            9,
+            128,
+            64,
+            64,
+            128,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.6
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 378.82937390141535,
+        "structure": [
+            9,
+            128,
+            64,
+            64,
+            128,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.6
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 386.6298816603753,
+        "structure": [
+            9,
+            128,
+            64,
+            64,
+            128,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.6
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 390.46153294635013,
+        "structure": [
+            9,
+            128,
+            128,
+            128,
+            128,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.6
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 274.4637823763213,
+        "structure": [
+            9,
+            16,
+            16,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.6
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 18.832106055543008,
+        "structure": [
+            9,
+            16,
+            16,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mae",
+            "mae_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.6
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 341.5481701614954,
+        "structure": [
+            9,
+            8,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.6
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 341.5481701614954,
+        "structure": [
+            9,
+            8,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.6
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 342.6104963916249,
+        "structure": [
+            9,
+            8,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.8
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 462.11299649685037,
+        "structure": [
+            9,
+            8,
+            8,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.8
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 429.1027683947127,
+        "structure": [
+            9,
+            8,
+            8,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.8
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 386.9483351752322,
+        "structure": [
+            9,
+            8,
+            8,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.8
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 396.1108006710363,
+        "structure": [
+            9,
+            8,
+            8,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "swish",
+                "swish_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.8
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 385.8397459587057,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "sigmoid",
+                "selu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.8
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 381.1295964303562,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "sigmoid",
+                "selu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.8
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 392.440325062059,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.8
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "AdaGrad",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 5.703174881457715e+106,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.8
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "None",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 1.493755752251377e+177,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.8
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "None",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 8.81331734614298e+45,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "None",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 376.6435416560994,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "None",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.15
+        ]
+    },
+    {
+        "error": 381.9960969188364,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "None",
+        "mini_batch_size": 50,
+        "regularization_technique": [
+            "L2",
+            0.01
+        ]
+    },
+    {
+        "error": 381.58365142837914,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "None",
+        "mini_batch_size": 25,
+        "regularization_technique": [
+            "L2",
+            0.01
+        ]
+    },
+    {
+        "error": 331.8579170393291,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "None",
+        "mini_batch_size": 10,
+        "regularization_technique": [
+            "L2",
+            0.01
+        ]
+    },
+    {
+        "error": 313.20841167555557,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "None",
+        "mini_batch_size": 5,
+        "regularization_technique": [
+            "L2",
+            0.01
+        ]
+    },
+    {
+        "error": 378.07045323509635,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "None",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.01
+        ]
+    },
+    {
+        "error": 339.7217592438657,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.001
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "None",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.01
+        ]
+    },
+    {
+        "error": 339.72175924386613,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.001
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.01
+        ]
+    },
+    {
+        "error": 365.2210933978553,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.001
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.01
+        ]
+    },
+    {
+        "error": 19.06826260827703,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "rmse",
+            "rmse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.001
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.01
+        ]
+    },
+    {
+        "error": 18.506137509683178,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "rmse",
+            "rmse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.001
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.01
+        ]
+    },
+    {
+        "error": 378.99286777362806,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.001
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.01
+        ]
+    },
+    {
+        "error": 378.14533500439603,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.01
+        ]
+    },
+    {
+        "error": 378.13265994515575,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.01
+        ]
+    },
+    {
+        "error": 378.13265994515575,
+        "structure": [
+            9,
+            16,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.01
+        ]
+    },
+    {
+        "error": 421.71499781297246,
+        "structure": [
+            9,
+            64,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.001
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.01
+        ]
+    },
+    {
+        "error": 378.0081399072268,
+        "structure": [
+            9,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.001
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.01
+        ]
+    },
+    {
+        "error": 378.01375170837235,
+        "structure": [
+            9,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.001
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.01
+        ]
+    },
+    {
+        "error": 364.04092905832385,
+        "structure": [
+            9,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 100,
+        "regularization_technique": [
+            "L2",
+            0.01
+        ]
+    },
+    {
+        "error": 9.835632851962768e+195,
+        "structure": [
+            9,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 100,
+        "regularization_technique": [
+            "L2",
+            0.01
+        ]
+    },
+    {
+        "error": 5.948859511268364e+189,
+        "structure": [
+            9,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.5
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 200,
+        "regularization_technique": [
+            "L2",
+            0.01
+        ]
+    },
+    {
+        "error": 7.235947995046418e+62,
+        "structure": [
+            9,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.5
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 500,
+        "regularization_technique": [
+            "L2",
+            0.01
+        ]
+    },
+    {
+        "error": 5.700735433372468e+213,
+        "structure": [
+            9,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 100,
+        "regularization_technique": [
+            "L2",
+            0.6
+        ]
+    },
+    {
+        "error": 1.1356656475668927e+188,
+        "structure": [
+            9,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 100,
+        "regularization_technique": [
+            "L2",
+            10
+        ]
+    },
+    {
+        "error": 1.439056772663225e+209,
+        "structure": [
+            9,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 100,
+        "regularization_technique": [
+            "L2",
+            1000
+        ]
+    },
+    {
+        "error": 3.912855655791781e+231,
+        "structure": [
+            9,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 100,
+        "regularization_technique": [
+            "L2",
+            500
+        ]
+    },
+    {
+        "error": 1.7532596811689495e+215,
+        "structure": [
+            9,
+            32,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 100,
+        "regularization_technique": [
+            "L2",
+            0.9
+        ]
+    },
+    {
+        "error": 429.3211489953464,
+        "structure": [
+            9,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.9
+        ]
+    },
+    {
+        "error": 429.3211489953464,
+        "structure": [
+            9,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.9
+        ]
+    },
+    {
+        "error": 378.9751108599362,
+        "structure": [
+            9,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.9
+        ]
+    },
+    {
+        "error": 378.97511076048795,
+        "structure": [
+            9,
+            16,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.9
+        ]
+    },
+    {
+        "error": 378.9751412809484,
+        "structure": [
+            9,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "leaky_relu",
+                "leaky_relu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.9
+        ]
+    },
+    {
+        "error": 378.8429196975391,
+        "structure": [
+            9,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "selu",
+                "selu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.9
+        ]
+    },
+    {
+        "error": 378.8555396619806,
+        "structure": [
+            9,
+            32,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.9
+        ]
+    },
+    {
+        "error": 379.96172761270543,
+        "structure": [
+            9,
+            2,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.9
+        ]
+    },
+    {
+        "error": 379.96213372779806,
+        "structure": [
+            9,
+            2,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.9
+        ]
+    },
+    {
+        "error": 379.96213372779806,
+        "structure": [
+            9,
+            2,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.9
+        ]
+    },
+    {
+        "error": 379.96172761270543,
+        "structure": [
+            9,
+            2,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.9
+        ]
+    },
+    {
+        "error": 379.9617271520272,
+        "structure": [
+            9,
+            2,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.9
+        ]
+    },
+    {
+        "error": 379.9617271520272,
+        "structure": [
+            9,
+            2,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "None",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.9
+        ]
+    },
+    {
+        "error": 379.96172761270543,
+        "structure": [
+            9,
+            2,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mse",
+            "mse_derivative"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.01
+            ],
+            [
+                "leaky_hp",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "None",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "L2",
+            0.9
+        ]
     }
 ]

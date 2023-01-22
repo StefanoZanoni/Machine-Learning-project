@@ -22,16 +22,17 @@ blind_testing_input = np.array(blind_testing_df[['a1', 'a2', 'a3', 'a4', 'a5', '
 
 # training_input = pp.min_max_scaling(training_input)
 
-activation_functions = [[(af.leaky_relu, af.leaky_relu_gradient), (af.leaky_relu, af.leaky_relu_gradient), (af.linear, af.linear_gradient)]]
+activation_functions = [[(af.tanh, af.tanh_gradient), (af.linear, af.linear_gradient)]]
 error_function = (ef.mse, ef.mse_derivative)
 hyper_parameters = [[('learning_rate', 0.01), ('leaky_hp', 0.1)]]
-regularization_techniques = [("L1", 100)]
+regularization_techniques = [("L2", 0.9)]
 
-performance = holdout.holdout_selection_assessment(training_input, training_output, [("structures", [[9, 16, 16, 2]]),
+performance = holdout.holdout_selection_assessment(training_input, training_output, [("structures", [[9, 2, 2]]),
                                                                               ("activation_functions", activation_functions),
                                                                               ("error_functions", [error_function]),
                                                                               ("hyper_parameters", hyper_parameters),
-                                                                              ("gradient_descent_techniques", ["NesterovM"]),
-                                                                              ("mini_batch_sizes", [731]),
+                                                                              ("gradient_descent_techniques", ["None"]),
+                                                                              ("mini_batch_sizes", [1]),
                                                                               ("regularization_techniques", regularization_techniques)],
                                                                                70, 70, False, "../MLcup_models.json", False, dt)
+# 731
