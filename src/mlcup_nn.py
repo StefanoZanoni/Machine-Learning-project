@@ -31,7 +31,7 @@ performance = holdout.holdout_selection_assessment(training_input, training_outp
                                                                               ("activation_functions", activation_functions),
                                                                               ("error_functions", [error_function]),
                                                                               ("hyper_parameters", hyper_parameters),
-                                                                              ("gradient_descent_techniques", ["None"]),
+                                                                              ("gradient_descent_techniques", ["NesterovM"]),
                                                                               ("mini_batch_sizes", [1]),
                                                                               ("regularization_techniques", regularization_techniques)],
                                                                                70, 70, False, "../MLcup_models.json", False, dt)

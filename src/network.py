@@ -51,7 +51,8 @@ class Network:
             # normalized Xavier/Glorot weight initialization for Sigmoid or Tanh
             elif fun[0].__code__.co_code == af.sigmoid.__code__.co_code or \
                     fun[0].__code__.co_code == af.tanh.__code__.co_code:
-                lower, upper = -(np.sqrt(6.0) / np.sqrt(self.structure[s] + self.structure[s + 1])), (np.sqrt(6.0) / np.sqrt(self.structure[s] + self.structure[s + 1]))
+                lower, upper = -(np.sqrt(6.0) / np.sqrt(self.structure[s] + self.structure[s + 1])), (
+                            np.sqrt(6.0) / np.sqrt(self.structure[s] + self.structure[s + 1]))
                 weights = np.random.rand(l, next_l)
                 scaled_weights = lower + weights * (upper - lower)
                 weights_list.append(scaled_weights)
@@ -146,7 +147,8 @@ class Network:
                 if len(params1) == 1:
                     if self.gradient_descent == "NesterovM":
                         nesterov_vw = args[0]
-                        delta = np.multiply(f1(NETs[layer]), (self.__get_weights(self.W[layer + 1], nesterov_vw[layer + 1]) @ delta))
+                        delta = np.multiply(f1(NETs[layer]),
+                                            (self.__get_weights(self.W[layer + 1], nesterov_vw[layer + 1]) @ delta))
                     else:
                         delta = np.multiply(f1(NETs[layer]),
                                             (self.__get_weights(self.W[layer + 1]) @ delta))
@@ -154,7 +156,8 @@ class Network:
                     alpha = self.hyper_parameters[1][1]
                     if self.gradient_descent == "NesterovM":
                         nesterov_vw = args[0]
-                        delta = np.multiply(f1(NETs[layer], alpha), (self.__get_weights(self.W[layer + 1], nesterov_vw[layer + 1]) @ delta))
+                        delta = np.multiply(f1(NETs[layer], alpha),
+                                            (self.__get_weights(self.W[layer + 1], nesterov_vw[layer + 1]) @ delta))
                     else:
                         delta = np.multiply(f1(NETs[layer], alpha), (self.__get_weights(self.W[layer + 1]) @ delta))
 
@@ -171,7 +174,6 @@ class Network:
         else:
             return w
 
-    # TODO fix nesterov_vw, nesterov_vb not updated
     def __gradient_descent(self, mini_batch, training_set_len, *args):
         self.DE_B = [np.zeros(b.shape) for b in self.B]
         self.DE_W = [np.zeros(W.shape) for W in self.W]
@@ -200,7 +202,7 @@ class Network:
             w_cache = args[0]
             b_cache = args[1]
             self.__ada_grad(w_cache, b_cache, regularization, lambda_hp, d)
-        elif self.gradient_descent == "RMSProp":
+        elif self.gradient_descent == "RMSprop":
             w_cache = args[0]
             b_cache = args[1]
             self.__rms_prop(0.9, w_cache, b_cache, regularization, lambda_hp, d)
@@ -221,8 +223,14 @@ class Network:
     def __nesterov_momentum(self, regularization, lambda_hp, d, nesterov_vw, nesterov_vb):
         eta = self.hyper_parameters[0][1]
         gamma = 0.9
-        nesterov_vw = [gamma * v + (eta / d) * DE_w for v, DE_w in zip(nesterov_vw, self.DE_W)]
-        nesterov_vb = [gamma * v + (eta / d) * DE_b for v, DE_b in zip(nesterov_vb, self.DE_B)]
+
+        temp_vw = [gamma * v + (eta / d) * DE_w for v, DE_w in zip(nesterov_vw, self.DE_W)]
+        temp_vb = [gamma * v + (eta / d) * DE_b for v, DE_b in zip(nesterov_vb, self.DE_B)]
+        for i in range(len(nesterov_vw)):
+            nesterov_vw[i] = temp_vw[i]
+        for i in range(len(nesterov_vb)):
+            nesterov_vb[i] = temp_vb[i]
+
         if regularization == "None":
             self.W = [W - v for v, W in zip(nesterov_vw, self.W)]
         elif regularization == "L1":
@@ -232,12 +240,16 @@ class Network:
 
         self.B = [B - v for v, B in zip(nesterov_vb, self.B)]
 
-        return nesterov_vw, nesterov_vb
-
     def __ada_grad(self, w_cache, b_cache, regularization, lambda_hp, d):
         eta = self.hyper_parameters[0][1]
-        w_cache = list(map(np.add, w_cache, list(map(np.square, self.DE_W))))
-        b_cache = list(map(np.add, b_cache, list(map(np.square, self.DE_B))))
+
+        tempw_cache = list(map(np.add, w_cache, list(map(np.square, self.DE_W))))
+        tempb_cache = list(map(np.add, b_cache, list(map(np.square, self.DE_B))))
+        for i in range(len(w_cache)):
+            w_cache[i] = tempw_cache[i]
+        for i in range(len(b_cache)):
+            b_cache[i] = tempb_cache[i]
+
         if regularization == "None":
             self.W = [W - (np.multiply(eta / d, DE_w) / (np.sqrt(w) + self.eps)) for W, DE_w, w in
                       zip(self.W, self.DE_W, w_cache)]
@@ -256,15 +268,21 @@ class Network:
 
     def __rms_prop(self, decay_rate, w_cache, b_cache, regularization, lambda_hp, d):
         eta = self.hyper_parameters[0][1]
+
         w_first_term = list(map(np.multiply, [decay_rate for i in range(len(w_cache))], w_cache))
         w_second_term = list(
             map(np.multiply, [1 - decay_rate for i in range(len(w_cache))], list(map(np.square, self.DE_W))))
-        w_cache = list(map(sum, w_first_term, w_second_term))
+        tempw_cache = list(map(sum, w_first_term, w_second_term))
 
         b_first_term = list(map(np.multiply, [decay_rate for i in range(len(b_cache))], b_cache))
         b_second_term = list(
             map(np.multiply, [1 - decay_rate for i in range(len(b_cache))], list(map(np.square, self.DE_B))))
-        b_cache = list(map(sum, b_first_term, b_second_term))
+        tempb_cache = list(map(sum, b_first_term, b_second_term))
+
+        for i in range(len(w_cache)):
+            w_cache[i] = tempw_cache[i]
+        for i in range(len(b_cache)):
+            b_cache[i] = tempb_cache[i]
 
         if regularization == "None":
             self.W = [W - np.multiply(eta / d, DE_w) / (np.sqrt(w) + self.eps) for W, DE_w, w in
@@ -288,6 +306,7 @@ class Network:
     # training_output: array like
     # mini_batch_size: int
     def train(self, end, training_input, training_output, mini_batch_size):
+
         # dividing training data into mini batch
         training_input = np.array(training_input)
         training_output = np.array(training_output)
@@ -311,23 +330,24 @@ class Network:
 
         mini_batches = np.array(mini_batches, dtype=np.ndarray)
 
-        if self.gradient_descent == "AdaGrad" or self.gradient_descent == "RMSProp":
+        if self.gradient_descent == "AdaGrad" or self.gradient_descent == "RMSprop":
             w_cache = [np.zeros_like(DE_w) for DE_w in self.DE_W]
             b_cache = [np.zeros_like(DE_b) for DE_b in self.DE_B]
         if self.gradient_descent == "NesterovM":
             nesterov_vw = [np.zeros_like(W) for W in self.W]
-            nesterov_vb = [np.zeros_like(B)for B in self.B]
+            nesterov_vb = [np.zeros_like(B) for B in self.B]
 
         patience = [20]
         patience_starting_point = patience
+        max_epoch = 200
 
         # start training
-        while not end(patience_starting_point, patience, 200):
+        while not end(patience_starting_point, patience, max_epoch):
             self.epoch += 1
             self.errors = []
 
             for mini_batch in mini_batches:
-                if self.gradient_descent == "AdaGrad" or self.gradient_descent == "RMSProp":
+                if self.gradient_descent == "AdaGrad" or self.gradient_descent == "RMSprop":
                     self.__gradient_descent(mini_batch, n, w_cache, b_cache)
                 elif self.gradient_descent == "NesterovM":
                     self.__gradient_descent(mini_batch, n, nesterov_vw, nesterov_vb)
@@ -344,7 +364,6 @@ class Network:
                 patience = patience_starting_point
 
         return patience[0] == 0 or self.epoch > max_epoch
-        # return self.epoch > 1000
 
     def compute_performance(self, input_data, output_data):
 
