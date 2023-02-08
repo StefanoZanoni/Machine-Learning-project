@@ -51,7 +51,7 @@ optimal_model = holdout.holdout_selection(training_input1, training_output1, [("
                                                                                ("error_functions", [error_function1]),
                                                                                ("hyper_parameters", hyper_parameters),
                                                                                (
-                                                                               "gradient_descend_techniques", ["NesterovM"]),
+                                                                               "gradient_descend_techniques", ["None"]),
                                                                                 ("mini_batch_sizes", [1]),
                                                                                ("regularization_techniques",
                                                                                 regularization_techniques1)],
@@ -62,42 +62,42 @@ print("Model selection in seconds:", np.ceil(timer() - start))
 performance = optimal_model.compute_performance(testing_input1, testing_output1)
 print(performance)
 
-# MONK2
-data = read_data_set(2)
-training_input2 = data[0]
-training_output2 = data[1]
-testing_input2 = data[2]
-testing_output2 = data[3]
-
-activation_functions2 = [[(af.tanh, af.tanh_gradient), (af.tanh, af.tanh_gradient), (af.sigmoid, af.sigmoid_gradient)],
-    [(af.leaky_relu, af.leaky_relu_gradient), (af.leaky_relu, af.leaky_relu_gradient), (af.sigmoid, af.sigmoid_gradient)]]
-error_function2 = (ef.bce, ef.bce_derivative)
-hyper_parameters2 = [[('learning_rate', 0.001), ('leaky', 0.1)]]
-regularization_techniques2 = [("None", 0)]
-
-# 166 data
-training_input2 = pp.one_hot_encoding(training_input2)
-testing_input2 = pp.one_hot_encoding(testing_input2)
-
-start = timer()
-
-optimal_model = holdout.holdout_selection(training_input2, training_output2, [("structures", [[17, 4, 2, 1]]),
-                                                                               (
-                                                                                   "activation_functions",
-                                                                                   activation_functions2),
-                                                                               ("error_functions", [error_function2]),
-                                                                               ("hyper_parameters", hyper_parameters2),
-                                                                               (
-                                                                               "gradient_descend_techniques", ["NesterovM"]),
-                                                                               ("mini_batch_sizes", [1]),
-                                                                               ("regularization_techniques",
-                                                                                regularization_techniques2)],
-                                           70, False, "../Monk2_models.json", True, dt)
-
-print("Model selection in seconds:", np.ceil(timer() - start))
-
-performance = optimal_model.compute_performance(testing_input2, testing_output2)
-print(performance)
+# # MONK2
+# data = read_data_set(2)
+# training_input2 = data[0]
+# training_output2 = data[1]
+# testing_input2 = data[2]
+# testing_output2 = data[3]
+#
+# activation_functions2 = [[(af.tanh, af.tanh_gradient), (af.tanh, af.tanh_gradient), (af.sigmoid, af.sigmoid_gradient)],
+#     [(af.leaky_relu, af.leaky_relu_gradient), (af.leaky_relu, af.leaky_relu_gradient), (af.sigmoid, af.sigmoid_gradient)]]
+# error_function2 = (ef.bce, ef.bce_derivative)
+# hyper_parameters2 = [[('learning_rate', 0.001), ('leaky', 0.1)]]
+# regularization_techniques2 = [("None", 0)]
+#
+# # 166 data
+# training_input2 = pp.one_hot_encoding(training_input2)
+# testing_input2 = pp.one_hot_encoding(testing_input2)
+#
+# start = timer()
+#
+# optimal_model = holdout.holdout_selection(training_input2, training_output2, [("structures", [[17, 4, 2, 1]]),
+#                                                                                (
+#                                                                                    "activation_functions",
+#                                                                                    activation_functions2),
+#                                                                                ("error_functions", [error_function2]),
+#                                                                                ("hyper_parameters", hyper_parameters2),
+#                                                                                (
+#                                                                                "gradient_descend_techniques", ["NesterovM"]),
+#                                                                                ("mini_batch_sizes", [1]),
+#                                                                                ("regularization_techniques",
+#                                                                                 regularization_techniques2)],
+#                                            70, False, "../Monk2_models.json", True, dt)
+#
+# print("Model selection in seconds:", np.ceil(timer() - start))
+#
+# performance = optimal_model.compute_performance(testing_input2, testing_output2)
+# print(performance)
 
 
 # # MONK3

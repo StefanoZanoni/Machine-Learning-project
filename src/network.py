@@ -10,6 +10,7 @@ from matplotlib import pyplot as plt
 
 
 class Network:
+
     def __init__(self, structure, activation_functions, error_function, hyper_parameters, is_classification,
                  regularization=("None", 0), optimizer="None", eps=1e-6):
         self.structure = structure
@@ -48,7 +49,7 @@ class Network:
                 scaled_weights = weights * std
                 weights_list.append(scaled_weights)
 
-            # normalized Xavier/Glorot weight initialization for Sigmoid or Tanh
+            # normalized Xavier/Glorot weights initialization for Sigmoid or Tanh
             elif fun[0].__code__.co_code == af.sigmoid.__code__.co_code or \
                     fun[0].__code__.co_code == af.tanh.__code__.co_code:
                 lower, upper = -(np.sqrt(6.0) / np.sqrt(self.structure[s] + self.structure[s + 1])), (
@@ -150,8 +151,7 @@ class Network:
                         delta = np.multiply(f1(NETs[layer]),
                                             (self.__get_weights(self.W[layer + 1], nesterov_vw[layer + 1]) @ delta))
                     else:
-                        delta = np.multiply(f1(NETs[layer]),
-                                            (self.__get_weights(self.W[layer + 1]) @ delta))
+                        delta = np.multiply(f1(NETs[layer]), self.W[layer + 1] @ delta)
                 else:
                     alpha = self.hyper_parameters[1][1]
                     if self.gradient_descent == "NesterovM":
@@ -159,20 +159,18 @@ class Network:
                         delta = np.multiply(f1(NETs[layer], alpha),
                                             (self.__get_weights(self.W[layer + 1], nesterov_vw[layer + 1]) @ delta))
                     else:
-                        delta = np.multiply(f1(NETs[layer], alpha), (self.__get_weights(self.W[layer + 1]) @ delta))
+                        delta = np.multiply(f1(NETs[layer], alpha), self.W[layer + 1] @ delta)
 
             pDE_B[layer] = delta
             pDE_W[layer] = OUTPUTs[layer - 1] @ delta.T if layer != 0 else x @ delta.T
 
         return pDE_B, pDE_W
 
-    def __get_weights(self, w, *v):
+    @staticmethod
+    def __get_weights(w, v):
         gamma = 0.9
-        if self.gradient_descent == "NesterovM":
-            w_look_ahead = w - gamma * v[0]
-            return w_look_ahead
-        else:
-            return w
+        w_look_ahead = w - gamma * v[0]
+        return w_look_ahead
 
     def __gradient_descent(self, mini_batch, training_set_len, *args):
         self.DE_B = [np.zeros(b.shape) for b in self.B]
@@ -373,19 +371,12 @@ class Network:
             for x, y in zip(input_data, output_data):
                 predicted_output = self.forward(x)
 
-                # multi-class classification
-                if not isinstance(predicted_output, int):
-                    if np.array_equal(predicted_output, y):
-                        correct_prevision += 1
-                # binary classification
-                else:
-                    if predicted_output == y:
-                        correct_prevision += 1
+                if np.array_equal(predicted_output, y):
+                    correct_prevision += 1
 
             accuracy = correct_prevision * 100 / len(output_data)
 
             return accuracy
-
         else:
             predicted_outputs = []
             for x, y in zip(input_data, output_data):
