@@ -8,9 +8,11 @@ from src import holdout
 # (input, output) type
 dt = object
 
-training_df = pd.read_csv('../MLcup_ploblem/ML-CUP22-TR.csv', names=['id', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'o1', 'o2'])
+training_df = pd.read_csv('../MLcup_ploblem/ML-CUP22-TR.csv',
+                          names=['id', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'o1', 'o2'])
 training_df = training_df.dropna(axis=0)
-blind_testing_df = pd.read_csv('../MLcup_ploblem/ML-CUP22-TS.csv', names=['id', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9'])
+blind_testing_df = pd.read_csv('../MLcup_ploblem/ML-CUP22-TS.csv',
+                               names=['id', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9'])
 blind_testing_df = blind_testing_df.dropna(axis=0)
 
 training_input = np.array(training_df[['a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9']])
@@ -26,11 +28,16 @@ hyper_parameters = [[('learning_rate', 0.001), ('leaky_hp', 0.1)]]
 regularization_techniques = [("L1", 10)]
 
 performance = holdout.holdout_selection_assessment(training_input, training_output, [("structures", [[9, 64, 16, 2]]),
-                                                                              ("activation_functions", activation_functions),
-                                                                              ("error_functions", [error_function]),
-                                                                              ("hyper_parameters", hyper_parameters),
-                                                                              ("gradient_descent_techniques", ["None"]),
-                                                                              ("mini_batch_sizes", [1]),
-                                                                              ("regularization_techniques", regularization_techniques)],
-                                                                               70, 70, False, "../MLcup_models.json", False, dt)
+                                                                                     ("activation_functions",
+                                                                                      activation_functions),
+                                                                                     ("error_functions",
+                                                                                      [error_function]),
+                                                                                     ("hyper_parameters",
+                                                                                      hyper_parameters),
+                                                                                     ("gradient_descent_techniques",
+                                                                                      ["None"]),
+                                                                                     ("mini_batch_sizes", [1]),
+                                                                                     ("regularization_techniques",
+                                                                                      regularization_techniques)],
+                                                   70, 70, False, "../MLcup_models.json", False, dt)
 # 731

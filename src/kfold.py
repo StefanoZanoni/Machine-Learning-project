@@ -1,5 +1,6 @@
 import numpy as np
 import validation_utilities
+from src.holdout import training
 
 
 def k_fold_cross_validation(data_set, output_data_set, hyper_parameters_set, k, randomized_search, filename,
@@ -23,10 +24,10 @@ def k_fold_cross_validation(data_set, output_data_set, hyper_parameters_set, k, 
     else:
         print("Best error: " + str(best_performance) + " | List of hyperparameters used: " + str(best_hp))
 
-    network = nt.Network(best_hp[0], best_hp[1], best_hp[2], best_hp[3], is_classification, best_hp[6], best_hp[4])
-    network.train(network.stop(), data_set, output_data_set, best_hp[5])
+    net = network.Network(best_hp[0], best_hp[1], best_hp[2], best_hp[3], is_classification, best_hp[6], best_hp[4])
+    net.train(net.stop(), data_set, output_data_set, best_hp[5])
 
-    return network
+    return net
 
 
 def cross_validation_inner(data_set, output_data_set, parameters, k):
@@ -45,7 +46,7 @@ def cross_validation_inner(data_set, output_data_set, parameters, k):
         hyperparameters = parameters + [training_set, output_training_set, validation_set, output_validation_set,
                                         proportions]
 
-        performance, arguments, network = threaded_training(hyperparameters)
+        performance, arguments, network = training(hyperparameters)
 
         performance_sum += performance
 
