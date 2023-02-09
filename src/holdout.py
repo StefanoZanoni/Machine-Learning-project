@@ -1,12 +1,12 @@
 import sys
-from multiprocessing.pool import ThreadPool
-
 import numpy as np
-import network as nt
 import multiprocessing
-import validation_utilities
+from multiprocessing.pool import ThreadPool
+from timeit import default_timer as timer
 
 from src import preprocessing
+from src import network
+from src import validation_utilities
 
 
 def holdout_selection(data_set, output_data_set, hyper_parameters_set, split_percentage, randomized_search, filename,
@@ -23,16 +23,19 @@ def holdout_selection(data_set, output_data_set, hyper_parameters_set, split_per
     for i in range(len(hp)):
         hp[i] = hp[i] + [training_set, output_training_set, validation_set, output_validation_set]
 
+    start = timer()
     best_model, mini_batch_size = search_best_model(hp, filename, is_classification)
     best_model.train(best_model.stop, data_set, output_data_set, mini_batch_size)
+    stop = timer()
+    print('model selection in seconds: ' + str(np.ceil(stop - start)))
     best_model.plot_learning_rate('green')
 
     return best_model
 
 
-def holdout_selection_assessment(data_set, output_data_set, hyper_parameters_set, test_split_percentage,
-                                 selection_split_percentage, randomized_search, filename, is_classification, dt):
-    selection_set_len = int(np.ceil(test_split_percentage * data_set.shape[0] / 100))
+def holdout_selection_assessment(data_set, output_data_set, hyper_parameters_set, selection_split_percentage,
+                                 training_split_percentage, randomized_search, filename, is_classification, dt):
+    selection_set_len = int(np.ceil(selection_split_percentage * data_set.shape[0] / 100))
     temp_data = np.array([[inp, out] for inp, out in zip(data_set, output_data_set)], dtype=dt)
     temp_data = preprocessing.shuffle_data(temp_data)
     selection_set = temp_data[:selection_set_len, 0]
@@ -41,7 +44,7 @@ def holdout_selection_assessment(data_set, output_data_set, hyper_parameters_set
     output_test_set = temp_data[selection_set_len:, 1]
 
     best_model = holdout_selection(selection_set, output_selection_set, hyper_parameters_set,
-                                   selection_split_percentage, randomized_search, filename, is_classification, dt)
+                                   training_split_percentage, randomized_search, filename, is_classification, dt)
 
     performance = best_model.compute_performance(test_set, output_test_set)
 
@@ -59,7 +62,6 @@ def search_best_model(parameters, filename, is_classification):
         best_hyper_parameters_found_max = []
         best_hyper_parameters_found_min = []
         for result in pool.map(training, parameters):
-            # result = training(hp)
             accuracy = result[0]
             if accuracy > max_accuracy_achieved:
                 max_accuracy_achieved = accuracy
@@ -81,10 +83,10 @@ def search_best_model(parameters, filename, is_classification):
     else:
         error_min = sys.float_info.max
         best_hyper_parameters_found = []
-        for hp in parameters:
-            result = training(hp)
-            if result[0] < error_min:
-                error_min = result[0]
+        for result in pool.map(training, parameters):
+            performance = result[0]
+            if performance < error_min:
+                error_min = performance
                 best_hyper_parameters_found = result[1]
                 best_network = result[2]
 
@@ -101,9 +103,9 @@ def search_best_model(parameters, filename, is_classification):
         validation_utilities.dump_on_json(error_min, best_hyper_parameters_found, filename,
                                           is_classification)
 
-    nn_model = nt.Network(best_hyper_parameters_found[0], best_hyper_parameters_found[1],
-                          best_hyper_parameters_found[2], best_hyper_parameters_found[3],
-                          is_classification, best_hyper_parameters_found[6], best_hyper_parameters_found[4])
+    nn_model = network.Network(best_hyper_parameters_found[0], best_hyper_parameters_found[1],
+                               best_hyper_parameters_found[2], best_hyper_parameters_found[3],
+                               is_classification, best_hyper_parameters_found[6], best_hyper_parameters_found[4])
 
     if is_classification:
         nn_model.take_opposite = take_opposite
@@ -125,10 +127,10 @@ def training(arguments):
     validation_set = arguments[10]
     output_validation_set = arguments[11]
 
-    network = nt.Network(structure, activation_functions, error_function, hyper_parameters, is_classification,
-                         regularization_technique,
-                         gradient_descent_technique)
-    network.train(network.stop, training_set, output_training_set, mini_batch_size)
-    performance = network.compute_performance(validation_set, output_validation_set)
+    net = network.Network(structure, activation_functions, error_function, hyper_parameters, is_classification,
+                          regularization_technique,
+                          gradient_descent_technique)
+    net.train(net.stop, training_set, output_training_set, mini_batch_size)
+    performance = net.compute_performance(validation_set, output_validation_set)
 
-    return performance, arguments, network
+    return performance, arguments, net

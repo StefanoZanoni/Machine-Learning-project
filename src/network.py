@@ -5,6 +5,7 @@ import numpy as np
 from inspect import signature
 import activation_functions as af
 import error_functions
+import preprocessing
 
 from matplotlib import pyplot as plt
 
@@ -267,14 +268,14 @@ class Network:
     def __rms_prop(self, decay_rate, w_cache, b_cache, regularization, lambda_hp, d):
         eta = self.hyper_parameters[0][1]
 
-        w_first_term = list(map(np.multiply, [decay_rate for i in range(len(w_cache))], w_cache))
+        w_first_term = list(map(np.multiply, [decay_rate] * len(w_cache), w_cache))
         w_second_term = list(
-            map(np.multiply, [1 - decay_rate for i in range(len(w_cache))], list(map(np.square, self.DE_W))))
+            map(np.multiply, [1 - decay_rate] * len(w_cache), list(map(np.square, self.DE_W))))
         tempw_cache = list(map(sum, w_first_term, w_second_term))
 
-        b_first_term = list(map(np.multiply, [decay_rate for i in range(len(b_cache))], b_cache))
+        b_first_term = list(map(np.multiply, [decay_rate] * len(b_cache), b_cache))
         b_second_term = list(
-            map(np.multiply, [1 - decay_rate for i in range(len(b_cache))], list(map(np.square, self.DE_B))))
+            map(np.multiply, [1 - decay_rate] * len(b_cache), list(map(np.square, self.DE_B))))
         tempb_cache = list(map(sum, b_first_term, b_second_term))
 
         for i in range(len(w_cache)):
@@ -345,6 +346,7 @@ class Network:
             self.errors = []
 
             for mini_batch in mini_batches:
+                mini_batch = preprocessing.shuffle_data(mini_batch)
                 if self.gradient_descent == "AdaGrad" or self.gradient_descent == "RMSprop":
                     self.__gradient_descent(mini_batch, n, w_cache, b_cache)
                 elif self.gradient_descent == "NesterovM":
@@ -354,7 +356,9 @@ class Network:
 
             self.errors_means.append(np.mean(self.errors))
 
-    def stop(self, patience_starting_point, patience=[1], max_epoch=1000):
+    def stop(self, patience_starting_point, patience=None, max_epoch=1000):
+        if patience is None:
+            patience = [1]
         if self.epoch > 1:
             if self.errors_means[self.epoch - 1] - self.errors_means[self.epoch - 2] >= 0:
                 patience[0] -= 1
