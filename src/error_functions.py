@@ -1,30 +1,48 @@
 import numpy as np
 
 
-# all the derivatives were computed with respect to the output (yx)
+# all the derivatives were computed w.r.t the output (yx)
 
+# mean Euclidean error
+def mee(y, yx):
+    y = np.reshape(y, np.shape(yx))
+    return np.linalg.norm(np.subtract(y, yx))
+
+
+# mean Euclidean error gradient
+def mee_gradient(y, yx):
+    y = np.reshape(y, np.shape(yx))
+    gradient = np.zeros_like(y)
+    denominator = mee(y, yx)
+    for i in range(len(gradient)):
+        gradient[i] = (yx[i] - y[i]) / denominator
+    return gradient
+
+
+# root mean squared error
 def rmse(y, yx):
     return np.sqrt(mse(y, yx))
 
 
-def rmse_derivative(y, yx):
-    return (1 / 2) * np.sqrt(mse(y, yx)) * mse_derivative(y, yx)
+# root mean squared error gradient
+def rmse_gradient(y, yx):
+    return (1 / 2 * np.sqrt(mse(y, yx))) * mse_gradient(y, yx)
 
 
 # mean squared error
 def mse(y, yx):
     if np.shape(yx) != (1, 1):
         y = np.reshape(y, np.shape(yx))
-        return np.square(np.subtract(yx, y)).mean()
+        return np.square(np.subtract(y, yx)).mean()
     else:
-        return (yx - y) ** 2
+        return (y - yx) ** 2
 
 
-# mean squared error derivative
-def mse_derivative(y, yx):
+# mean squared error gradient
+def mse_gradient(y, yx):
     if np.shape(yx) != (1, 1):
         y = np.reshape(y, np.shape(yx))
-        return 2 * ((np.subtract(yx, y)).mean())
+        return 2 * (np.subtract(yx, y))
     else:
         return 2 * (yx - y)
 
@@ -38,11 +56,11 @@ def mae(y, yx):
         np.abs(yx - y)
 
 
-# mean absolute error derivative
-def mae_derivative(y, yx):
+# mean absolute error gradient
+def mae_gradient(y, yx):
     if np.shape(yx) != (1, 1):
         y = np.reshape(y, np.shape(yx))
-        return np.multiply(1 / len(yx), np.divide(np.subtract(yx, y), np.abs(np.subtract(yx, y)))).mean()
+        return np.divide(np.subtract(yx, y), np.abs(np.subtract(yx, y)))
     else:
         return (yx - y) / np.abs(yx - y)
 
@@ -65,34 +83,33 @@ def huber_loss(y, yx, delta):
             return delta * (np.abs(yx - y) - 0.5 * delta)
 
 
-# huber loss derivative
-def huber_loss_derivative(y, yx, delta):
+# huber loss gradient
+def huber_loss_gradient(y, yx, delta):
     if np.shape(yx) != (1, 1):
         y = np.reshape(y, np.shape(yx))
         dhl = np.zeros_like(yx)
-        dhl[np.abs(np.subtract(yx, y)) <= delta] = mse_derivative(y, yx)
+        dhl[np.abs(np.subtract(yx, y)) <= delta] = mse_gradient(y, yx)
         dhl[np.abs(np.subtract(yx, y)) > delta] = 1 / len(yx) * (np.multiply(delta, np.divide(np.subtract(yx, y),
                                                                                               np.abs(
                                                                                                   np.subtract(yx, y)))))
-        return dhl.mean()
+        return dhl
     else:
         if np.abs(yx - y) <= delta:
-            return mse_derivative(yx, y)
+            return mse_gradient(yx, y)
         else:
             return delta * (yx - y) / np.abs(yx - y)
 
 
 # binary cross entropy
-# problems with divide by zero
 def bce(y, yx):
     y = np.reshape(y, np.shape(yx))
     return -(y * np.log(yx) + (1 - y) * np.log(1 - yx)).mean()
 
 
-# binary cross entropy derivative
-def bce_derivative(y, yx):
+# binary cross entropy gradient
+def bce_gradient(y, yx):
     y = np.reshape(y, np.shape(yx))
-    return np.divide((yx - y), np.multiply(yx, (1 - yx))).mean()
+    return np.divide((yx - y), np.multiply(yx, (1 - yx)))
 
 
 # categorical cross entropy
@@ -104,10 +121,10 @@ def cce(y, yx):
         return -y * np.log(yx)
 
 
-# categorical cross entropy derivative
-def cce_derivative(y, yx):
+# categorical cross entropy gradient
+def cce_gradient(y, yx):
     if np.shape(yx) != (1, 1):
         y = np.reshape(y, np.shape(yx))
-        return np.divide(-y, yx).mean()
+        return np.divide(-y, yx)
     else:
         return -y / yx

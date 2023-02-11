@@ -13,7 +13,7 @@ from matplotlib import pyplot as plt
 class Network:
 
     def __init__(self, structure, activation_functions, error_function, hyper_parameters, is_classification,
-                 regularization=("None", 0), optimizer="None", eps=1e-6):
+                 regularization=("None", 0), optimizer="None", eps=1e-7):
         self.structure = structure
         self.activation_functions = activation_functions
         self.num_layers = len(structure)
@@ -176,6 +176,7 @@ class Network:
     def __gradient_descent(self, mini_batch, training_set_len, *args):
         self.DE_B = [np.zeros(b.shape) for b in self.B]
         self.DE_W = [np.zeros(W.shape) for W in self.W]
+
         if self.gradient_descent == "NesterovM":
             nesterov_vw = args[0]
             nesterov_vb = args[1]
@@ -190,8 +191,8 @@ class Network:
                 pDE_B, pDE_W = self.__backpropagation(np.asmatrix(x).T, y, nesterov_vw, nesterov_vb)
             else:
                 pDE_B, pDE_W = self.__backpropagation(np.asmatrix(x).T, y)
-            self.DE_B = [DE_b + pDE_b for DE_b, pDE_b in zip(self.DE_B, pDE_B)]
-            self.DE_W = [DE_w + pDE_w for DE_w, pDE_w in zip(self.DE_W, pDE_W)]
+            self.DE_B = [DE_b + np.array(pDE_b) for DE_b, pDE_b in zip(self.DE_B, pDE_B)]
+            self.DE_W = [DE_w + np.array(pDE_w) for DE_w, pDE_w in zip(self.DE_W, pDE_W)]
 
         if self.gradient_descent == "None":
             self.__standard_gradient_descent(regularization, lambda_hp, d)
@@ -211,10 +212,10 @@ class Network:
         if regularization == "None":
             self.W = [W - ((eta / d) * DE_w) for W, DE_w in zip(self.W, self.DE_W)]
         if regularization == "L1":
-            self.W = [W - ((eta / d) * lambda_hp * np.sign(W)) - ((eta / d) * DE_w) for W, DE_w in
+            self.W = [W - ((eta / d) * (DE_w + lambda_hp * np.sign(W))) for W, DE_w in
                       zip(self.W, self.DE_W)]
         if regularization == "L2":
-            self.W = [W - (2 * (eta / d) * lambda_hp * W) - ((eta / d) * DE_w) for W, DE_w in
+            self.W = [W - ((eta / d) * (DE_w + lambda_hp * W)) for W, DE_w in
                       zip(self.W, self.DE_W)]
 
         self.B = [b - ((eta / d) * DE_b) for b, DE_b in zip(self.B, self.DE_B)]
@@ -235,7 +236,7 @@ class Network:
         elif regularization == "L1":
             self.W = [W - v - ((eta / d) * lambda_hp * np.sign(W)) for v, W in zip(nesterov_vw, self.W)]
         elif regularization == "L2":
-            self.W = [W - v - (2 * (eta / d) * lambda_hp * W) for v, W in zip(nesterov_vw, self.W)]
+            self.W = [W - v - ((eta / d) * lambda_hp * W) for v, W in zip(nesterov_vw, self.W)]
 
         self.B = [B - v for v, B in zip(nesterov_vb, self.B)]
 
@@ -244,25 +245,29 @@ class Network:
 
         tempw_cache = list(map(np.add, w_cache, list(map(np.square, self.DE_W))))
         tempb_cache = list(map(np.add, b_cache, list(map(np.square, self.DE_B))))
+
         for i in range(len(w_cache)):
+            tempw_cache[i] = np.array(tempw_cache[i])
             w_cache[i] = tempw_cache[i]
         for i in range(len(b_cache)):
+            tempb_cache[i] = np.array(tempb_cache[i])
             b_cache[i] = tempb_cache[i]
 
         if regularization == "None":
-            self.W = [W - (np.multiply(eta / d, DE_w) / (np.sqrt(w) + self.eps)) for W, DE_w, w in
+            self.W = [W - ((eta / d) * np.divide(DE_w, np.sqrt(w) + self.eps)) for W, DE_w, w in
                       zip(self.W, self.DE_W, w_cache)]
         if regularization == "L1":
-            self.W = [W - ((eta / d) * lambda_hp * np.sign(W)) - (np.multiply(eta / d, DE_w) / (np.sqrt(w) + self.eps))
+            self.W = [W - ((eta / d) * (np.divide(DE_w, np.sqrt(w) + self.eps) + lambda_hp * np.sign(W)))
                       for
                       W, DE_w, w in
                       zip(self.W, self.DE_W, w_cache)]
         if regularization == "L2":
-            self.W = [W - (2 * (eta / d) * lambda_hp * W) - (np.multiply(eta / d, DE_w) / (np.sqrt(w) + self.eps)) for
+            self.W = [W - ((eta / d) * (np.divide(DE_w, np.sqrt(w) + self.eps) + lambda_hp * W))
+                      for
                       W, DE_w, w in
                       zip(self.W, self.DE_W, w_cache)]
 
-        self.B = [B - np.multiply(eta / d, DE_b) / (np.sqrt(b) + self.eps) for B, DE_b, b in
+        self.B = [B - ((eta / d) * np.divide(DE_b, (np.sqrt(b) + self.eps))) for B, DE_b, b in
                   zip(self.B, self.DE_B, b_cache)]
 
     def __rms_prop(self, decay_rate, w_cache, b_cache, regularization, lambda_hp, d):
@@ -279,22 +284,24 @@ class Network:
         tempb_cache = list(map(sum, b_first_term, b_second_term))
 
         for i in range(len(w_cache)):
+            tempw_cache[i] = np.array(tempw_cache[i])
             w_cache[i] = tempw_cache[i]
         for i in range(len(b_cache)):
+            tempb_cache[i] = np.array(tempb_cache[i])
             b_cache[i] = tempb_cache[i]
 
         if regularization == "None":
-            self.W = [W - np.multiply(eta / d, DE_w) / (np.sqrt(w) + self.eps) for W, DE_w, w in
+            self.W = [W - (eta / d) * np.divide(DE_w, (np.sqrt(w) + self.eps)) for W, DE_w, w in
                       zip(self.W, self.DE_W, w_cache)]
         if regularization == "L1":
-            self.W = [W - ((eta / d) * lambda_hp * np.sign(W)) - (np.multiply(eta / d, DE_w) / (np.sqrt(w) + self.eps))
+            self.W = [W - ((eta / d) * (np.divide(DE_w, np.sqrt(w) + self.eps) + lambda_hp * np.sign(W)))
                       for
                       W, DE_w, w in
                       zip(self.W, self.DE_W, w_cache)]
         if regularization == "L2":
-            self.W = [W - (2 * (eta / d) * lambda_hp * W) - (np.multiply(eta / d, DE_w) / (np.sqrt(w) + self.eps)) for
-                      W, DE_w, w
-                      in
+            self.W = [W - ((eta / d) * (np.divide(DE_w, np.sqrt(w) + self.eps) + lambda_hp * W))
+                      for
+                      W, DE_w, w in
                       zip(self.W, self.DE_W, w_cache)]
 
         self.B = [B - (np.multiply(eta / d, DE_b) / (np.sqrt(b) + self.eps)) for B, DE_b, b in
@@ -338,7 +345,7 @@ class Network:
 
         patience = [20]
         patience_starting_point = patience
-        max_epoch = 200
+        max_epoch = 100
 
         # start training
         while not end(patience_starting_point, patience, max_epoch):
@@ -346,7 +353,6 @@ class Network:
             self.errors = []
 
             for mini_batch in mini_batches:
-                mini_batch = preprocessing.shuffle_data(mini_batch)
                 if self.gradient_descent == "AdaGrad" or self.gradient_descent == "RMSprop":
                     self.__gradient_descent(mini_batch, n, w_cache, b_cache)
                 elif self.gradient_descent == "NesterovM":
@@ -399,6 +405,10 @@ class Network:
             elif self.error_function[0].__code__.co_code == error_functions.rmse.__code__.co_code:
                 for predicted_output, output in zip(predicted_outputs, output_data):
                     errors.append(error_functions.rmse(output, predicted_output))
+                error = np.mean(errors)
+            elif self.error_function[0].__code__.co_code == error_functions.mee.__code__.co_code:
+                for predicted_output, output in zip(predicted_outputs, output_data):
+                    errors.append(error_functions.mee(output, predicted_output))
                 error = np.mean(errors)
 
             return error

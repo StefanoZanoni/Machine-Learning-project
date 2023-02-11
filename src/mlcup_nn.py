@@ -21,13 +21,13 @@ training_output = np.array(training_df[['o1', 'o2']])
 blind_testing_input = np.array(blind_testing_df[['a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9']])
 
 activation_functions = [[(activation_functions.tanh, activation_functions.tanh_gradient),
-                         (activation_functions.tanh, activation_functions.tanh_gradient),
+(activation_functions.tanh, activation_functions.tanh_gradient),
                          (activation_functions.linear, activation_functions.linear_gradient)]]
-error_function = (error_functions.mse, error_functions.mse_derivative)
-hyper_parameters = [[('learning_rate', 0.001), ('leaky_hp', 0.1)]]
-regularization_techniques = [("L1", 10)]
+error_function = (error_functions.mee, error_functions.mee_gradient)
+hyper_parameters = [[('learning_rate', 0.4), ('leaky_hp', 0.1)]]
+regularization_techniques = [("None", 0)]
 
-performance = holdout.holdout_selection_assessment(training_input, training_output, [("structures", [[9, 64, 16, 2]]),
+performance = holdout.holdout_selection_assessment(training_input, training_output, [("structures", [[9, 8, 10, 2]]),
                                                                                      ("activation_functions",
                                                                                       activation_functions),
                                                                                      ("error_functions",
@@ -35,9 +35,9 @@ performance = holdout.holdout_selection_assessment(training_input, training_outp
                                                                                      ("hyper_parameters",
                                                                                       hyper_parameters),
                                                                                      ("gradient_descent_techniques",
-                                                                                      ["None"]),
-                                                                                     ("mini_batch_sizes", [1]),
+                                                                                      ["RMSprop"]),
+                                                                                     ("mini_batch_sizes", [2]),
                                                                                      ("regularization_techniques",
                                                                                       regularization_techniques)],
-                                                   70, 70, False, "../MLcup_models.json", False, dt)
-# 731
+                                                   75, 70, False, "../MLcup_models.json", False, dt)
+# 784

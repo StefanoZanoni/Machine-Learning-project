@@ -35,7 +35,7 @@ testing_output1 = data[3]
 
 activation_functions1 = [[(activation_functions.relu, activation_functions.relu_gradient),
                          (activation_functions.sigmoid, activation_functions.sigmoid_gradient)]]
-error_function1 = (error_functions.bce, error_functions.bce_derivative)
+error_function1 = (error_functions.bce, error_functions.bce_gradient)
 hyper_parameters = [[('learning_rate', 0.05), ('leaky_hp', 0.05)]]
 regularization_techniques1 = [("L2", 0.001)]
 
@@ -73,7 +73,7 @@ activation_functions2 = [[(activation_functions.tanh, activation_functions.tanh_
                          [(activation_functions.leaky_relu, activation_functions.leaky_relu_gradient),
                           (activation_functions.leaky_relu, activation_functions.leaky_relu_gradient),
                           (activation_functions.sigmoid, activation_functions.sigmoid_gradient)]]
-error_function2 = (error_functions.bce, error_functions.bce_derivative)
+error_function2 = (error_functions.bce, error_functions.bce_gradient)
 hyper_parameters2 = [[('learning_rate', 0.001), ('leaky', 0.1)]]
 regularization_techniques2 = [("None", 0)]
 
@@ -106,7 +106,7 @@ testing_input3 = data[2]
 testing_output3 = data[3]
 
 activation_functions3 = [[(activation_functions.tanh, activation_functions.tanh_gradient), (activation_functions.leaky_relu, activation_functions.leaky_relu_gradient), (activation_functions.sigmoid, activation_functions.sigmoid_gradient)]]
-error_function3 = (error_functions.bce, error_functions.bce_derivative)
+error_function3 = (error_functions.bce, error_functions.bce_gradient)
 hyper_parameters3 = [[('learning_rate', 0.032), ('leaky', 0.05)],
                      [('learning_rate', 0.032), ('leaky', 0.08)], [('learning_rate', 0.027), ('leaky', 0.1)],
                      [('learning_rate', 0.03), ('leaky', 0.1)], [('learning_rate', 0.032), ('leaky', 0.1)]]
