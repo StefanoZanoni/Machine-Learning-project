@@ -1,6 +1,19 @@
 import numpy as np
 
 
+def compute_mean_and_variance(data):
+    mean = np.mean(data, axis=0)
+    variance = np.var(data, axis=0)
+    return mean, variance
+
+
+def shuffle_data(input_data):
+    np.random.seed(0)
+    data = np.copy(input_data)
+    np.random.shuffle(data)
+    return data
+
+
 # Also known as linear scaling
 # x' = (x - min(x)) / (max(x) - min(x))
 # where x is data and x' is the normalized data
@@ -23,12 +36,6 @@ def min_max_scaling(*args):
 
     return normalized_dataset
 
-
-# def clipping_scaling(training_input, max_value, min_value):
-# greater_boolean_matrix = np.greater(training_input, max_value)
-# less_boolean_matrix = np.less(training_input, min_value)
-# training_input[greater_boolean_matrix] = max
-# training_input[less_boolean_matrix] = min
 
 # x' = (x - mean) / standard deviation
 # x is the dataset
@@ -56,7 +63,7 @@ def z_score_scaling(*args):
 def one_hot_encoding(input_data):
     max_values = np.max(input_data, axis=0)
     dictionaries = []
-    # [{}, {}, {}]
+
     for value in max_values:
         encoding = np.zeros(value, dtype=max_values.dtype)
         dictionary_entry = {}
@@ -73,13 +80,5 @@ def one_hot_encoding(input_data):
             dic = dictionaries[i]
             new_row = np.concatenate((new_row, dic[column]), axis=None)
         result_data.append(new_row)
-        # [[0, 0 ,1] , [1, 1, 0]]
 
     return np.array(result_data, dtype=max_values.dtype)
-
-
-def shuffle_data(input_data):
-    np.random.seed(0)
-    data = np.copy(input_data)
-    np.random.shuffle(data)
-    return data

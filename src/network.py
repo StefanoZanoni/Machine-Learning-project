@@ -5,7 +5,6 @@ import numpy as np
 from inspect import signature
 import activation_functions as af
 import error_functions
-import preprocessing
 
 from matplotlib import pyplot as plt
 

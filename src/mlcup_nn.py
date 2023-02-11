@@ -35,7 +35,7 @@ performance = holdout.holdout_selection_assessment(training_input, training_outp
                                                                                      ("hyper_parameters",
                                                                                       hyper_parameters),
                                                                                      ("gradient_descent_techniques",
-                                                                                      ["RMSprop"]),
+                                                                                      ["AdaGrad"]),
                                                                                      ("mini_batch_sizes", [2]),
                                                                                      ("regularization_techniques",
                                                                                       regularization_techniques)],
