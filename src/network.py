@@ -1,3 +1,4 @@
+import sys
 from random import randint
 from typing import Type
 
@@ -25,11 +26,18 @@ class Network:
 
         self.B = [np.zeros((l, 1)) for l in structure[1:]]
         self.W = self.__weights_initialization()
+        self.best_B = self.B
+        self.best_W = self.W
+        self.Ws = []
+        self.Bs = []
 
         self.DE_B = [np.zeros(b.shape) for b in self.B]
         self.DE_W = [np.zeros(W.shape) for W in self.W]
         self.errors = []
+        self.validation_errors = []
         self.errors_means = []
+        self.validation_errors_means = []
+        self.best_validation_errors_means = sys.float_info.max
         self.epoch = 0
 
         self.take_opposite = False
@@ -43,7 +51,7 @@ class Network:
 
             # He weights initialization for ReLu
             if fun[0].__code__.co_code == af.relu.__code__.co_code or \
-                    fun[0].__code__.co_code == af.leaky_relu.__code__.co_code:
+                    fun[0].__code__.co_code == af.parametric_relu.__code__.co_code:
                 std = np.sqrt(2.0 / self.structure[s])
                 weights = np.random.rand(l, next_l)
                 scaled_weights = weights * std
@@ -53,7 +61,7 @@ class Network:
             elif fun[0].__code__.co_code == af.sigmoid.__code__.co_code or \
                     fun[0].__code__.co_code == af.tanh.__code__.co_code:
                 lower, upper = -(np.sqrt(6.0) / np.sqrt(self.structure[s] + self.structure[s + 1])), (
-                            np.sqrt(6.0) / np.sqrt(self.structure[s] + self.structure[s + 1]))
+                        np.sqrt(6.0) / np.sqrt(self.structure[s] + self.structure[s + 1]))
                 weights = np.random.rand(l, next_l)
                 scaled_weights = lower + weights * (upper - lower)
                 weights_list.append(scaled_weights)
@@ -106,7 +114,6 @@ class Network:
             f = self.activation_functions[j][0]
             sig = signature(f)
             params = sig.parameters
-            # print(str(W) + '\n')
             net = W.T @ output + b if NETs else W.T @ x + b
             if len(params) == 2:
                 alpha = self.hyper_parameters[1][1]
@@ -310,7 +317,7 @@ class Network:
     # training_input: array like
     # training_output: array like
     # mini_batch_size: int
-    def train(self, end, training_input, training_output, mini_batch_size):
+    def train(self, training_input, training_output, mini_batch_size, end, *args):
 
         # dividing training data into mini batch
         training_input = np.array(training_input)
@@ -335,42 +342,94 @@ class Network:
 
         mini_batches = np.array(mini_batches, dtype=np.ndarray)
 
-        if self.gradient_descent == "AdaGrad" or self.gradient_descent == "RMSprop":
-            w_cache = [np.zeros_like(DE_w) for DE_w in self.DE_W]
-            b_cache = [np.zeros_like(DE_b) for DE_b in self.DE_B]
-        if self.gradient_descent == "NesterovM":
-            nesterov_vw = [np.zeros_like(W) for W in self.W]
-            nesterov_vb = [np.zeros_like(B) for B in self.B]
-
-        patience = [20]
-        patience_starting_point = patience
-        max_epoch = 100
-
         # start training
-        while not end(patience_starting_point, patience, max_epoch):
+        while not end(args):
             self.epoch += 1
             self.errors = []
 
             for mini_batch in mini_batches:
                 if self.gradient_descent == "AdaGrad" or self.gradient_descent == "RMSprop":
+                    w_cache = [np.zeros_like(DE_w) for DE_w in self.DE_W]
+                    b_cache = [np.zeros_like(DE_b) for DE_b in self.DE_B]
                     self.__gradient_descent(mini_batch, n, w_cache, b_cache)
                 elif self.gradient_descent == "NesterovM":
+                    nesterov_vw = [np.zeros_like(W) for W in self.W]
+                    nesterov_vb = [np.zeros_like(B) for B in self.B]
                     self.__gradient_descent(mini_batch, n, nesterov_vw, nesterov_vb)
                 else:
                     self.__gradient_descent(mini_batch, n)
 
             self.errors_means.append(np.mean(self.errors))
+            self.Ws.append(self.W)
+            self.Bs.append(self.B)
 
-    def stop(self, patience_starting_point, patience=None, max_epoch=1000):
-        if patience is None:
-            patience = [1]
+        self.W = self.best_W
+        self.B = self.best_B
+
+    def stop(self, args):
+        patience_starting_point = args[0]
+        patience = args[1]
+        max_epoch = args[2]
+
         if self.epoch > 1:
             if self.errors_means[self.epoch - 1] - self.errors_means[self.epoch - 2] >= 0:
                 patience[0] -= 1
+                if patience[0] == patience_starting_point - 1:
+                    self.best_W = self.Ws[self.epoch - 2]
+                    self.best_B = self.Bs[self.epoch - 2]
             else:
-                patience = patience_starting_point
+                patience[0] = patience_starting_point
 
-        return patience[0] == 0 or self.epoch > max_epoch
+        if self.epoch > max_epoch:
+            self.best_W = self.W
+            self.best_B = self.B
+            return True
+
+        return patience[0] == 0
+
+    def early_stopping(self, args):
+        input_validation_set = args[0]
+        output_validation_set = args[1]
+        patience_starting_point = args[2]
+        patience = args[3]
+
+        if self.epoch >= 1:
+            if self.is_classification:
+                for pattern_in, pattern_out in zip(input_validation_set, output_validation_set):
+                    predicted_output = self.forward(pattern_in)
+                    error = np.abs(pattern_out - predicted_output)
+                    self.validation_errors.append(error)
+                accuracy = np.mean(self.validation_errors)
+                self.validation_errors_means.append(accuracy) if accuracy >= 50 \
+                    else self.validation_errors_means.append(100 - accuracy)
+            else:
+                for pattern_in, pattern_out in zip(input_validation_set, output_validation_set):
+                    predicted_output = self.forward(pattern_in)
+                    error = self.error_function[0](pattern_out, predicted_output)
+                    self.validation_errors.append(error)
+                self.validation_errors_means.append(np.mean(self.validation_errors))
+
+        if self.epoch > 1:
+            if self.is_classification:
+                if self.validation_errors_means[self.epoch - 1] - self.validation_errors_means[self.epoch - 2] <= 0:
+                    patience[0] -= 1
+                    if patience[0] == patience_starting_point - 1:
+                        self.best_W = self.Ws[self.epoch - 2]
+                        self.best_B = self.Bs[self.epoch - 2]
+                        self.best_validation_errors_means = self.validation_errors_means[self.epoch - 2]
+                else:
+                    patience[0] = patience_starting_point
+            else:
+                if self.validation_errors_means[self.epoch - 1] - self.validation_errors_means[self.epoch - 2] >= 0:
+                    patience[0] -= 1
+                    if patience[0] == patience_starting_point - 1:
+                        self.best_W = self.Ws[self.epoch - 2]
+                        self.best_B = self.Bs[self.epoch - 2]
+                        self.best_validation_errors_means = self.validation_errors_means[self.epoch - 2]
+                else:
+                    patience[0] = patience_starting_point
+
+        return patience[0] == 0
 
     def compute_performance(self, input_data, output_data):
 

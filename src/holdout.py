@@ -23,9 +23,13 @@ def holdout_selection(data_set, output_data_set, hyper_parameters_set, split_per
     for i in range(len(hp)):
         hp[i] = hp[i] + [training_set, output_training_set, validation_set, output_validation_set]
 
+    patience = [20]
+    patience_starting_point = patience[0]
+
     start = timer()
-    best_model, mini_batch_size = search_best_model(hp, filename, is_classification)
-    best_model.train(best_model.stop, data_set, output_data_set, mini_batch_size)
+    best_model, mini_batch_size, max_epoch = search_best_model(hp, filename, is_classification)
+    best_model.train(temp_data[:, 0], temp_data[:, 1], mini_batch_size, best_model.stop,
+                     patience_starting_point, patience, max_epoch)
     stop = timer()
     print('model selection in seconds: ' + str(np.ceil(stop - start)))
     best_model.plot_learning_rate('green')
@@ -110,7 +114,9 @@ def search_best_model(parameters, filename, is_classification):
     if is_classification:
         nn_model.take_opposite = take_opposite
 
-    return nn_model, best_hyper_parameters_found[5]
+    max_epoch = best_network.epoch
+
+    return nn_model, best_hyper_parameters_found[5], max_epoch
 
 
 def training(arguments):
@@ -130,7 +136,12 @@ def training(arguments):
     net = network.Network(structure, activation_functions, error_function, hyper_parameters, is_classification,
                           regularization_technique,
                           gradient_descent_technique)
-    net.train(net.stop, training_set, output_training_set, mini_batch_size)
-    performance = net.compute_performance(validation_set, output_validation_set)
+
+    patience = [20]
+    patience_starting_point = patience[0]
+
+    net.train(training_set, output_training_set, mini_batch_size, net.early_stopping,
+              validation_set, output_validation_set, patience_starting_point, patience)
+    performance = net.best_validation_errors_means
 
     return performance, arguments, net

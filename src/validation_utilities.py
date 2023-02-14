@@ -68,7 +68,12 @@ def dump_on_json(performance, hyper_parameters, filename, is_classification):
         (str(hyper_parameters[2][1])).split(" ")[1]
     )
 
+    threshold = 0
+
     if is_classification:
+        threshold = 90
+        if performance < threshold:
+            return
         model = {
             "accuracy": performance,
             "structure": hyper_parameters[0],
@@ -80,6 +85,9 @@ def dump_on_json(performance, hyper_parameters, filename, is_classification):
             "regularization_technique": hyper_parameters[6]
         }
     else:
+        threshold = 1.5
+        if performance > 1.5:
+            return
         model = {
             "error": performance,
             "structure": hyper_parameters[0],

@@ -98,13 +98,23 @@ def relu_gradient(x):
     return y
 
 
-def leaky_relu(x, alpha):
+def parametric_relu(x, alpha):
     return np.maximum(np.multiply(alpha, x), x)
 
 
-def leaky_relu_gradient(x, alpha):
+def parametric_relu_gradient(x, alpha):
     dx = np.ones_like(x)
     dx[x < 0] = alpha
+    return dx
+
+
+def leaky_relu(x):
+    return np.maximum(0.01 * x, x)
+
+
+def leaky_relu_gradient(x):
+    dx = np.ones_like(x)
+    dx[x < 0] = 0.01
     return dx
 
 
