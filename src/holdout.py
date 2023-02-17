@@ -11,6 +11,7 @@ from src import validation_utilities
 
 def holdout_selection(data_set, output_data_set, hyper_parameters_set, split_percentage, randomized_search, filename,
                       is_classification, dt):
+
     validation_set_len = int(np.ceil((100 - split_percentage) * data_set.shape[0] / 100))
     temp_data = np.array([[inp, out] for inp, out in zip(data_set, output_data_set)], dtype=dt)
     temp_data = preprocessing.shuffle_data(temp_data)
@@ -27,18 +28,21 @@ def holdout_selection(data_set, output_data_set, hyper_parameters_set, split_per
     patience_starting_point = patience[0]
 
     start = timer()
+
     best_model, mini_batch_size, max_epoch = search_best_model(hp, filename, is_classification)
     best_model.train(temp_data[:, 0], temp_data[:, 1], mini_batch_size, best_model.stop,
                      patience_starting_point, patience, max_epoch)
+
     stop = timer()
+
     print('model selection in seconds: ' + str(np.ceil(stop - start)))
-    best_model.plot_learning_rate('green')
 
     return best_model
 
 
 def holdout_selection_assessment(data_set, output_data_set, hyper_parameters_set, selection_split_percentage,
                                  training_split_percentage, randomized_search, filename, is_classification, dt):
+
     selection_set_len = int(np.ceil(selection_split_percentage * data_set.shape[0] / 100))
     temp_data = np.array([[inp, out] for inp, out in zip(data_set, output_data_set)], dtype=dt)
     temp_data = preprocessing.shuffle_data(temp_data)
@@ -65,6 +69,7 @@ def search_best_model(parameters, filename, is_classification):
         min_accuracy_achieved = 100
         best_hyper_parameters_found_max = []
         best_hyper_parameters_found_min = []
+
         for result in pool.map(training, parameters):
             accuracy = result[0]
             if accuracy > max_accuracy_achieved:
@@ -87,6 +92,7 @@ def search_best_model(parameters, filename, is_classification):
     else:
         error_min = sys.float_info.max
         best_hyper_parameters_found = []
+
         for result in pool.map(training, parameters):
             performance = result[0]
             if performance < error_min:
@@ -94,15 +100,15 @@ def search_best_model(parameters, filename, is_classification):
                 best_hyper_parameters_found = result[1]
                 best_network = result[2]
 
-    best_network.plot_learning_rate('red')
+    best_network.plot_learning_rate()
 
     if is_classification:
-        print("Best accuracy: " + str(max_accuracy_achieved) + " | List of hyperparameters used: " + str(
+        print("Best accuracy on the validation set: " + str(max_accuracy_achieved) + " | List of hyperparameters used: " + str(
             best_hyper_parameters_found[:7]))
         validation_utilities.dump_on_json(max_accuracy_achieved, best_hyper_parameters_found, filename,
                                           is_classification)
     else:
-        print("Best error: " + str(error_min) + " | List of hyperparameters used: " + str(
+        print("Best error on the validation set: " + str(error_min) + " | List of hyperparameters used: " + str(
             best_hyper_parameters_found[:7]))
         validation_utilities.dump_on_json(error_min, best_hyper_parameters_found, filename,
                                           is_classification)

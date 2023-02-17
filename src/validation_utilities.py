@@ -3,6 +3,7 @@ import os
 from random import random
 
 
+# return a list of sets of hyperparameters to try
 def get_hyper_parameters(hyper_parameters_set, randomized_search, is_classification):
     # [(structures, [[s1], [s2]]), (af, [[lr, sg], [r, sg]]), (ef, []), (hp, [(lr, []), (), ()]), (gdt, [""]), (batch, [])]
     structures = hyper_parameters_set[0][1]
@@ -68,11 +69,8 @@ def dump_on_json(performance, hyper_parameters, filename, is_classification):
         (str(hyper_parameters[2][1])).split(" ")[1]
     )
 
-    threshold = 0
-
     if is_classification:
-        threshold = 90
-        if performance < threshold:
+        if performance < 90:
             return
         model = {
             "accuracy": performance,
@@ -85,7 +83,6 @@ def dump_on_json(performance, hyper_parameters, filename, is_classification):
             "regularization_technique": hyper_parameters[6]
         }
     else:
-        threshold = 1.5
         if performance > 1.5:
             return
         model = {
