@@ -270,18 +270,63 @@ class Network:
             self.DE_B = [DE_b + np.array(pDE_b) for DE_b, pDE_b in zip(self.DE_B, pDE_B)]
             self.DE_W = [DE_w + np.array(pDE_w) for DE_w, pDE_w in zip(self.DE_W, pDE_W)]
 
+            if self.gradient_descent == "NesterovM":
+                eta = self.hyper_parameters[0][1]
+                gamma = 0.9
+
+                temp_vw = [gamma * v + (eta / d) * DE_w for v, DE_w in zip(nesterov_vw, self.DE_W)]
+                temp_vb = [gamma * v + (eta / d) * DE_b for v, DE_b in zip(nesterov_vb, self.DE_B)]
+                for i in range(len(nesterov_vw)):
+                    nesterov_vw[i] = temp_vw[i]
+                for i in range(len(nesterov_vb)):
+                    nesterov_vb[i] = temp_vb[i]
+            elif self.gradient_descent == "AdaGrad":
+                eta = self.hyper_parameters[0][1]
+                eps = 1e-7
+                w_cache = args[0]
+                b_cache = args[1]
+
+                tempw_cache = list(map(np.add, w_cache, list(map(np.square, self.DE_W))))
+                tempb_cache = list(map(np.add, b_cache, list(map(np.square, self.DE_B))))
+
+                for i in range(len(w_cache)):
+                    tempw_cache[i] = np.array(tempw_cache[i])
+                    w_cache[i] = tempw_cache[i]
+                for i in range(len(b_cache)):
+                    tempb_cache[i] = np.array(tempb_cache[i])
+                    b_cache[i] = tempb_cache[i]
+            elif self.gradient_descent == "RMSprop":
+                eta = self.hyper_parameters[0][1]
+                eps = 1e-7
+                w_cache = args[0]
+                b_cache = args[1]
+                decay_rate = 0.9
+
+                w_first_term = list(map(np.multiply, [decay_rate] * len(w_cache), w_cache))
+                w_second_term = list(
+                    map(np.multiply, [1 - decay_rate] * len(w_cache), list(map(np.square, self.DE_W))))
+                tempw_cache = list(map(sum, w_first_term, w_second_term))
+
+                b_first_term = list(map(np.multiply, [decay_rate] * len(b_cache), b_cache))
+                b_second_term = list(
+                    map(np.multiply, [1 - decay_rate] * len(b_cache), list(map(np.square, self.DE_B))))
+                tempb_cache = list(map(sum, b_first_term, b_second_term))
+
+                for i in range(len(w_cache)):
+                    tempw_cache[i] = np.array(tempw_cache[i])
+                    w_cache[i] = tempw_cache[i]
+                for i in range(len(b_cache)):
+                    tempb_cache[i] = np.array(tempb_cache[i])
+                    b_cache[i] = tempb_cache[i]
+
         if self.gradient_descent == "None":
             self.__standard_gradient_descent(regularization, lambda_hp, d)
         elif self.gradient_descent == "NesterovM":
             self.__nesterov_momentum(regularization, lambda_hp, d, nesterov_vw, nesterov_vb)
         elif self.gradient_descent == "AdaGrad":
-            w_cache = args[0]
-            b_cache = args[1]
             self.__ada_grad(w_cache, b_cache, regularization, lambda_hp, d)
         elif self.gradient_descent == "RMSprop":
-            w_cache = args[0]
-            b_cache = args[1]
-            self.__rms_prop(0.9, w_cache, b_cache, regularization, lambda_hp, d)
+            self.__rms_prop(w_cache, b_cache, regularization, lambda_hp, d)
 
     def __standard_gradient_descent(self, regularization, lambda_hp, d):
         eta = self.hyper_parameters[0][1]
@@ -299,14 +344,6 @@ class Network:
 
     def __nesterov_momentum(self, regularization, lambda_hp, d, nesterov_vw, nesterov_vb):
         eta = self.hyper_parameters[0][1]
-        gamma = 0.9
-
-        temp_vw = [gamma * v + (eta / d) * DE_w for v, DE_w in zip(nesterov_vw, self.DE_W)]
-        temp_vb = [gamma * v + (eta / d) * DE_b for v, DE_b in zip(nesterov_vb, self.DE_B)]
-        for i in range(len(nesterov_vw)):
-            nesterov_vw[i] = temp_vw[i]
-        for i in range(len(nesterov_vb)):
-            nesterov_vb[i] = temp_vb[i]
 
         if regularization == "None":
             self.W = [W - v for v, W in zip(nesterov_vw, self.W)]
@@ -320,16 +357,6 @@ class Network:
     def __ada_grad(self, w_cache, b_cache, regularization, lambda_hp, d):
         eta = self.hyper_parameters[0][1]
         eps = 1e-7
-
-        tempw_cache = list(map(np.add, w_cache, list(map(np.square, self.DE_W))))
-        tempb_cache = list(map(np.add, b_cache, list(map(np.square, self.DE_B))))
-
-        for i in range(len(w_cache)):
-            tempw_cache[i] = np.array(tempw_cache[i])
-            w_cache[i] = tempw_cache[i]
-        for i in range(len(b_cache)):
-            tempb_cache[i] = np.array(tempb_cache[i])
-            b_cache[i] = tempb_cache[i]
 
         if regularization == "None":
             self.W = [W - ((eta / d) * np.divide(DE_w, np.sqrt(w) + eps)) for W, DE_w, w in
@@ -348,26 +375,9 @@ class Network:
         self.B = [B - ((eta / d) * np.divide(DE_b, (np.sqrt(b) + eps))) for B, DE_b, b in
                   zip(self.B, self.DE_B, b_cache)]
 
-    def __rms_prop(self, decay_rate, w_cache, b_cache, regularization, lambda_hp, d):
+    def __rms_prop(self, w_cache, b_cache, regularization, lambda_hp, d):
         eta = self.hyper_parameters[0][1]
         eps = 1e-7
-
-        w_first_term = list(map(np.multiply, [decay_rate] * len(w_cache), w_cache))
-        w_second_term = list(
-            map(np.multiply, [1 - decay_rate] * len(w_cache), list(map(np.square, self.DE_W))))
-        tempw_cache = list(map(sum, w_first_term, w_second_term))
-
-        b_first_term = list(map(np.multiply, [decay_rate] * len(b_cache), b_cache))
-        b_second_term = list(
-            map(np.multiply, [1 - decay_rate] * len(b_cache), list(map(np.square, self.DE_B))))
-        tempb_cache = list(map(sum, b_first_term, b_second_term))
-
-        for i in range(len(w_cache)):
-            tempw_cache[i] = np.array(tempw_cache[i])
-            w_cache[i] = tempw_cache[i]
-        for i in range(len(b_cache)):
-            tempb_cache[i] = np.array(tempb_cache[i])
-            b_cache[i] = tempb_cache[i]
 
         if regularization == "None":
             self.W = [W - (eta / d) * np.divide(DE_w, (np.sqrt(w) + eps)) for W, DE_w, w in
@@ -420,7 +430,6 @@ class Network:
                     w_cache = [np.zeros_like(DE_w) for DE_w in self.DE_W]
                     b_cache = [np.zeros_like(DE_b) for DE_b in self.DE_B]
                     self.__gradient_descent(mini_batch, n, w_cache, b_cache)
-                # TODO fix nesterov Momentum (now is the same as standard gradient descent)
                 elif self.gradient_descent == "NesterovM":
                     nesterov_vw = [np.zeros_like(W) for W in self.W]
                     nesterov_vb = [np.zeros_like(B) for B in self.B]
