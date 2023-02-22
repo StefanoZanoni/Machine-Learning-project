@@ -117,8 +117,8 @@ optimal_model = holdout.holdout_selection(training_input3, training_output3, [("
                                                                               ("hyper_parameters", hyper_parameters3),
                                                                               (
                                                                                   "gradient_descend_techniques",
-                                                                                  ["None"]),
-                                                                              ("mini_batch_sizes", [1]),
+                                                                                  ["AdaGrad"]),
+                                                                              ("mini_batch_sizes", [2]),
                                                                               ("regularization_techniques",
                                                                                regularization_techniques3)],
                                           70, False, "../Monk3_models.json", True, dt)
