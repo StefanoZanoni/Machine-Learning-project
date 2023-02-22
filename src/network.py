@@ -185,11 +185,22 @@ class Network:
         e, de = self.error_function
         sig2 = signature(e)
         params2 = sig2.parameters
-        if len(params2) == 2:
-            error = e(y, OUTPUTs[last])
+
+        if self.is_classification:
+            predicted_output = np.copy(output)
+            predicted_output[output > 0.5] = 1
+            predicted_output[output < 0.5] = 0
+            predicted_output[output == 0.5] = randint(0, 1)
+            if np.array_equal(y, predicted_output):
+                error = 0
+            else:
+                error = 1
         else:
-            beta = self.hyper_parameters[2][1]
-            error = e(y, OUTPUTs[last], beta)
+            if len(params2) == 2:
+                error = e(y, OUTPUTs[last])
+            else:
+                beta = self.hyper_parameters[2][1]
+                error = e(y, OUTPUTs[last], beta)
 
         self.training_errors.append(error)
 
@@ -422,7 +433,7 @@ class Network:
                     self.__gradient_descent(mini_batch, n)
 
             if self.is_classification:
-                self.training_errors_means.append(100 - (np.sum(self.training_errors) / n * 100))
+                self.training_errors_means.append(100 - (np.sum(self.training_errors) / len(self.training_errors) * 100))
             else:
                 self.training_errors_means.append(np.mean(self.training_errors))
 
@@ -505,6 +516,7 @@ class Network:
 
             return accuracy
 
+        # TODO fix numerical issues with parametric_relu, two hidden layers and standard gradient descent
         else:
             errors = []
             for x, y in zip(input_data, output_data):
