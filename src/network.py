@@ -179,7 +179,6 @@ class Network:
             NETs.append(net)
             OUTPUTs.append(output)
 
-        # TODO add the accuracy computation for classification problems
         # storing the error for the current pattern at the end of the forward pass
         last = self.num_layers - 2
         e, de = self.error_function
@@ -187,14 +186,11 @@ class Network:
         params2 = sig2.parameters
 
         if self.is_classification:
-            predicted_output = np.copy(output)
-            predicted_output[output > 0.5] = 1
-            predicted_output[output < 0.5] = 0
-            predicted_output[output == 0.5] = randint(0, 1)
-            if np.array_equal(y, predicted_output):
-                error = 0
+            if np.equal(output, 0.5):
+                predicted_output = randint(0, 1)
             else:
-                error = 1
+                predicted_output = 1 if np.greater(output, 0.5) else 0
+            error = 0 if np.equal(y, predicted_output) else 1
         else:
             if len(params2) == 2:
                 error = e(y, OUTPUTs[last])
