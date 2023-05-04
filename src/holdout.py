@@ -1,12 +1,12 @@
 import sys
 import numpy as np
-import multiprocessing
-from multiprocessing.pool import ThreadPool
+from multiprocessing.pool import Pool
 from timeit import default_timer as timer
 
 from src import preprocessing
 from src import network
 from src import validation_utilities
+from src.validation_utilities import training
 
 
 def holdout_selection(data_set, output_data_set, hyper_parameters_set, split_percentage, randomized_search, filename,
@@ -20,18 +20,14 @@ def holdout_selection(data_set, output_data_set, hyper_parameters_set, split_per
     output_validation_set = temp_data[:validation_set_len, 1]
     output_training_set = temp_data[validation_set_len:, 1]
 
-    hp = validation_utilities.get_hyper_parameters(hyper_parameters_set, randomized_search, is_classification)
-    for i in range(len(hp)):
-        hp[i] = hp[i] + [training_set, output_training_set, validation_set, output_validation_set]
-
-    patience = [20]
-    patience_starting_point = patience[0]
+    hps = validation_utilities.get_hyper_parameters(hyper_parameters_set, randomized_search, is_classification)
+    for i in range(len(hps)):
+        hps[i] = hps[i] + [training_set, output_training_set, validation_set, output_validation_set]
 
     start = timer()
 
-    best_model, mini_batch_size, max_epoch = search_best_model(hp, filename, is_classification)
-    best_model.train(temp_data[:, 0], temp_data[:, 1], mini_batch_size, best_model.stop,
-                     patience_starting_point, patience, max_epoch)
+    best_model, mini_batch_size, max_epoch = search_best_model(hps, filename, is_classification)
+    best_model.train(temp_data[:, 0], temp_data[:, 1], mini_batch_size, best_model.stop, max_epoch)
 
     stop = timer()
 
@@ -60,8 +56,8 @@ def holdout_selection_assessment(data_set, output_data_set, hyper_parameters_set
 
 
 def search_best_model(parameters, filename, is_classification):
-    core_count = multiprocessing.cpu_count()
-    pool = ThreadPool(processes=core_count)
+
+    pool = Pool()
 
     if is_classification:
         take_opposite = False
@@ -120,34 +116,4 @@ def search_best_model(parameters, filename, is_classification):
     if is_classification:
         nn_model.take_opposite = take_opposite
 
-    max_epoch = best_network.epoch
-
-    return nn_model, best_hyper_parameters_found[5], max_epoch
-
-
-def training(arguments):
-    structure = arguments[0]
-    activation_functions = arguments[1]
-    error_function = arguments[2]
-    hyper_parameters = arguments[3]
-    gradient_descent_technique = arguments[4]
-    mini_batch_size = arguments[5]
-    regularization_technique = arguments[6]
-    is_classification = arguments[7]
-    training_set = arguments[8]
-    output_training_set = arguments[9]
-    validation_set = arguments[10]
-    output_validation_set = arguments[11]
-
-    net = network.Network(structure, activation_functions, error_function, hyper_parameters, is_classification,
-                          regularization_technique,
-                          gradient_descent_technique)
-
-    patience = [20]
-    patience_starting_point = patience[0]
-
-    net.train(training_set, output_training_set, mini_batch_size, net.early_stopping,
-              validation_set, output_validation_set, patience_starting_point, patience)
-    performance = net.best_validation_errors_means
-
-    return performance, arguments, net
+    return nn_model, best_hyper_parameters_found[5], best_network.epoch

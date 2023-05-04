@@ -11,7 +11,7 @@ from src import activation_functions as af
 class Network:
 
     def __init__(self, structure, activation_functions, error_function, hyper_parameters, is_classification,
-                 regularization=("None", 0), optimizer="None"):
+                 regularization=("None", 0), optimizer="None", patience=10, delta=0.005):
 
         # neural network structure in the form [in, L1, L2, ... , Ln, out]
         # where in and out are respectively the input and the output layer and
@@ -25,7 +25,7 @@ class Network:
         # the total number of layers
         self.num_layers = len(structure)
 
-        # the metric used to compute the error of the neaural network
+        # the metric used to compute the error of the neural network
         self.error_function = error_function
 
         # a list of tuples in the form [(hp_1, value_1), (hp_2, value_2), ..., (hp_n, value_n)]
@@ -71,13 +71,15 @@ class Network:
         # the list of all validation errors on the validation data set
         self.validation_errors = []
 
-        # the list of the avarage errors over the epochs
+        # the list of the average errors over the epochs
         self.training_errors_means = []
         self.validation_errors_means = []
 
         self.best_validation_errors_means = sys.float_info.max
 
         self.epoch = 0
+        self.patience = patience
+        self.delta = delta
 
         # a flag used in case of binary classification problem to take the "inverse" of the accuracy
         self.take_opposite = False
@@ -157,10 +159,10 @@ class Network:
 
     def __backpropagation(self, x, y, *args):
 
-        # error derivate w.r.t the bias for pattern p
+        # error derivative w.r.t the bias for pattern p
         pDE_B = [np.zeros(b.shape) for b in self.B]
 
-        # error derivate w.r.t the weights for pattern p
+        # error derivative w.r.t the weights for pattern p
         pDE_W = [np.zeros(w.shape) for w in self.W]
 
         # forward pass
@@ -281,8 +283,6 @@ class Network:
                 for i in range(len(nesterov_vb)):
                     nesterov_vb[i] = temp_vb[i]
             elif self.gradient_descent == "AdaGrad":
-                eta = self.hyper_parameters[0][1]
-                eps = 1e-7
                 w_cache = args[0]
                 b_cache = args[1]
 
@@ -296,8 +296,6 @@ class Network:
                     tempb_cache[i] = np.array(tempb_cache[i])
                     b_cache[i] = tempb_cache[i]
             elif self.gradient_descent == "RMSprop":
-                eta = self.hyper_parameters[0][1]
-                eps = 1e-7
                 w_cache = args[0]
                 b_cache = args[1]
                 decay_rate = 0.9
@@ -438,7 +436,8 @@ class Network:
                     self.__gradient_descent(mini_batch, n)
 
             if self.is_classification:
-                self.training_errors_means.append(100 - (np.sum(self.training_errors) / len(self.training_errors) * 100))
+                self.training_errors_means.append(
+                    100 - (np.sum(self.training_errors) / len(self.training_errors) * 100))
             else:
                 self.training_errors_means.append(np.mean(self.training_errors))
 
@@ -449,65 +448,36 @@ class Network:
         self.B = self.best_B
 
     def stop(self, args):
-        patience_starting_point = args[0]
-        patience = args[1]
-        max_epoch = args[2]
+        max_epoch = args[0]
 
-        if self.epoch > 1:
-            if self.is_classification:
-                error_increasing = self.training_errors_means[self.epoch - 1] - \
-                                   self.training_errors_means[self.epoch - 2] <= 0
-            else:
-                error_increasing = self.training_errors_means[self.epoch - 1] - \
-                                   self.training_errors_means[self.epoch - 2] >= 0
-
-            if error_increasing:
-                patience[0] -= 1
-
-                # save the best weights and biases before error start increasing
-                if patience[0] == patience_starting_point - 1:
-                    self.best_W = self.Ws[self.epoch - 2]
-                    self.best_B = self.Bs[self.epoch - 2]
-            else:
-                patience[0] = patience_starting_point
-
-        if self.epoch > max_epoch:
-            self.best_W = self.W
-            self.best_B = self.B
+        if self.epoch >= max_epoch:
             return True
 
-        return patience[0] == 0
+        return False
 
     def early_stopping(self, args):
         input_validation_set = args[0]
         output_validation_set = args[1]
-        patience_starting_point = args[2]
-        patience = args[3]
 
         if self.epoch >= 1:
             performance = self.compute_performance(input_validation_set, output_validation_set)
             self.validation_errors_means.append(performance)
 
-        if self.epoch > 1:
+        if self.epoch > self.patience:
             if self.is_classification:
-                error_increasing = self.validation_errors_means[self.epoch - 1] - \
-                                   self.validation_errors_means[self.epoch - 2] <= 0
+                error_increasing = performance - self.delta < self.best_validation_errors_means
             else:
-                error_increasing = self.validation_errors_means[self.epoch - 1] - \
-                                   self.validation_errors_means[self.epoch - 2] >= 0
+                error_increasing = performance - self.delta > self.best_validation_errors_means
 
-            if error_increasing:
-                patience[0] -= 1
-
-                # save the best weights and biases before error start increasing
-                if patience[0] == patience_starting_point - 1:
-                    self.best_W = self.Ws[self.epoch - 2]
-                    self.best_B = self.Bs[self.epoch - 2]
-                    self.best_validation_errors_means = self.validation_errors_means[self.epoch - 2]
+            if not error_increasing:
+                # save the best weights and biases
+                self.best_W = self.Ws[self.epoch - 1]
+                self.best_B = self.Bs[self.epoch - 1]
+                self.best_validation_errors_means = self.validation_errors_means[self.epoch - 1]
             else:
-                patience[0] = patience_starting_point
+                self.patience -= 1
 
-        return patience[0] == 0
+        return self.patience == 0
 
     def compute_performance(self, input_data, output_data):
 
@@ -520,8 +490,6 @@ class Network:
             accuracy = correct_prevision * 100 / len(output_data)
 
             return accuracy
-
-        # TODO fix numerical issues with parametric_relu, two hidden layers and standard gradient descent
         else:
             errors = []
             for x, y in zip(input_data, output_data):
