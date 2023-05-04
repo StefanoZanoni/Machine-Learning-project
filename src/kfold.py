@@ -9,7 +9,12 @@ from src.validation_utilities import training
 
 
 def k_fold_cross_validation(data_set, output_data_set, hyper_parameters_set, k, randomized_search, filename,
-                            is_classification):
+                            is_classification, dt):
+    temp_data = np.array([[inp, out] for inp, out in zip(data_set, output_data_set)], dtype=dt)
+    temp_data = preprocessing.shuffle_data(temp_data)
+    data_set = temp_data[:, 0]
+    output_data_set = temp_data[:, 1]
+
     hps = validation_utilities.get_hyper_parameters(hyper_parameters_set, randomized_search, is_classification)
 
     if is_classification:
@@ -33,8 +38,8 @@ def k_fold_cross_validation(data_set, output_data_set, hyper_parameters_set, k, 
                 best_hp = hp
                 best_model = net
 
-    validation_utilities.dump_on_json(performance, best_hp, filename, is_classification)
-    best_network.plot_learning_rate()
+    validation_utilities.dump_on_json(best_performance, best_hp, filename, is_classification)
+    best_model.plot_learning_rate()
     if is_classification:
         print("Best accuracy: " + str(best_performance) + " | List of hyperparameters used: " + str(best_hp))
     else:
@@ -54,7 +59,10 @@ def k_fold_cross_validation(data_set, output_data_set, hyper_parameters_set, k, 
 def cross_validation_inner(data_set, output_data_set, parameters, k):
     data_set_len = data_set.shape[0]
     proportions = int(np.ceil(data_set_len / k))
-    performance_sum = 0
+    parameters_and_data = []
+
+    pool = Pool()
+
     for validation_start in range(0, data_set_len, proportions):
         validation_end = validation_start + proportions
         validation_set = data_set[validation_start:validation_end]
@@ -64,8 +72,8 @@ def cross_validation_inner(data_set, output_data_set, parameters, k):
         training_set = np.concatenate((training_set1, training_set2))
         output_training_set = np.concatenate((output_data_set[:validation_start], output_data_set[validation_end:]))
 
-        hyperparameters = parameters + [training_set, output_training_set, validation_set, output_validation_set,
-                                        proportions]
+        parameters_and_data.append(parameters + [training_set, output_training_set, validation_set,
+                                                 output_validation_set, proportions])
 
     best_performance = 0
     performance_sum = 0
@@ -78,4 +86,4 @@ def cross_validation_inner(data_set, output_data_set, parameters, k):
 
     performance_mean = performance_sum / k
 
-    return performance, network
+    return performance_mean, best_model
