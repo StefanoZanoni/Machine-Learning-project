@@ -47,15 +47,16 @@ def k_fold_cross_validation(data_set, output_data_set, hyper_parameters_set, k, 
         print("Best error on validation set: " + str(best_performance) + " | List of hyperparameters used: " + str(
             best_hp))
 
-    best_model = network.Network(best_hp[0], best_hp[1], best_hp[2], best_hp[3], is_classification,
-                                 best_hp[6], best_hp[4])
-    best_model.train(data_set, output_data_set, best_hp[5], best_model.stop, best_model.epoch)
+    model = network.Network(best_hp[0], best_hp[1], best_hp[2], best_hp[3], is_classification,
+                            best_hp[6], best_hp[4])
+    max_epoch = best_model.epoch
+    model.train(data_set, output_data_set, best_hp[5], model.stop, max_epoch)
 
     stop = timer()
 
     print('model selection in seconds: ' + str(np.ceil(stop - start)))
 
-    return best_model
+    return model
 
 
 def cross_validation_inner(data_set, output_data_set, parameters, k):
