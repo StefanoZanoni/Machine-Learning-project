@@ -75,7 +75,10 @@ class Network:
         self.training_errors_means = []
         self.validation_errors_means = []
 
-        self.best_validation_errors_means = sys.float_info.max
+        if not is_classification:
+            self.best_validation_errors_means = sys.float_info.max
+        else:
+            self.best_validation_errors_means = 0
 
         self.epoch = 0
         self.patience = patience
@@ -444,11 +447,16 @@ class Network:
             self.Ws.append(self.W)
             self.Bs.append(self.B)
 
-        self.W = self.best_W
-        self.B = self.best_B
+        if end.__code__.co_code == self.early_stopping.__code__.co_code:
+            self.W = self.best_W
+            self.B = self.best_B
 
     def stop(self, args):
         max_epoch = args[0]
+
+        # if self.epoch >= 1:
+        #     self.best_W = self.Ws[self.epoch - 1]
+        #     self.best_B = self.Bs[self.epoch - 1]
 
         if self.epoch >= max_epoch:
             return True

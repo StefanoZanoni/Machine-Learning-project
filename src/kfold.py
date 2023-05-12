@@ -41,9 +41,11 @@ def k_fold_cross_validation(data_set, output_data_set, hyper_parameters_set, k, 
     validation_utilities.dump_on_json(best_performance, best_hp, filename, is_classification)
     best_model.plot_learning_rate()
     if is_classification:
-        print("Best accuracy: " + str(best_performance) + " | List of hyperparameters used: " + str(best_hp))
+        print("Best accuracy on validation set: " + str(best_performance) + " | List of hyperparameters used: " + str(
+            best_hp))
     else:
-        print("Best error: " + str(best_performance) + " | List of hyperparameters used: " + str(best_hp))
+        print("Best error on validation set: " + str(best_performance) + " | List of hyperparameters used: " + str(
+            best_hp))
 
     best_model = network.Network(best_hp[0], best_hp[1], best_hp[2], best_hp[3], is_classification,
                                  best_hp[6], best_hp[4])
