@@ -25,26 +25,37 @@ if __name__ == '__main__':
 
     blind_testing_input = np.array(blind_testing_df[['a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9']])
 
-    activation_functions = [[(activation_functions.parametric_relu, activation_functions.parametric_relu_gradient),
+    activation_functions = [
+                            [(activation_functions.parametric_relu, activation_functions.parametric_relu_gradient),
                              (activation_functions.parametric_relu, activation_functions.parametric_relu_gradient),
-                             (activation_functions.linear, activation_functions.linear_gradient)]]
+                             (activation_functions.linear, activation_functions.linear_gradient)],
+                            [(activation_functions.selu, activation_functions.selu_gradient),
+                             (activation_functions.selu, activation_functions.selu_gradient),
+                             (activation_functions.linear, activation_functions.linear_gradient)]
+                            ]
     error_function = (error_functions.mee, error_functions.mee_gradient)
-    hyper_parameters = [[('learning_rate', 0.001), ('PReLU_hp', 0.1)]]
+    hyper_parameters = [[('learning_rate', 0.1), ('PReLU_hp', 0.1)], [('learning_rate', 0.01), ('PReLU_hp', 0.2)],
+                        [('learning_rate', 0.05), ('PReLU_hp', 0.1)], [('learning_rate', 0.2), ('PReLU_hp', 0.2)]]
     regularization_techniques = [("None", 0)]
 
-    best_model = kfold.k_fold_cross_validation(training_input, training_output, [("structures", [[9, 10, 6, 2]]),
-                                                                                 ("activation_functions",
-                                                                                  activation_functions),
-                                                                                 ("error_functions",
-                                                                                  [error_function]),
-                                                                                 ("hyper_parameters",
-                                                                                  hyper_parameters),
-                                                                                 ("gradient_descent_techniques",
-                                                                                  ['NesterovM']),
-                                                                                 ("mini_batch_sizes", [1]),
-                                                                                 ("regularization_techniques",
-                                                                                  regularization_techniques)],
-                                               32, False, "../MLcup_models.json", False, dt)
+    best_model = kfold.k_fold_cross_validation(training_input, training_output,
+                                               [("structures", [[9, 10, 6, 2], [9, 4, 4, 2],
+                                                                [9, 6, 6, 2], [9, 8, 8, 2],
+                                                                [9, 10, 10, 2], [9, 10, 4, 2],
+                                                                [9, 8, 6, 2], [9, 8, 4, 2]]),
+                                                ("activation_functions",
+                                                 activation_functions),
+                                                ("error_functions",
+                                                 [error_function]),
+                                                ("hyper_parameters",
+                                                 hyper_parameters),
+                                                ("gradient_descent_techniques",
+                                                 ["None", "NesterovM",
+                                                  "RMSprop", "AdaGrad"]),
+                                                ("mini_batch_sizes", [1, 2, 4]),
+                                                ("regularization_techniques",
+                                                 regularization_techniques)],
+                                               4, False, "../MLcup_models.json", False, dt)
 
     performance = best_model.compute_performance(test_input, test_output)
-    print('performance on the test set: ' + str(performance))
+    # print('performance on the test set: ' + str(performance))

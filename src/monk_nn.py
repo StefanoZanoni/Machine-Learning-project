@@ -46,7 +46,12 @@ if __name__ == '__main__':
     testing_input1 = preprocessing.one_hot_encoding(testing_input1)
 
     optimal_model = holdout.holdout_selection(training_input1, training_output1, [("structures",
-                                                                                   [[17, 4, 4, 1]]),
+                                                                                   [[17, 1, 1, 1], [17, 2, 2, 1],
+                                                                                    [17, 3, 3, 1], [17, 4, 4, 1],
+                                                                                    [17, 5, 5, 1], [17, 2, 1, 1],
+                                                                                    [17, 3, 1, 1], [17, 4, 1, 1],
+                                                                                    [17, 3, 2, 1], [17, 4, 2, 1],
+                                                                                    [17, 4, 3, 1]]),
                                                                                   ("activation_functions",
                                                                                    activation_functions1),
                                                                                   ("error_functions",
@@ -80,7 +85,9 @@ if __name__ == '__main__':
     training_input2 = preprocessing.one_hot_encoding(training_input2)
     testing_input2 = preprocessing.one_hot_encoding(testing_input2)
 
-    optimal_model = holdout.holdout_selection(training_input2, training_output2, [("structures", [[17, 4, 1]]),
+    optimal_model = holdout.holdout_selection(training_input2, training_output2, [("structures", [[17, 1, 1], [17, 2, 1],
+                                                                                   [17, 3, 1], [17, 4, 1],
+                                                                                   [17, 5, 1], [17, 6, 1]]),
                                                                                   ("activation_functions",
                                                                                    activation_functions2), (
                                                                                   "error_functions", [error_function2]),
@@ -88,8 +95,8 @@ if __name__ == '__main__':
                                                                                    hyper_parameters2), (
                                                                                   "gradient_descend_techniques",
                                                                                   ["None", "NesterovM"]),
-                                                                                  ("mini_batch_sizes", [1, 2, 4, 8, 16,
-                                                                                                        32, 64]),
+                                                                                  ("mini_batch_sizes",
+                                                                                   [1, 2, 4, 8]),
                                                                                   ("regularization_techniques",
                                                                                    regularization_techniques2)], 70,
                                               False, "../Monk2_models.json", True, dt)
@@ -104,19 +111,25 @@ if __name__ == '__main__':
     testing_input3 = data[2]
     testing_output3 = data[3]
 
-    activation_functions3 = [[(activation_functions.tanh, activation_functions.tanh_gradient),
-                              (activation_functions.sigmoid, activation_functions.sigmoid_gradient)]]
+    activation_functions3 = [
+                             [(activation_functions.tanh, activation_functions.tanh_gradient),
+                              (activation_functions.sigmoid, activation_functions.sigmoid_gradient)],
+                             [(activation_functions.relu, activation_functions.relu_gradient),
+                              (activation_functions.sigmoid, activation_functions.sigmoid_gradient)]
+                             ]
     error_function3 = (error_functions.bce, error_functions.bce_gradient)
-    hyper_parameters3 = [[('learning_rate', 0.01)], [('learning_rate', 0.05)],
-                         [('learning_rate', 0.1)], [('learning_rate', 0.2)]]
-    regularization_techniques3 = [("None", 0), ("L1", 0.001)]
+    hyper_parameters3 = [[('learning_rate', 0.1)], [('learning_rate', 0.2)], [('learning_rate', 0.3)]]
+    regularization_techniques3 = [("None", 0)]
 
     training_input3 = preprocessing.one_hot_encoding(training_input3)
     testing_input3 = preprocessing.one_hot_encoding(testing_input3)
 
-    optimal_model = holdout.holdout_selection(training_input3, training_output3, [("structures", [[17, 5, 1], [17, 4, 1],
-                                                                                                  [17, 3, 1], [17, 2, 1],
-                                                                                                  [17, 1, 1], [17, 6, 1]]),
+    optimal_model = holdout.holdout_selection(training_input3, training_output3, [("structures", [[17, 1, 1],
+                                                                                                  [17, 2, 1],
+                                                                                                  [17, 3, 1],
+                                                                                                  [17, 4, 1],
+                                                                                                  [17, 5, 1],
+                                                                                                  [17, 6, 1]]),
                                                                                   (
                                                                                       "activation_functions",
                                                                                       activation_functions3),
@@ -127,10 +140,11 @@ if __name__ == '__main__':
                                                                                   (
                                                                                       "gradient_descend_techniques",
                                                                                       ["None", "NesterovM"]),
-                                                                                  ("mini_batch_sizes", [1, 2, 4, 8, 16, 32, 64]),
+                                                                                  ("mini_batch_sizes",
+                                                                                   [1, 2, 4, 8, 16]),
                                                                                   ("regularization_techniques",
                                                                                    regularization_techniques3)],
                                               70, False, "../Monk3_models.json", True, dt)
 
     performance = optimal_model.compute_performance(testing_input3, testing_output3)
-    # print('performance on the test set: ' + str(performance))
+    print('performance on the test set: ' + str(performance))

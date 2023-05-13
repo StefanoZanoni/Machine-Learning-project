@@ -6,6 +6,7 @@ from src import network
 
 
 def training(arguments):
+    print(f"training model: {arguments[:7]}\n...\n")
     structure = arguments[0]
     activation_functions = arguments[1]
     error_function = arguments[2]
@@ -126,7 +127,7 @@ def dump_on_json(performance, hyper_parameters, filename, is_classification):
             "regularization_technique": hyper_parameters[6]
         }
     else:
-        if performance > 1.5:
+        if performance > 1.7:
             return
         model = {
             "error": performance,
