@@ -32,5 +32,209 @@
             "None",
             0
         ]
+    },
+    {
+        "accuracy": 97.29729729729729,
+        "structure": [
+            17,
+            2,
+            1
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ]
+        ],
+        "error_function": [
+            "bce",
+            "bce_gradient"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 2,
+        "regularization_technique": [
+            "None",
+            0
+        ]
+    },
+    {
+        "accuracy": 97.29729729729729,
+        "structure": [
+            17,
+            2,
+            1
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ]
+        ],
+        "error_function": [
+            "bce",
+            "bce_gradient"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 2,
+        "regularization_technique": [
+            "None",
+            0
+        ]
+    },
+    {
+        "accuracy": 97.29729729729729,
+        "structure": [
+            17,
+            1,
+            1
+        ],
+        "activation_function": [
+            [
+                "relu",
+                "relu_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ]
+        ],
+        "error_function": [
+            "bce",
+            "bce_gradient"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.2
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 2,
+        "regularization_technique": [
+            "None",
+            0
+        ]
+    },
+    {
+        "accuracy": 97.29729729729729,
+        "structure": [
+            17,
+            1,
+            1
+        ],
+        "activation_function": [
+            [
+                "relu",
+                "relu_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ]
+        ],
+        "error_function": [
+            "bce",
+            "bce_gradient"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.2
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 2,
+        "regularization_technique": [
+            "None",
+            0
+        ]
+    },
+    {
+        "accuracy": 97.29729729729729,
+        "structure": [
+            17,
+            1,
+            1
+        ],
+        "activation_function": [
+            [
+                "relu",
+                "relu_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ]
+        ],
+        "error_function": [
+            "bce",
+            "bce_gradient"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.2
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 2,
+        "regularization_technique": [
+            "None",
+            0
+        ]
+    },
+    {
+        "accuracy": 97.29729729729729,
+        "structure": [
+            17,
+            1,
+            1
+        ],
+        "activation_function": [
+            [
+                "relu",
+                "relu_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ]
+        ],
+        "error_function": [
+            "bce",
+            "bce_gradient"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.2
+            ]
+        ],
+        "gradient_descent_technique": "NesterovM",
+        "mini_batch_size": 2,
+        "regularization_technique": [
+            "None",
+            0
+        ]
     }
 ]

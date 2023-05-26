@@ -127,7 +127,7 @@ def dump_on_json(performance, hyper_parameters, filename, is_classification):
             "regularization_technique": hyper_parameters[6]
         }
     else:
-        if performance > 1.7:
+        if performance > 1.5:
             return
         model = {
             "error": performance,

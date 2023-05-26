@@ -26,7 +26,7 @@ def k_fold_cross_validation(data_set, output_data_set, hyper_parameters_set, k, 
 
     # grid search over k
     for hp in hps:
-        performance, net = cross_validation_inner(data_set, output_data_set, hp, k)
+        performance, net = cross_validation_inner(data_set, output_data_set, hp, k, is_classification)
         if is_classification:
             if performance > best_performance:
                 best_performance = performance
@@ -59,7 +59,7 @@ def k_fold_cross_validation(data_set, output_data_set, hyper_parameters_set, k, 
     return model
 
 
-def cross_validation_inner(data_set, output_data_set, parameters, k):
+def cross_validation_inner(data_set, output_data_set, parameters, k, is_classification):
     data_set_len = data_set.shape[0]
     proportions = int(np.ceil(data_set_len / k))
     parameters_and_data = []
@@ -78,14 +78,22 @@ def cross_validation_inner(data_set, output_data_set, parameters, k):
         parameters_and_data.append(parameters + [training_set, output_training_set, validation_set,
                                                  output_validation_set, proportions])
 
-    best_performance = 0
+    if is_classification:
+        best_performance = 0
+    else:
+        best_performance = sys.float_info.max
     performance_sum = 0
     for result in pool.map(training, parameters_and_data):
         performance = result[0]
         performance_sum += performance
-        if performance > best_performance:
-            best_performance = performance
-            best_model = result[2]
+        if is_classification:
+            if performance > best_performance:
+                best_performance = performance
+                best_model = result[2]
+        else:
+            if performance < best_performance:
+                best_performance = performance
+                best_model = result[2]
 
     performance_mean = performance_sum / k
 

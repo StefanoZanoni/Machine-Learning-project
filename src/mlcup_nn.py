@@ -6,6 +6,7 @@ from src import error_functions
 from src import kfold
 
 if __name__ == '__main__':
+
     # (input, output) type
     dt = object
 
@@ -26,23 +27,17 @@ if __name__ == '__main__':
     blind_testing_input = np.array(blind_testing_df[['a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9']])
 
     activation_functions = [
-                            [(activation_functions.parametric_relu, activation_functions.parametric_relu_gradient),
-                             (activation_functions.parametric_relu, activation_functions.parametric_relu_gradient),
-                             (activation_functions.linear, activation_functions.linear_gradient)],
-                            [(activation_functions.selu, activation_functions.selu_gradient),
+                            [(activation_functions.tanh, activation_functions.tanh_gradient),
+                             (activation_functions.tanh, activation_functions.tanh_gradient),
                              (activation_functions.selu, activation_functions.selu_gradient),
                              (activation_functions.linear, activation_functions.linear_gradient)]
                             ]
     error_function = (error_functions.mee, error_functions.mee_gradient)
-    hyper_parameters = [[('learning_rate', 0.1), ('PReLU_hp', 0.1)], [('learning_rate', 0.01), ('PReLU_hp', 0.2)],
-                        [('learning_rate', 0.05), ('PReLU_hp', 0.1)], [('learning_rate', 0.2), ('PReLU_hp', 0.2)]]
-    regularization_techniques = [("None", 0)]
+    hyper_parameters = [[('learning_rate', 0.005)]]
+    regularization_techniques = [("L1", 0.001)]
 
     best_model = kfold.k_fold_cross_validation(training_input, training_output,
-                                               [("structures", [[9, 10, 6, 2], [9, 4, 4, 2],
-                                                                [9, 6, 6, 2], [9, 8, 8, 2],
-                                                                [9, 10, 10, 2], [9, 10, 4, 2],
-                                                                [9, 8, 6, 2], [9, 8, 4, 2]]),
+                                               [("structures", [[9, 12, 12, 8, 2]]),
                                                 ("activation_functions",
                                                  activation_functions),
                                                 ("error_functions",
@@ -50,12 +45,27 @@ if __name__ == '__main__':
                                                 ("hyper_parameters",
                                                  hyper_parameters),
                                                 ("gradient_descent_techniques",
-                                                 ["None", "NesterovM",
-                                                  "RMSprop", "AdaGrad"]),
-                                                ("mini_batch_sizes", [1, 2, 4]),
+                                                 ["None"]),
+                                                ("mini_batch_sizes", [4]),
                                                 ("regularization_techniques",
                                                  regularization_techniques)],
-                                               4, False, "../MLcup_models.json", False, dt)
+                                               128, False, "../MLcup_models.json", False, dt)
 
     performance = best_model.compute_performance(test_input, test_output)
-    # print('performance on the test set: ' + str(performance))
+    print('performance on the test set: ' + str(performance))
+
+    output_x = []
+    output_y = []
+    for input in blind_testing_input:
+        output = best_model.forward(input)
+        output_x.append(output[0][0])
+        output_y.append(output[1][0])
+
+    blind_len = blind_testing_input.shape[0]
+    ids = [i for i in range(1, blind_len + 1)]
+
+    df = pd.DataFrame(np.array([ids, output_x, output_y]).T, columns=['id', 'output_x', 'output_y'])
+    df2 = df.copy()
+    df2.loc[:, 'id'] = df2['id'].apply(int)
+    df2.to_csv('../output/ZDS_ML-CUP22-TS.csv', index=False)
+

@@ -84,7 +84,7 @@ def selu_gradient(x):
     alpha = 1.6732632423543772848170429916717
     y = np.copy(np.ravel(x))
     y[np.ravel(x) > 0] = lambda_hp
-    y[np.ravel(x) <= 0] = lambda_hp * alpha * np.exp(np.ravel(x[np.ravel(x) < 0]))
+    y[np.ravel(x) <= 0] = lambda_hp * alpha * np.exp(np.ravel(x[np.ravel(x) <= 0]))
     return np.array([y]).T
 
 
