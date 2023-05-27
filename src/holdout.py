@@ -7,11 +7,14 @@ from src import preprocessing
 from src import network
 from src import validation_utilities
 from src.validation_utilities import training
+from src import utilities
 
 
 def holdout_selection(data_set, output_data_set, hyper_parameters_set, split_percentage, randomized_search, filename,
-                      is_classification, dt):
+                      is_classification):
+    dt = object
 
+    # compute validation set length
     validation_set_len = int(np.ceil((100 - split_percentage) * data_set.shape[0] / 100))
     # create an array with input and output coupled
     temp_data = np.array([[inp, out] for inp, out in zip(data_set, output_data_set)], dtype=dt)

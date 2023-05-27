@@ -1,12 +1,15 @@
-import json
-import os
 from random import random
 
 from src import network
 
 
+# Function that creates the network with the specified parameters.
+# Training on the training data, evaluation of performances on validation data.
+# Returns performance, parameters of the network and the network built
 def training(arguments):
     print(f"training model: {arguments[:7]}\n...\n")
+
+    # Retrieving arguments to build the network
     structure = arguments[0]
     activation_functions = arguments[1]
     error_function = arguments[2]
@@ -15,27 +18,31 @@ def training(arguments):
     mini_batch_size = arguments[5]
     regularization_technique = arguments[6]
     is_classification = arguments[7]
+
+    # Retrieving training and validation data
     training_set = arguments[8]
     output_training_set = arguments[9]
     validation_set = arguments[10]
     output_validation_set = arguments[11]
 
+    # Creation of the network
     net = network.Network(structure, activation_functions, error_function, hyper_parameters, is_classification,
                           regularization_technique,
                           gradient_descent_technique)
 
+    # Training of the model and then evaluation on validation data
     net.train(training_set, output_training_set, mini_batch_size, net.early_stopping,
               validation_set, output_validation_set)
+
+    # Retrieving performance of the network on the validation set
     performance = net.best_validation_errors_means
 
     return performance, arguments, net
 
 
-# return a list of sets of hyperparameters to try
+# Creates a list of sets of hyperparameters to try to build the network
 def get_hyper_parameters(hyper_parameters_set, randomized_search, is_classification):
-
-    # [(structures, [[s1], [s2]]), (af, [[lr, sg], [r, sg]]), (ef, []), (hp, [(lr, []), (), ()]), (gdt, [""]),
-    # (batch, [])]
+    # Retrieving arguments to all the possible hyperparameters
     structures = hyper_parameters_set[0][1]
     activation_functions_list = hyper_parameters_set[1][1]
     error_functions = hyper_parameters_set[2][1]
@@ -55,9 +62,11 @@ def get_hyper_parameters(hyper_parameters_set, randomized_search, is_classificat
     return hps
 
 
+# Given a set of arguments to build the network on,
+# returns 20 combinations of hyperparameters randomly chosen
 def randomized_grid_search(structures, activation_functions_list, error_functions, hyper_parameters_list,
                            gradient_descent_techniques, mini_batch_sizes, regularization_techniques, is_classification):
-
+    # List of combinations of hyperparameters
     hps = []
 
     for i in range(20):
@@ -76,15 +85,18 @@ def randomized_grid_search(structures, activation_functions_list, error_function
 
         regularization_technique = regularization_techniques[random.randint(0, len(regularization_techniques) - 1)]
 
+        # Append the new combination to the list of combinations chosen
         hps.append([structure, activation_functions, error_function, hyper_parameters, gradient_descent_technique,
                     mini_batch_size, regularization_technique, is_classification])
 
     return hps
 
 
+# Given a set of arguments to build the network on,
+# returns all the possible combinations of hyperparameters
 def exhaustive_grid_search(structures, activation_functions_list, error_functions, hyper_parameters_list,
                            gradient_descent_techniques, mini_batch_sizes, regularization_techniques, is_classification):
-
+    # List of possible combinations of hyperparameters
     hps = []
 
     for structure in structures:
@@ -95,71 +107,6 @@ def exhaustive_grid_search(structures, activation_functions_list, error_function
                         for mini_batch_size in mini_batch_sizes:
                             for regularization_technique in regularization_techniques:
                                 hps.append([structure, activation_functions, error_function, hyper_parameters,
-                                           gradient_descent_technique, mini_batch_size, regularization_technique,
-                                           is_classification])
+                                            gradient_descent_technique, mini_batch_size, regularization_technique,
+                                            is_classification])
     return hps
-
-
-def dump_on_json(performance, hyper_parameters, filename, is_classification):
-    activation_functions = []
-    for functions in hyper_parameters[1]:
-        activation_functions.append((
-            (str(functions[0])).split(" ")[1],
-            (str(functions[1])).split(" ")[1]
-        ))
-
-    error_functions = (
-        (str(hyper_parameters[2][0])).split(" ")[1],
-        (str(hyper_parameters[2][1])).split(" ")[1]
-    )
-
-    if is_classification:
-        if performance < 90:
-            return
-        model = {
-            "accuracy": performance,
-            "structure": hyper_parameters[0],
-            "activation_function": activation_functions,
-            "error_function": error_functions,
-            "hyper_parameters": hyper_parameters[3],
-            "gradient_descent_technique": hyper_parameters[4],
-            "mini_batch_size": hyper_parameters[5],
-            "regularization_technique": hyper_parameters[6]
-        }
-    else:
-        if performance > 1.5:
-            return
-        model = {
-            "error": performance,
-            "structure": hyper_parameters[0],
-            "activation_function": activation_functions,
-            "error_function": error_functions,
-            "hyper_parameters": hyper_parameters[3],
-            "gradient_descent_technique": hyper_parameters[4],
-            "mini_batch_size": hyper_parameters[5],
-            "regularization_technique": hyper_parameters[6]
-        }
-
-    models = []
-
-    file_exists = os.path.exists(filename)
-    is_file_empty = file_exists and os.stat(filename).st_size == 0
-
-    if file_exists and not is_file_empty:
-        with open(filename, "r") as open_file:
-            read_models = json.load(open_file)
-            for single_model in read_models:
-                models.append(single_model)
-            open_file.close()
-
-        with open(filename, "w") as open_file:
-            models.append(model)
-            json_object = json.dumps(models, indent=4)
-            open_file.write(json_object)
-            open_file.close()
-    else:
-        with open(filename, "w+") as open_file:
-            models.append(model)
-            json_object = json.dumps(models, indent=4)
-            open_file.write(json_object)
-            open_file.close()

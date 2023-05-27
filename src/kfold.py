@@ -6,40 +6,66 @@ from multiprocessing.pool import Pool
 from timeit import default_timer as timer
 from src import network, preprocessing
 from src.validation_utilities import training
+from src import utilities
 
 
+# This function implements the k fold cross validation technique. It takes:
+#   - input data
+#   - output data
+#   - set of all hyperparameters
+#   - boolean flag to determine if the search is randomized
+#   - name of the file where to dump
+#   - boolean flag to determine if is classification or regression task
 def k_fold_cross_validation(data_set, output_data_set, hyper_parameters_set, k, randomized_search, filename,
-                            is_classification, dt):
+                            is_classification):
+    dt = object
+
+    # Maps inputs to outputs
     temp_data = np.array([[inp, out] for inp, out in zip(data_set, output_data_set)], dtype=dt)
+    # Shuffles the data
     temp_data = preprocessing.shuffle_data(temp_data)
+    # Divides data between inputs and outputs
     data_set = temp_data[:, 0]
     output_data_set = temp_data[:, 1]
 
+    # Gets combinations of hyperparameters in a list to try on the network
     hps = validation_utilities.get_hyper_parameters(hyper_parameters_set, randomized_search, is_classification)
 
+    # Sets the neutral result for successive comparisons
     if is_classification:
         best_performance = 0
     else:
         best_performance = sys.float_info.max
 
+    # Starts the timer to evaluate the time needed to do the model selection
     start = timer()
 
-    # grid search over k
+    # For every possible hyperparameters list does a k fold
     for hp in hps:
+        # Applies the k fold and takes the performance achieved on the validation set
         performance, net = cross_validation_inner(data_set, output_data_set, hp, k, is_classification)
+
+        # If the performances achieved on the validation set are better than the best performance achieved until
+        # now, we update the value of best performance, the list of best hyperparameters and the best model found
         if is_classification:
+            # In case of classification we want a better accuracy. Bigger is better
             if performance > best_performance:
                 best_performance = performance
                 best_hp = hp
                 best_model = net
         else:
+            # In case of regression we want a low error. Lower is better
             if performance < best_performance:
                 best_performance = performance
                 best_hp = hp
                 best_model = net
 
-    validation_utilities.dump_on_json(best_performance, best_hp, filename, is_classification)
+    # Dumps on file the best model found
+    utilities.dump_on_json(best_performance, best_hp, filename, is_classification)
+    # Plots the learning rate
     best_model.plot_learning_rate()
+
+    # Prints the best accuracy/error found on validation set with the list of the best hyperparameters
     if is_classification:
         print("Best accuracy on validation set: " + str(best_performance) + " | List of hyperparameters used: " + str(
             best_hp))
@@ -47,6 +73,7 @@ def k_fold_cross_validation(data_set, output_data_set, hyper_parameters_set, k, 
         print("Best error on validation set: " + str(best_performance) + " | List of hyperparameters used: " + str(
             best_hp))
 
+    # We build a new network with the best hyperparameters found
     model = network.Network(best_hp[0], best_hp[1], best_hp[2], best_hp[3], is_classification,
                             best_hp[6], best_hp[4])
     max_epoch = best_model.epoch
