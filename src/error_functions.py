@@ -1,7 +1,8 @@
 import numpy as np
 
-
 # all the derivatives were computed w.r.t the output (yx)
+# x1, x2 are vectors, each operation has to be considered as an element wise one
+
 
 # mean Euclidean error
 def mee(y, yx):
@@ -63,41 +64,6 @@ def mae_gradient(y, yx):
         return np.divide(np.subtract(yx, y), np.abs(np.subtract(yx, y)))
     else:
         return (yx - y) / np.abs(yx - y)
-
-
-# huber loss
-# problems with dimensions
-def huber_loss(y, yx, delta):
-    if np.shape(yx) != (1, 1):
-        y = np.reshape(y, np.shape(yx))
-        hl = np.zeros_like(yx)
-        hl[np.abs(np.subtract(yx, y)) <= delta] = mse(y, yx)
-        hl[np.abs(np.subtract(yx, y)) > delta] = (np.multiply(delta,
-                                                              (np.subtract(np.abs(np.subtract(yx, y)),
-                                                                           0.5 * delta)))) / len(yx)
-        return hl.mean()
-    else:
-        if np.abs(yx - y) <= delta:
-            return mse(y, yx)
-        else:
-            return delta * (np.abs(yx - y) - 0.5 * delta)
-
-
-# huber loss gradient
-def huber_loss_gradient(y, yx, delta):
-    if np.shape(yx) != (1, 1):
-        y = np.reshape(y, np.shape(yx))
-        dhl = np.zeros_like(yx)
-        dhl[np.abs(np.subtract(yx, y)) <= delta] = mse_gradient(y, yx)
-        dhl[np.abs(np.subtract(yx, y)) > delta] = 1 / len(yx) * (np.multiply(delta, np.divide(np.subtract(yx, y),
-                                                                                              np.abs(
-                                                                                                  np.subtract(yx, y)))))
-        return dhl
-    else:
-        if np.abs(yx - y) <= delta:
-            return mse_gradient(yx, y)
-        else:
-            return delta * (yx - y) / np.abs(yx - y)
 
 
 # binary cross entropy

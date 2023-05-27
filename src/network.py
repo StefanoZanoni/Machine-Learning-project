@@ -4,6 +4,7 @@ from random import randint
 from typing import Type
 from inspect import signature
 from matplotlib import pyplot as plt
+from matplotlib.pyplot import figure
 
 from src import activation_functions as af
 
@@ -13,7 +14,7 @@ class Network:
     def __init__(self, structure, activation_functions, error_function, hyper_parameters, is_classification,
                  regularization=("None", 0), optimizer="None", patience=10, delta=0):
 
-        # neural network structure in the form [in, L1, L2, ... , Ln, out]
+        # Neural network structure in the form [in, L1, L2, ... , Ln, out]
         # where in and out are respectively the input and the output layer and
         # L1, ..., Ln are the hidden layers. Each layer can have a different number of neurons
         self.structure = structure
@@ -75,16 +76,16 @@ class Network:
         self.training_errors_means = []
         self.validation_errors_means = []
 
-        if not is_classification:
-            self.best_validation_errors_means = sys.float_info.max
-        else:
+        if is_classification:
             self.best_validation_errors_means = 0
+        else:
+            self.best_validation_errors_means = sys.float_info.max
 
         self.epoch = 0
         self.patience = patience
         self.delta = delta
 
-        # a flag used in case of binary classification problem to take the "inverse" of the accuracy
+        # a flag used in case of a binary classification problem to take the "inverse" of the accuracy
         self.take_opposite = False
 
     def __weights_initialization(self):
@@ -93,9 +94,8 @@ class Network:
 
         for l, next_l, fun in zip(self.structure[:-1], self.structure[1:], self.activation_functions):
 
-            # uniform He weights initialization for ReLu and its variants
+            # He weights uniform initialization for ReLu and its variants
             if fun[0].__code__.co_code == af.relu.__code__.co_code or \
-                    fun[0].__code__.co_code == af.parametric_relu.__code__.co_code or \
                     fun[0].__code__.co_code == af.leaky_relu.__code__.co_code or \
                     fun[0].__code__.co_code == af.elu.__code__.co_code or \
                     fun[0].__code__.co_code == af.selu.__code__.co_code:
@@ -105,7 +105,7 @@ class Network:
                 scaled_weights = weights * std
                 weights_list.append(scaled_weights)
 
-            # uniform Xavier/Glorot weights initialization for Sigmoid and Tanh
+            # Xavier/Glorot weights uniform initialization for Sigmoid and Tanh
             elif fun[0].__code__.co_code == af.sigmoid.__code__.co_code or \
                     fun[0].__code__.co_code == af.tanh.__code__.co_code:
 
@@ -126,9 +126,12 @@ class Network:
 
         for b, W, j, i in zip(self.B, self.W, range(len(self.B)), range(len(self.structure))):
             f = self.activation_functions[j][0]
+            # get the signature of the activation function to check if there are needed some hyperparameters
             sig = signature(f)
             params = sig.parameters
+            #
             net = W.T @ output + b if i != 0 else W.T @ x + b
+            # in case of leaky ReLu
             if len(params) == 2:
                 alpha = self.hyper_parameters[1][1]
                 output = f(net, alpha)
@@ -139,7 +142,7 @@ class Network:
         if self.is_classification:
 
             # multi-class classification
-            # return most probable class
+            # return the most probable class
             if len(output) > 1:
                 index = output.argmax(axis=0)
                 index = index.item()
@@ -508,6 +511,8 @@ class Network:
             return np.mean(errors)
 
     def plot_learning_rate(self):
+
+        figure(figsize=(8, 6), dpi=80)
 
         if self.is_classification:
             plt.plot(range(1, self.epoch + 1), self.training_errors_means, color='red')

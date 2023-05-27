@@ -29,12 +29,20 @@ if __name__ == '__main__':
     activation_functions = [
                             [(activation_functions.tanh, activation_functions.tanh_gradient),
                              (activation_functions.tanh, activation_functions.tanh_gradient),
-                             (activation_functions.selu, activation_functions.selu_gradient),
+                             (activation_functions.swish, activation_functions.swish_gradient),
                              (activation_functions.linear, activation_functions.linear_gradient)]
                             ]
     error_function = (error_functions.mee, error_functions.mee_gradient)
+
+    # Defines the list of hyperparameters to try
+    # Each element of the list is a list that contains a tuple (or more than one if we are using activation functions
+    # that requires an additional parameters) with the name of the parameter and the value to try
     hyper_parameters = [[('learning_rate', 0.005)]]
-    regularization_techniques = [("L1", 0.001)]
+
+    # Define a list of regularization to try. Each element of the list is a tuple that contains the name of the
+    # regularization technique and then its value.
+    # If there's no need to try a regularization technique is sufficient to add the tuple ("None", 0)
+    regularization_techniques = [('None', 0)]
 
     best_model = kfold.k_fold_cross_validation(training_input, training_output,
                                                [("structures", [[9, 12, 12, 8, 2]]),
@@ -65,7 +73,8 @@ if __name__ == '__main__':
     ids = [i for i in range(1, blind_len + 1)]
 
     df = pd.DataFrame(np.array([ids, output_x, output_y]).T, columns=['id', 'output_x', 'output_y'])
-    df2 = df.copy()
-    df2.loc[:, 'id'] = df2['id'].apply(int)
-    df2.to_csv('../output/ZDS_ML-CUP22-TS.csv', index=False)
+    # Converts the first column, the ids, in integers
+    df[df.columns[0]] = df[df.columns[0]].astype(int)
 
+    # Writes the dataframe to a .csv file
+    df.to_csv('../output/ZDS_ML-CUP22-TS.csv', index=False)
