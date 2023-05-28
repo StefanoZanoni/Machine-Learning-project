@@ -9,7 +9,8 @@ from src.validation_utilities import training
 from src import utilities
 
 
-# This function implements the k fold cross validation technique. It takes:
+# This function applies the k fold cross validation technique to a list of combinations of hyperparameters.
+# It takes:
 #   - input data
 #   - output data
 #   - set of all hyperparameters
@@ -73,10 +74,12 @@ def k_fold_cross_validation(data_set, output_data_set, hyper_parameters_set, k, 
         print("Best error on validation set: " + str(best_performance) + " | List of hyperparameters used: " + str(
             best_hp))
 
-    # We build a new network with the best hyperparameters found
+    # Builds a new network with the best hyperparameters found
     model = network.Network(best_hp[0], best_hp[1], best_hp[2], best_hp[3], is_classification,
                             best_hp[6], best_hp[4])
+    # Sets the max epoch he can reach based on the maximum epoch reached by the best model
     max_epoch = best_model.epoch
+    # Retrains on the whole training set
     model.train(data_set, output_data_set, best_hp[5], model.stop, max_epoch)
 
     stop = timer()
@@ -86,33 +89,57 @@ def k_fold_cross_validation(data_set, output_data_set, hyper_parameters_set, k, 
     return model
 
 
+# This function implements the kfold validation technique. It takes:
+#   - The input data set
+#   - The output data set
+#   - A combination of hyperparameters to try
+#   - k, the factor of the kfold
+#   - a boolean flag to decides if it's a classification or regression technique
+# The execution of the k training is parallelized
 def cross_validation_inner(data_set, output_data_set, parameters, k, is_classification):
+    # Computes the dimension of the validation set
     data_set_len = data_set.shape[0]
     proportions = int(np.ceil(data_set_len / k))
     parameters_and_data = []
 
+    # Creates a Thread Pool to parallelize the k training process
     pool = Pool()
 
+    # Builds the list of tasks to pass to the thread pool
     for validation_start in range(0, data_set_len, proportions):
+        # Computes the end of the validation set in the input data set
         validation_end = validation_start + proportions
+
+        # Takes the input and output data for the validation set
         validation_set = data_set[validation_start:validation_end]
         output_validation_set = output_data_set[validation_start:validation_end]
+
+        # Takes the remaining input and output data for the training set
         training_set1 = data_set[:validation_start]
         training_set2 = data_set[validation_end:]
         training_set = np.concatenate((training_set1, training_set2))
         output_training_set = np.concatenate((output_data_set[:validation_start], output_data_set[validation_end:]))
 
+        # Appends the task of hyperparameters to try and the data set
         parameters_and_data.append(parameters + [training_set, output_training_set, validation_set,
                                                  output_validation_set, proportions])
 
+    # Sets the neutral result for successive comparisons
     if is_classification:
         best_performance = 0
     else:
         best_performance = sys.float_info.max
+
     performance_sum = 0
+    # Gives to the thread pool the task and the list of data to apply to that task
+    # Result is composed as follows:
+    #   - Result[0] is the performance
+    #   - Result[1] is the list of hyperparameters used
+    #   - Result[2] is the model
     for result in pool.map(training, parameters_and_data):
         performance = result[0]
         performance_sum += performance
+
         if is_classification:
             if performance > best_performance:
                 best_performance = performance
@@ -122,6 +149,7 @@ def cross_validation_inner(data_set, output_data_set, parameters, k, is_classifi
                 best_performance = performance
                 best_model = result[2]
 
+    # At the end of the k trainings computes the mean over the performances
     performance_mean = performance_sum / k
 
     return performance_mean, best_model
