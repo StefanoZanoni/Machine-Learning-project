@@ -21,7 +21,7 @@ if __name__ == '__main__':
     activation_functions = [
                             [(activation_functions.tanh, activation_functions.tanh_gradient),
                              (activation_functions.tanh, activation_functions.tanh_gradient),
-                             (activation_functions.swish, activation_functions.swish_gradient),
+                             (activation_functions.selu, activation_functions.selu_gradient),
                              (activation_functions.linear, activation_functions.linear_gradient)]
                             ]
 
@@ -32,14 +32,14 @@ if __name__ == '__main__':
     # Defines the list of hyperparameters to try
     # Each element of the list is a list that contains a tuple (or more than one if we are using activation functions
     # that requires an additional parameters) with the name of the parameter and the value to try
-    hyper_parameters = [[('learning_rate', 0.005)]]
+    hyper_parameters = [[('learning_rate', 0.002)]]
 
     # Define a list of regularization to try. Each element of the list is a tuple that contains the name of the
     # regularization technique and then its value.
-    # If there's no need to try a regularization technique is sufficient to add the tuple ("None", 0)
+    # If there's no need to try a regularization technique, it is sufficient to add the tuple ("None", 0)
     regularization_techniques = [('None', 0)]
 
-    # Model selection through kfold technique
+    # Model selection through k-fold technique
     # K = 128
     # The first False let us do an exhaustive search through all possible combinations of hyperparameters
     # The second False let us define that it's a regression problem
@@ -58,7 +58,7 @@ if __name__ == '__main__':
                                                  regularization_techniques)],
                                                128, False, "../MLcup_models.json", False)
 
-    # With the optimal model found in the kfold selection, we compute the performance on the testing data
+    # With the optimal model found in the k-fold selection, we compute the performance on the testing data
     performance = best_model.compute_performance(test_input, test_output)
     print('performance on the test set: ' + str(performance))
 

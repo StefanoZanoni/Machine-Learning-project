@@ -20,9 +20,9 @@ training_df = pd.read_csv('../MLcup_problem/ML-CUP22-TR.csv',
 # remove all columns with NaN values
 training_df = training_df.dropna(axis=0)
 
-# convert inputs to numpy array
+# convert inputs to a numpy array
 input_data = np.array(training_df[['a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9']])
-# convert outputs to numpy array
+# convert outputs to a numpy array
 output_data = np.array(training_df[['o1', 'o2']])
 
 # split data into training and test sets
@@ -32,7 +32,7 @@ train_in, test_in, train_out, test_out = train_test_split(input_data, output_dat
 # k value for k-fold cross validation
 splits = 128
 
-kf = KFold(n_splits=splits)
+kf = KFold(n_splits=splits, shuffle=True)
 kf.get_n_splits(train_in)
 
 best_performance = sys.float_info.max
@@ -48,18 +48,15 @@ for train_index, test_index in kf.split(train_in):
     # build the model
     inputs = k.Input(shape=(9,))
     x = k.layers.Dense(12, activation="tanh", use_bias=True,
-                       kernel_initializer=k.initializers.GlorotUniform(seed=0),
-                       kernel_regularizer=k.regularizers.L1(l1=0.001))(inputs)
+                       kernel_initializer=k.initializers.GlorotUniform(seed=0))(inputs)
     x = k.layers.Dense(12, activation="tanh", use_bias=True,
-                       kernel_initializer=k.initializers.GlorotUniform(seed=0),
-                       kernel_regularizer=k.regularizers.L1(l1=0.001))(x)
+                       kernel_initializer=k.initializers.GlorotUniform(seed=0))(x)
     x = k.layers.Dense(8, activation="selu", use_bias=True,
-                       kernel_initializer=k.initializers.HeUniform(seed=0),
-                       kernel_regularizer=k.regularizers.L1(l1=0.001))(x)
+                       kernel_initializer=k.initializers.HeUniform(seed=0))(x)
     output = k.layers.Dense(2, activation="linear", use_bias=True)(x)
 
     model = k.Model(inputs, output)
-    opt = k.optimizers.SGD(learning_rate=0.005)
+    opt = k.optimizers.SGD(learning_rate=0.002)
     model.compile(optimizer=opt,
                   loss=mee_loss_fn)
 

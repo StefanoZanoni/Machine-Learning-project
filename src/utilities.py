@@ -36,6 +36,8 @@ def read_ml_cup_data_set():
                               names=['id', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'o1', 'o2'])
     # Drops the first column, which is filled with NaN, from each dataframe
     training_df = training_df.dropna(axis=0)
+    # shuffle the data to avoid injecting some bias into the test set during the splitting
+    training_df = training_df.sample(frac=1, random_state=1).reset_index()
 
     # Reads testing dataframe from the input file
     blind_testing_df = pd.read_csv('../MLcup_problem/ML-CUP22-TS.csv',
@@ -43,11 +45,11 @@ def read_ml_cup_data_set():
     # Drops the first column, which is filled with NaN, from each dataframe
     blind_testing_df = blind_testing_df.dropna(axis=0)
 
-    # Converts to numpy array the input and output data
+    # Converts to a numpy array the input and output data
     input_data = np.array(training_df[['a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9']])
     output_data = np.array(training_df[['o1', 'o2']])
 
-    # Converts to numpy array the input blind data
+    # Converts to a numpy array the input blind data
     blind_testing_input = np.array(blind_testing_df[['a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9']])
 
     return input_data, output_data, blind_testing_input
@@ -55,6 +57,7 @@ def read_ml_cup_data_set():
 
 # This function splits the input data in training data and test data
 def split_input_data(input_data, output_data, percentage):
+
     # Keeps the 'percentage'% of input and output data for training purposes
     training_input = input_data[:(input_data.shape[0] / 100 * percentage).__ceil__(), :]
     training_output = output_data[:(output_data.shape[0] / 100 * percentage).__ceil__(), :]
@@ -77,7 +80,7 @@ def dump_on_json(performance, hyper_parameters, filename, is_classification):
     activation_functions = []
 
     # Retrieves from the list of all the activation functions used,
-    # the name of the function and the name of its gradient and then
+    # the name of the function and the name of its gradient, and then
     # they are added to the list
     for functions in hyper_parameters[1]:
         activation_functions.append((
@@ -135,7 +138,7 @@ def dump_on_json(performance, hyper_parameters, filename, is_classification):
                 models.append(single_model)
             open_file.close()
 
-        # The new model is appended to the list of models and the whole
+        # The new model is appended to the list of models, and the whole
         # models list is dumped as json to the file
         with open(filename, "w") as open_file:
             models.append(model)
