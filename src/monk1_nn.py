@@ -17,8 +17,8 @@ if __name__ == '__main__':
     # Each element of the list is a list that contains the activation functions for the model.
     # Each element of the internal list contains tuples that are assigned to each layer of the model.
     # A single tuple is of the form (function, gradient of that function)
-    activation_functions1 = [[(activation_functions.tanh, activation_functions.tanh_gradient),
-                              (activation_functions.tanh, activation_functions.tanh_gradient),
+    activation_functions1 = [[(activation_functions.relu, activation_functions.relu_gradient),
+                              (activation_functions.relu, activation_functions.relu_gradient),
                               (activation_functions.sigmoid, activation_functions.sigmoid_gradient)]]
 
     # Defines the tuple for the error function. The form of the tuple is
@@ -28,12 +28,11 @@ if __name__ == '__main__':
     # Defines the list of hyperparameters to try
     # Each element of the list is a list that contains a tuple (or more than one if we are using activation functions
     # that requires an additional parameters) with the name of the parameter and the value to try
-    hyper_parameters = [[('learning_rate', 0.1)], [('learning_rate', 0.15)], [('learning_rate', 0.19)],
-                        [('learning_rate', 0.2)]]
+    hyper_parameters = [[('learning_rate', 0.15)]]
 
     # Define a list of regularization to try. Each element of the list is a tuple that contains the name of the
     # regularization technique and then its value.
-    # If there's no need to try a regularization technique is sufficient to add the tuple ("None", 0)
+    # If there's no need to try a regularization technique, it is sufficient to add the tuple ("None", 0)
     regularization_techniques1 = [("None", 0)]
 
     # Encoding of the inputs
@@ -45,12 +44,7 @@ if __name__ == '__main__':
     # The False let us do an exhaustive search through all possible combinations of hyperparameters
     # The True let us define that it's a classification problem
     optimal_model = holdout.holdout_selection(training_input1, training_output1, [("structures",
-                                                                                   [[17, 1, 1, 1], [17, 2, 2, 1],
-                                                                                    [17, 3, 3, 1], [17, 4, 4, 1],
-                                                                                    [17, 5, 5, 1], [17, 2, 1, 1],
-                                                                                    [17, 3, 1, 1], [17, 4, 1, 1],
-                                                                                    [17, 3, 2, 1], [17, 4, 2, 1],
-                                                                                    [17, 4, 3, 1]]),
+                                                                                   [[17, 1, 1, 1]]),
                                                                                   ("activation_functions",
                                                                                    activation_functions1),
                                                                                   ("error_functions",
@@ -58,13 +52,14 @@ if __name__ == '__main__':
                                                                                   ("hyper_parameters",
                                                                                    hyper_parameters),
                                                                                   ("gradient_descend_techniques",
-                                                                                   ["None", "NesterovM"]),
+                                                                                   ["None", "NesterovM",
+                                                                                    "AdaGrad", "RMSprop"]),
                                                                                   ("mini_batch_sizes",
-                                                                                   [1, 2, 4, 8, 16, 32, 64]),
+                                                                                   [1, 2, 4, 8, 16, 32]),
                                                                                   ("regularization_techniques",
                                                                                    regularization_techniques1)],
                                               70, False, "../Monk1_models.json", True)
 
     # With the optimal model found in the holdout selection, we compute the performance on the testing data
-    performance = optimal_model.compute_performance(testing_input1, testing_output1)
+    performance = optimal_model.compute_performance(testing_input1, testing_output1)[0]
     print('performance on the test set: ' + str(performance))

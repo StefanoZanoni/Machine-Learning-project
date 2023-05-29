@@ -3,6 +3,8 @@ import numpy as np
 # all the derivatives were computed w.r.t the output (yx)
 # x1, x2 are vectors, each operation has to be considered as an element wise one
 
+# y is the true output and yx is the predicted one
+
 
 # mean Euclidean error
 def mee(y, yx):

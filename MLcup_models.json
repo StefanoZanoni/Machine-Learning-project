@@ -3238,5 +3238,181 @@
             "None",
             0
         ]
+    },
+    {
+        "error": 1.339444002616545,
+        "structure": [
+            9,
+            12,
+            12,
+            8,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "selu",
+                "selu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mee",
+            "mee_gradient"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.002
+            ]
+        ],
+        "gradient_descent_technique": "None",
+        "mini_batch_size": 4,
+        "regularization_technique": [
+            "None",
+            0
+        ]
+    },
+    {
+        "error": 1.348524077272057,
+        "structure": [
+            9,
+            12,
+            12,
+            8,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "selu",
+                "selu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mee",
+            "mee_gradient"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.002
+            ]
+        ],
+        "gradient_descent_technique": "None",
+        "mini_batch_size": 4,
+        "regularization_technique": [
+            "None",
+            0
+        ]
+    },
+    {
+        "error": 1.3471907474041473,
+        "structure": [
+            9,
+            12,
+            12,
+            8,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "selu",
+                "selu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mee",
+            "mee_gradient"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.002
+            ]
+        ],
+        "gradient_descent_technique": "None",
+        "mini_batch_size": 4,
+        "regularization_technique": [
+            "L2",
+            0.001
+        ]
+    },
+    {
+        "error": 1.348524077272057,
+        "structure": [
+            9,
+            12,
+            12,
+            8,
+            2
+        ],
+        "activation_function": [
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "tanh",
+                "tanh_gradient"
+            ],
+            [
+                "selu",
+                "selu_gradient"
+            ],
+            [
+                "linear",
+                "linear_gradient"
+            ]
+        ],
+        "error_function": [
+            "mee",
+            "mee_gradient"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.002
+            ]
+        ],
+        "gradient_descent_technique": "None",
+        "mini_batch_size": 4,
+        "regularization_technique": [
+            "None",
+            0
+        ]
     }
 ]
