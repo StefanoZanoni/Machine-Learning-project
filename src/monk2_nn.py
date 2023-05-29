@@ -60,5 +60,5 @@ if __name__ == '__main__':
                                               False, "../Monk2_models.json", True)
 
     # With the optimal model found in the holdout selection, we compute the performance on the testing data
-    performance = optimal_model.compute_performance(testing_input2, testing_output2)
+    performance = optimal_model.compute_performance(testing_input2, testing_output2)[0]
     print('performance on the test set: ' + str(performance))

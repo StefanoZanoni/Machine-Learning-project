@@ -418,14 +418,28 @@ class Network:
     def __standard_gradient_descent(self, regularization, lambda_hp, d):
         eta = self.hyper_parameters[0][1]
 
-        if regularization == "None":
-            self.W = [W - ((eta / d) * DE_w) for W, DE_w in zip(self.W, self.DE_W)]
-        if regularization == "L1":
-            self.W = [W - ((eta / d) * (DE_w + lambda_hp * np.sign(W))) for W, DE_w in
-                      zip(self.W, self.DE_W)]
-        if regularization == "L2":
-            self.W = [W - ((eta / d) * (DE_w + lambda_hp * W)) for W, DE_w in
-                      zip(self.W, self.DE_W)]
+        match regularization:
+            case "None":
+                # The update rule for weights and biases, when no regularization occurs, is the previous
+                # weights/biases minus eta/d times the derivative of the error w.r.t. weights/biases
+                #
+                # 'd' is the size of the mini batches.
+                # In case the size of the mini batches is equals to the size of the training set, 'd' is equal to 1
+                self.W = [W - ((eta / d) * DE_w) for W, DE_w in zip(self.W, self.DE_W)]
+
+            case "L1":
+                # In case of regularization L1, we have that the previous formula changes only in the derivative of
+                # the error w.r.t. the weights. Instead of having the derivative of the error, we have the derivative
+                # of the error plus a lambda hyperparameter that multiplies the sign of every element in the matrix
+                # in the layer
+                self.W = [W - ((eta / d) * (DE_w + lambda_hp * np.sign(W))) for W, DE_w in
+                          zip(self.W, self.DE_W)]
+
+            case "L2":
+                # In the case of regularization L2, instead of multiplying the lambda hyperparameter by the sign of the
+                # matrix, we multiply it by the current matrix weight
+                self.W = [W - ((eta / d) * (DE_w + lambda_hp * W)) for W, DE_w in
+                          zip(self.W, self.DE_W)]
 
         self.B = [b - ((eta / d) * DE_b) for b, DE_b in zip(self.B, self.DE_B)]
 
@@ -451,23 +465,37 @@ class Network:
 
         self.B = [B - v for v, B in zip(nesterov_vb, self.B)]
 
+    # This function implements Ada Grad
     def __ada_grad(self, w_cache, b_cache, regularization, lambda_hp, d):
         eta = self.hyper_parameters[0][1]
         eps = 1e-7
 
-        if regularization == "None":
-            self.W = [W - ((eta / d) * np.divide(DE_w, np.sqrt(w) + eps)) for W, DE_w, w in
-                      zip(self.W, self.DE_W, w_cache)]
-        if regularization == "L1":
-            self.W = [W - ((eta / d) * (np.divide(DE_w, np.sqrt(w) + eps) + lambda_hp * np.sign(W)))
-                      for
-                      W, DE_w, w in
-                      zip(self.W, self.DE_W, w_cache)]
-        if regularization == "L2":
-            self.W = [W - ((eta / d) * (np.divide(DE_w, np.sqrt(w) + eps) + lambda_hp * W))
-                      for
-                      W, DE_w, w in
-                      zip(self.W, self.DE_W, w_cache)]
+        # The update rule for weights/biases, when no regularization occurs, is the previous
+        # weights/biases minus eta/d times the division between the derivative of the error w.r.t. weights/biases
+        # and the sum of the square of the velocity and an epsilon parameter
+        #
+        # 'd' is the size of the mini batches.
+        # In case the size of the mini batches is equals to the size of the training set, 'd' is equal to 1
+        match regularization:
+            case "None":
+                self.W = [W - ((eta / d) * np.divide(DE_w, np.sqrt(w) + eps)) for W, DE_w, w in
+                          zip(self.W, self.DE_W, w_cache)]
+
+            # L1 regularization follows the following rule:
+            # add a penalty term equal to: lambda hyperparameter times the sign of the previous weights
+            case "L1":
+                self.W = [W - ((eta / d) * (np.divide(DE_w, np.sqrt(w) + eps) + lambda_hp * np.sign(W)))
+                          for
+                          W, DE_w, w in
+                          zip(self.W, self.DE_W, w_cache)]
+
+            # L2 regularization follows the following rule:
+            # add a penalty term equal to: lambda hyperparameter times the previous weights
+            case "L2":
+                self.W = [W - ((eta / d) * (np.divide(DE_w, np.sqrt(w) + eps) + lambda_hp * W))
+                          for
+                          W, DE_w, w in
+                          zip(self.W, self.DE_W, w_cache)]
 
         self.B = [B - ((eta / d) * np.divide(DE_b, (np.sqrt(b) + eps))) for B, DE_b, b in
                   zip(self.B, self.DE_B, b_cache)]
@@ -505,22 +533,32 @@ class Network:
         self.B = [B - (np.multiply(eta / d, DE_b) / (np.sqrt(b) + eps)) for B, DE_b, b in
                   zip(self.B, self.DE_B, b_cache)]
 
+    # This function implements the training process for the network.
+    # It takes:
+    #   - training input dataset
+    #   - training output dataset
+    #   - size of the mini batches
+    #   - predicate termination function
+    #   - args are the arguments for the end function
     def train(self, training_input, training_output, mini_batch_size, end, *args):
 
         # dividing training data into mini batches
         training_input = np.array(training_input)
         training_output = np.array(training_output)
+
         n = len(training_output)
         mini_batches = []
         mini_batch = []
         dt = np.dtype(np.ndarray, Type[int])
 
+        # Couples the input data with the output data and builds the mini batches list
         if mini_batch_size == n:
             mini_batch = np.array([(inp, output) for inp, output in zip(training_input, training_output)], dtype=dt)
             mini_batches = [mini_batch]
         else:
             for i in range(1, n):
                 mini_batch.append((training_input[i], training_output[i]))
+
                 if i % mini_batch_size == 0 and i >= mini_batch_size:
                     temp = mini_batch.copy()
                     temp = np.array(temp, dtype=dt)
@@ -534,27 +572,40 @@ class Network:
             self.epoch += 1
             self.training_errors = []
 
+            # For every mini batch applies the gradient descent technique chosen
             for mini_batch in mini_batches:
-                if self.gradient_descent == "AdaGrad" or self.gradient_descent == "RMSprop":
-                    w_cache = [np.zeros_like(DE_w) for DE_w in self.DE_W]
-                    b_cache = [np.zeros_like(DE_b) for DE_b in self.DE_B]
-                    self.__gradient_descent(mini_batch, n, w_cache, b_cache)
-                elif self.gradient_descent == "NesterovM":
-                    nesterov_vw = [np.zeros_like(W) for W in self.W]
-                    nesterov_vb = [np.zeros_like(B) for B in self.B]
-                    self.__gradient_descent(mini_batch, n, nesterov_vw, nesterov_vb)
-                else:
-                    self.__gradient_descent(mini_batch, n)
+                match self.gradient_descent:
+                    case "AdaGrad" | "RMSprop":
+                        w_cache = [np.zeros_like(DE_w) for DE_w in self.DE_W]
+                        b_cache = [np.zeros_like(DE_b) for DE_b in self.DE_B]
+                        self.__gradient_descent(mini_batch, n, w_cache, b_cache)
+
+                    case "NesterovM":
+                        nesterov_vw = [np.zeros_like(W) for W in self.W]
+                        nesterov_vb = [np.zeros_like(B) for B in self.B]
+                        self.__gradient_descent(mini_batch, n, nesterov_vw, nesterov_vb)
+
+                    case _:
+                        self.__gradient_descent(mini_batch, n)
 
             if self.is_classification:
+                prediction_training_err = [prediction_err for (prediction_err, error) in self.training_errors]
+                error = [error for (prediction_err, error) in self.training_errors]
+
+                # Computes the mean accuracy and appends it to the list
                 self.training_errors_means.append(
-                    100 - (np.sum(self.training_errors) / len(self.training_errors) * 100))
+                    (100 - (np.sum(prediction_training_err) / len(prediction_training_err) * 100),
+                     np.mean(error))
+                )
             else:
+                # Computes the mean error and appends it to the list
                 self.training_errors_means.append(np.mean(self.training_errors))
 
             self.Ws.append(self.W)
             self.Bs.append(self.B)
 
+        # At the end of the training, if we are using the early stopping technique,
+        # we set the final weights and biases
         if end.__code__.co_code == self.early_stopping.__code__.co_code:
             self.W = self.best_W
             self.B = self.best_B

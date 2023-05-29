@@ -35,7 +35,10 @@ def training(arguments):
               validation_set, output_validation_set)
 
     # Retrieving performance of the network on the validation set
-    performance = net.best_validation_errors_means
+    if is_classification:
+        performance = net.best_validation_errors_means[0]
+    else:
+        performance = net.best_validation_errors_means
 
     return performance, arguments, net
 
