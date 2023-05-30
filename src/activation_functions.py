@@ -54,31 +54,6 @@ def tanh_gradient(x):
     return 1 - np.square(np.tanh(x))
 
 
-# softmax activation function
-# it is used for multiclass classification problems
-# f(x) = e^x / summation(e^x)
-#
-# pros: 1) the Softmax activation function is able to handle multiple classes.
-#
-# cons: 1) computationally expensive.
-def softmax(x):
-    z = np.subtract(x, np.max(x))
-    numerator = np.exp(z)
-    denominator = np.sum(numerator)
-    return np.divide(numerator, denominator)
-
-
-# softmax activation function gradient
-#
-# pros: -
-#
-# cons: 1) computationally expensive.
-def softmax_gradient(x):
-    sm = softmax(x)
-    s = np.reshape(sm, (-1, 1))
-    return np.diagflat(s) - np.dot(s, s.T)
-
-
 # Swish activation function
 # f(x) = x * sig(x)
 #

@@ -19,11 +19,11 @@ if __name__ == '__main__':
     # Each element of the internal list contains tuples that are assigned to each layer of the model.
     # A single tuple is of the form (function, gradient of that function)
     activation_functions = [
-                            [(activation_functions.tanh, activation_functions.tanh_gradient),
-                             (activation_functions.tanh, activation_functions.tanh_gradient),
-                             (activation_functions.selu, activation_functions.selu_gradient),
-                             (activation_functions.linear, activation_functions.linear_gradient)]
-                            ]
+        [(activation_functions.tanh, activation_functions.tanh_gradient),
+         (activation_functions.tanh, activation_functions.tanh_gradient),
+         (activation_functions.selu, activation_functions.selu_gradient),
+         (activation_functions.linear, activation_functions.linear_gradient)]
+    ]
 
     # Defines the tuple for the error function. The form of the tuple is
     # (error function, gradient of that error function)
@@ -43,20 +43,29 @@ if __name__ == '__main__':
     # K = 128
     # The first False let us do an exhaustive search through all possible combinations of hyperparameters
     # The second False let us define that it's a regression problem
-    best_model = kfold.k_fold_cross_validation(training_input, training_output,
-                                               [("structures", [[9, 12, 12, 8, 2]]),
-                                                ("activation_functions",
-                                                 activation_functions),
-                                                ("error_functions",
-                                                 [error_function]),
-                                                ("hyper_parameters",
-                                                 hyper_parameters),
-                                                ("gradient_descent_techniques",
-                                                 ["None"]),
-                                                ("mini_batch_sizes", [4]),
-                                                ("regularization_techniques",
-                                                 regularization_techniques)],
-                                               128, False, "../MLcup_models.json", False)
+    best_model, max_epoch, best_mini_batch, training_error_means, validation_error_means = \
+        kfold.k_fold_cross_validation(training_input, training_output,
+                                      [("structures", [[9, 12, 12, 8, 2]]),
+                                       ("activation_functions",
+                                        activation_functions),
+                                       ("error_functions",
+                                        [error_function]),
+                                       ("hyper_parameters",
+                                        hyper_parameters),
+                                       ("gradient_descent_techniques",
+                                        ["None"]),
+                                       ("mini_batch_sizes", [4]),
+                                       ("regularization_techniques",
+                                        regularization_techniques)],
+                                      128, False, "../MLcup_models.json", False)
+
+    # Retrains on the whole training set
+    best_model.train(training_input, training_output, best_mini_batch, best_model.stop, max_epoch, test_input,
+                     test_output)
+    best_model.validation_errors_means = validation_error_means
+    best_model.training_errors_means = training_error_means
+    # Plots the learning rate
+    best_model.plot_learning_rate()
 
     # With the optimal model found in the k-fold selection, we compute the performance on the testing data
     performance = best_model.compute_performance(test_input, test_output)

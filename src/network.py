@@ -75,6 +75,7 @@ class Network:
         # the list of the average errors over the epochs
         self.training_errors_means = []
         self.validation_errors_means = []
+        self.test_errors_means = []
 
         if is_classification:
             self.best_validation_errors_means = (0, 0)
@@ -604,6 +605,12 @@ class Network:
             self.Ws.append(self.W)
             self.Bs.append(self.B)
 
+            if end.__code__.co_code == self.stop.__code__.co_code and not self.is_classification:
+                test_input = args[1]
+                test_output = args[2]
+                performance = self.compute_performance(test_input, test_output)
+                self.test_errors_means.append(performance)
+
         # At the end of the training, if we are using the early stopping technique,
         # we set the final weights and biases
         if end.__code__.co_code == self.early_stopping.__code__.co_code:
@@ -686,22 +693,28 @@ class Network:
             # plot the error or accuracy on the training and validation set
             figure(figsize=(10, 6))
             plt.plot(range(1, self.epoch + 1), training_error_a, color='red', label='Training accuracy curve')
-            plt.plot(range(1, self.epoch + 1), validation_error_a, color='green',
+            plt.plot(range(1, self.epoch + 1), validation_error_a, color='blue',
                      linestyle='dashed', label='Validation accuracy curve')
             plt.xlabel('Epochs', fontsize='20')
             plt.ylabel('Accuracy', fontsize='20')
             plt.legend(fontsize='20')
+            plt.grid()
             plt.show()
         else:
             training_error_l = self.training_errors_means
             validation_error_l = self.validation_errors_means
+            test_error_l = self.test_errors_means
 
         # plot the error or accuracy on the training and validation set
         figure(figsize=(10, 6))
         plt.plot(range(1, self.epoch + 1), training_error_l, color='red', label='Training loss curve')
-        plt.plot(range(1, self.epoch + 1), validation_error_l, color='green',
+        plt.plot(range(1, self.epoch + 1), validation_error_l, color='blue',
                  linestyle='dashed', label='Validation loss curve')
+        if not self.is_classification:
+            plt.plot(range(1, self.epoch + 1), test_error_l, color='black',
+                     linestyle='dashdot', label='Test loss curve')
         plt.xlabel('Epochs', fontsize='20')
-        plt.ylabel('Loss', fontsize='20')
+        plt.ylabel('Loss (MEE)', fontsize='20')
         plt.legend(fontsize='20')
+        plt.grid()
         plt.show()

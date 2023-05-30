@@ -55,7 +55,7 @@ if __name__ == '__main__':
                                                                                    ["None", "NesterovM",
                                                                                     "AdaGrad", "RMSprop"]),
                                                                                   ("mini_batch_sizes",
-                                                                                   [1, 2, 4, 8, 16, 32, 64]),
+                                                                                   [1]),
                                                                                   ("regularization_techniques",
                                                                                    regularization_techniques1)],
                                               70, False, "../Monk1_models.json", True)
