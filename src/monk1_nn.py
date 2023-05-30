@@ -17,8 +17,8 @@ if __name__ == '__main__':
     # Each element of the list is a list that contains the activation functions for the model.
     # Each element of the internal list contains tuples that are assigned to each layer of the model.
     # A single tuple is of the form (function, gradient of that function)
-    activation_functions1 = [[(activation_functions.relu, activation_functions.relu_gradient),
-                              (activation_functions.relu, activation_functions.relu_gradient),
+    activation_functions1 = [[(activation_functions.tanh, activation_functions.tanh_gradient),
+                              (activation_functions.tanh, activation_functions.tanh_gradient),
                               (activation_functions.sigmoid, activation_functions.sigmoid_gradient)]]
 
     # Defines the tuple for the error function. The form of the tuple is
@@ -28,12 +28,12 @@ if __name__ == '__main__':
     # Defines the list of hyperparameters to try
     # Each element of the list is a list that contains a tuple (or more than one if we are using activation functions
     # that requires an additional parameters) with the name of the parameter and the value to try
-    hyper_parameters = [[('learning_rate', 0.15)]]
+    hyper_parameters = [[('learning_rate', 0.2)]]
 
     # Define a list of regularization to try. Each element of the list is a tuple that contains the name of the
     # regularization technique and then its value.
     # If there's no need to try a regularization technique, it is sufficient to add the tuple ("None", 0)
-    regularization_techniques1 = [("None", 0)]
+    regularization_techniques1 = [("None", 0), ("L1", 1e-5), ("L2", 1e-5)]
 
     # Encoding of the inputs
     training_input1 = preprocessing.one_hot_encoding(training_input1)
@@ -44,7 +44,7 @@ if __name__ == '__main__':
     # The False let us do an exhaustive search through all possible combinations of hyperparameters
     # The True let us define that it's a classification problem
     optimal_model = holdout.holdout_selection(training_input1, training_output1, [("structures",
-                                                                                   [[17, 1, 1, 1]]),
+                                                                                   [[17, 4, 4, 1]]),
                                                                                   ("activation_functions",
                                                                                    activation_functions1),
                                                                                   ("error_functions",
@@ -55,7 +55,7 @@ if __name__ == '__main__':
                                                                                    ["None", "NesterovM",
                                                                                     "AdaGrad", "RMSprop"]),
                                                                                   ("mini_batch_sizes",
-                                                                                   [1, 2, 4, 8, 16, 32]),
+                                                                                   [1, 2, 4, 8, 16, 32, 64]),
                                                                                   ("regularization_techniques",
                                                                                    regularization_techniques1)],
                                               70, False, "../Monk1_models.json", True)

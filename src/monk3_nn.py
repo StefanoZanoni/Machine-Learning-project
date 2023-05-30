@@ -19,8 +19,6 @@ if __name__ == '__main__':
     # Each element of the internal list contains tuples that are assigned to each layer of the model.
     # A single tuple is of the form (function, gradient of that function)
     activation_functions3 = [
-                             [(activation_functions.tanh, activation_functions.tanh_gradient),
-                              (activation_functions.sigmoid, activation_functions.sigmoid_gradient)],
                              [(activation_functions.relu, activation_functions.relu_gradient),
                               (activation_functions.sigmoid, activation_functions.sigmoid_gradient)]
                              ]
@@ -32,11 +30,11 @@ if __name__ == '__main__':
     # Defines the list of hyperparameters to try
     # Each element of the list is a list that contains a tuple (or more than one if we are using activation functions
     # that requires an additional parameters) with the name of the parameter and the value to try
-    hyper_parameters3 = [[('learning_rate', 0.1)], [('learning_rate', 0.2)], [('learning_rate', 0.3)]]
+    hyper_parameters3 = [[('learning_rate', 0.2)]]
 
     # Define a list of regularization to try. Each element of the list is a tuple that contains the name of the
     # regularization technique and then its value.
-    # If there's no need to try a regularization technique is sufficient to add the tuple ("None", 0)
+    # If there's no need to try a regularization technique, it is sufficient to add the tuple ("None", 0)
     regularization_techniques3 = [("None", 0)]
 
     # Encoding of the inputs
@@ -47,12 +45,7 @@ if __name__ == '__main__':
     # The percentage of data to keep for the training is 70%
     # The False let us do an exhaustive search through all possible combinations of hyperparameters
     # The True let us define that it's a classification problem
-    optimal_model = holdout.holdout_selection(training_input3, training_output3, [("structures", [[17, 1, 1],
-                                                                                                  [17, 2, 1],
-                                                                                                  [17, 3, 1],
-                                                                                                  [17, 4, 1],
-                                                                                                  [17, 5, 1],
-                                                                                                  [17, 6, 1]]),
+    optimal_model = holdout.holdout_selection(training_input3, training_output3, [("structures", [[17, 1, 1]]),
                                                                                   (
                                                                                       "activation_functions",
                                                                                       activation_functions3),
@@ -62,9 +55,9 @@ if __name__ == '__main__':
                                                                                    hyper_parameters3),
                                                                                   (
                                                                                       "gradient_descend_techniques",
-                                                                                      ["None", "NesterovM"]),
+                                                                                      ["NesterovM"]),
                                                                                   ("mini_batch_sizes",
-                                                                                   [1, 2, 4, 8, 16]),
+                                                                                   [2]),
                                                                                   ("regularization_techniques",
                                                                                    regularization_techniques3)],
                                               70, False, "../Monk3_models.json", True)
