@@ -38,15 +38,14 @@ def holdout_selection(data_set, output_data_set, hyper_parameters_set, split_per
     start = timer()
 
     # search the best model over all the hyperparameter configurations
-    best_model, mini_batch_size, max_epoch = search_best_model(hps, filename, is_classification)
-    # retrain the best model over the whole dataset
-    best_model.train(temp_data[:, 0], temp_data[:, 1], mini_batch_size, best_model.stop, max_epoch)
+    best_model, mini_batch_size, max_epoch, best_training_error_means, best_validation_error_means = \
+        search_best_model(hps, filename, is_classification)
 
     stop = timer()
 
     print('model selection in seconds: ' + str(np.ceil(stop - start)))
 
-    return best_model
+    return best_model, max_epoch, mini_batch_size, best_training_error_means, best_validation_error_means
 
 
 def holdout_selection_assessment(data_set, output_data_set, hyper_parameters_set, selection_split_percentage,
@@ -125,7 +124,8 @@ def search_best_model(parameters, filename, is_classification):
                 best_hyper_parameters_found = result[1]
                 best_network = result[2]
 
-    best_network.plot_learning_rate()
+    print(f"performance on the validation set: "
+          f"{max(best_network.validation_errors_means)}")
 
     if is_classification:
         print("Best accuracy on the validation set: " + str(max_accuracy_achieved) +
@@ -144,4 +144,5 @@ def search_best_model(parameters, filename, is_classification):
     if is_classification:
         nn_model.take_opposite = take_opposite
 
-    return nn_model, best_hyper_parameters_found[5], best_network.epoch
+    return nn_model, best_hyper_parameters_found[5], best_network.epoch,\
+        best_network.training_errors_means, best_network.validation_errors_means

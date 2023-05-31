@@ -4,7 +4,6 @@ from src import preprocessing
 from src import holdout
 from src import utilities
 
-
 # MONK2
 if __name__ == '__main__':
     # Reads the dataset
@@ -19,9 +18,9 @@ if __name__ == '__main__':
     # Each element of the internal list contains tuples that are assigned to each layer of the model.
     # A single tuple is of the form (function, gradient of that function)
     activation_functions2 = [
-                                [(activation_functions.relu, activation_functions.relu_gradient),
-                                 (activation_functions.sigmoid, activation_functions.sigmoid_gradient)]
-                            ]
+        [(activation_functions.relu, activation_functions.relu_gradient),
+         (activation_functions.sigmoid, activation_functions.sigmoid_gradient)]
+    ]
 
     # Defines the tuple for the error function. The form of the tuple is
     # (error function, gradient of that error function)
@@ -45,20 +44,30 @@ if __name__ == '__main__':
     # The percentage of data to keep for the training is 70%
     # The False let us do an exhaustive search through all possible combinations of hyperparameters
     # The True let us define that it's a classification problem
-    optimal_model = holdout.holdout_selection(training_input2, training_output2, [("structures", [[17, 4, 1]]),
-                                                                                  ("activation_functions",
-                                                                                   activation_functions2), (
-                                                                                  "error_functions", [error_function2]),
-                                                                                  ("hyper_parameters",
-                                                                                   hyper_parameters2), (
-                                                                                  "gradient_descend_techniques",
-                                                                                  ["None", "NesterovM"]),
-                                                                                  ("mini_batch_sizes",
-                                                                                   [1]),
-                                                                                  ("regularization_techniques",
-                                                                                   regularization_techniques2)], 70,
-                                              False, "../Monk2_models.json", True)
+    best_model, max_epoch, best_mini_batch, training_error_means, validation_error_means \
+        = holdout.holdout_selection(training_input2, training_output2, [("structures", [[17, 4, 1]]),
+                                                                        ("activation_functions",
+                                                                         activation_functions2), (
+                                                                            "error_functions", [error_function2]),
+                                                                        ("hyper_parameters",
+                                                                         hyper_parameters2), (
+                                                                            "gradient_descend_techniques",
+                                                                            ["None"]),
+                                                                        ("mini_batch_sizes",
+                                                                         [1]),
+                                                                        ("regularization_techniques",
+                                                                         regularization_techniques2)], 70,
+                                    False, "../Monk2_models.json", True)
+
+    training_input2 = preprocessing.shuffle_data(training_input2)
+    training_output2 = preprocessing.shuffle_data(training_output2)
+    # retrain the best model over the whole dataset
+    best_model.train(training_input2, training_output2, best_mini_batch, best_model.stop, max_epoch, testing_input2,
+                     testing_output2)
+    best_model.validation_errors_means = validation_error_means
+    best_model.training_errors_means = training_error_means
+    best_model.plot_learning_rate()
 
     # With the optimal model found in the holdout selection, we compute the performance on the testing data
-    performance = optimal_model.compute_performance(testing_input2, testing_output2)[0]
+    performance = best_model.compute_performance(testing_input2, testing_output2)
     print('performance on the test set: ' + str(performance))
