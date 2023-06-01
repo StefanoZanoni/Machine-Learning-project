@@ -3,8 +3,7 @@ import numpy as np
 from multiprocessing.pool import Pool
 from timeit import default_timer as timer
 
-from src import preprocessing
-from src import network
+from src import network, preprocessing
 from src import validation_utilities
 from src.validation_utilities import training
 from src import utilities
@@ -46,33 +45,6 @@ def holdout_selection(data_set, output_data_set, hyper_parameters_set, split_per
     print('model selection in seconds: ' + str(np.ceil(stop - start)))
 
     return best_model, max_epoch, mini_batch_size, best_training_error_means, best_validation_error_means
-
-
-def holdout_selection_assessment(data_set, output_data_set, hyper_parameters_set, selection_split_percentage,
-                                 training_split_percentage, randomized_search, filename, is_classification, dt):
-    # compute selection set length
-    selection_set_len = int(np.ceil(selection_split_percentage * data_set.shape[0] / 100))
-    # create an array with input and output coupled
-    temp_data = np.array([[inp, out] for inp, out in zip(data_set, output_data_set)], dtype=dt)
-    # shuffle all the data
-    temp_data = preprocessing.shuffle_data(temp_data)
-    # create the selection input set
-    selection_set = temp_data[:selection_set_len, 0]
-    # create the test input set
-    test_set = temp_data[selection_set_len:, 0]
-    # create the selection output set
-    output_selection_set = temp_data[:selection_set_len, 1]
-    # create the test output set
-    output_test_set = temp_data[selection_set_len:, 1]
-
-    # compute holdout selection on the selection set
-    best_model = holdout_selection(selection_set, output_selection_set, hyper_parameters_set,
-                                   training_split_percentage, randomized_search, filename, is_classification, dt)
-
-    # compute the performance on the test set
-    performance = best_model.compute_performance(test_set, output_test_set)
-
-    return performance
 
 
 def search_best_model(parameters, filename, is_classification):

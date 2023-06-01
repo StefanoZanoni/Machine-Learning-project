@@ -17,6 +17,8 @@ def read_monk_data_set(problem):
     # Drops the first column, which is filled with NaN, from each dataframe
     training_df = training_df.dropna(axis=1)
     testing_df = testing_df.dropna(axis=1)
+    training_df.drop_duplicates(inplace=True)
+    training_df = training_df.sample(frac=1).reset_index()
 
     # Converts to numpy array the output training data and the output testing data
     training_output = np.array(training_df["output"])
@@ -34,8 +36,9 @@ def read_ml_cup_data_set():
     # Reads training dataframe from the input file
     training_df = pd.read_csv('../MLcup_problem/ML-CUP22-TR.csv',
                               names=['id', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'o1', 'o2'])
-    # Drops the first column, which is filled with NaN, from each dataframe
+    # Drops rows, which is filled with NaN, from each dataframe
     training_df = training_df.dropna(axis=0)
+    training_df.drop_duplicates(inplace=True)
     # shuffle the data to avoid injecting some bias into the test set during the splitting
     training_df = training_df.sample(frac=1, random_state=1).reset_index()
 

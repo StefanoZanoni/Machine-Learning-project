@@ -1,3 +1,5 @@
+import numpy as np
+
 from src import activation_functions
 from src import error_functions
 from src import preprocessing
@@ -18,8 +20,7 @@ if __name__ == '__main__':
     # Each element of the internal list contains tuples that are assigned to each layer of the model.
     # A single tuple is of the form (function, gradient of that function)
     activation_functions1 = [
-        [(activation_functions.tanh, activation_functions.tanh_gradient),
-         (activation_functions.tanh, activation_functions.tanh_gradient),
+        [(activation_functions.relu, activation_functions.relu_gradient),
          (activation_functions.sigmoid, activation_functions.sigmoid_gradient)]
     ]
 
@@ -30,24 +31,24 @@ if __name__ == '__main__':
     # Defines the list of hyperparameters to try
     # Each element of the list is a list that contains a tuple (or more than one if we are using activation functions
     # that requires an additional parameters) with the name of the parameter and the value to try
-    hyper_parameters = [[('learning_rate', 0.2)]]
+    hyper_parameters = [[('learning_rate', 0.1)]]
 
     # Define a list of regularization to try. Each element of the list is a tuple that contains the name of the
     # regularization technique and then its value.
     # If there's no need to try a regularization technique, it is sufficient to add the tuple ("None", 0)
-    regularization_techniques1 = [("L1", 1e-5)]
+    regularization_techniques1 = [("None", 0)]
 
     # Encoding of the inputs
     training_input1 = preprocessing.one_hot_encoding(training_input1)
     testing_input1 = preprocessing.one_hot_encoding(testing_input1)
 
     # Model selection through holdout technique
-    # The percentage of data to keep for the training is 70%
+    # The percentage of data to keep for the training is 80%
     # The False let us do an exhaustive search through all possible combinations of hyperparameters
     # The True let us define that it's a classification problem
     best_model, max_epoch, best_mini_batch, training_error_means, validation_error_means = \
         holdout.holdout_selection(training_input1, training_output1, [("structures",
-                                                                       [[17, 4, 4, 1]]),
+                                                                       [[17, 6, 1]]),
                                                                       ("activation_functions",
                                                                        activation_functions1),
                                                                       ("error_functions",
@@ -55,15 +56,14 @@ if __name__ == '__main__':
                                                                       ("hyper_parameters",
                                                                        hyper_parameters),
                                                                       ("gradient_descend_techniques",
-                                                                       ["NesterovM"]),
+                                                                       ["None", "NesterovM" "RMSprop",
+                                                                        "AdaGrad"]),
                                                                       ("mini_batch_sizes",
-                                                                       [1]),
+                                                                       [2]),
                                                                       ("regularization_techniques",
                                                                        regularization_techniques1)],
                                   70, False, "../Monk1_models.json", True)
 
-    training_input1 = preprocessing.shuffle_data(training_input1)
-    training_output1 = preprocessing.shuffle_data(training_output1)
     # retrain the best model over the whole dataset
     best_model.train(training_input1, training_output1, best_mini_batch, best_model.stop, max_epoch, testing_input1,
                      testing_output1)

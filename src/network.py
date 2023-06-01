@@ -12,7 +12,7 @@ from src import activation_functions as af
 class Network:
 
     def __init__(self, structure, activation_functions, error_function, hyper_parameters, is_classification,
-                 regularization=("None", 0), optimizer="None", patience=10, delta=0):
+                 regularization=("None", 0), optimizer="None", patience=400, delta=0):
 
         # Neural network structure in the form [in, L1, L2, ... , Ln, out]
         # where in and out are respectively the input and the output layer and
@@ -703,7 +703,9 @@ class Network:
             plt.plot(range(1, self.epoch + 1), test_error_a, color='black',
                      linestyle='dashdot', label='Test accuracy curve')
             plt.xlabel('Epochs', fontsize='20')
+            plt.xticks(fontsize=15)
             plt.ylabel('Accuracy', fontsize='20')
+            plt.yticks(fontsize=15)
             plt.legend(fontsize='20')
             plt.grid()
             plt.show()
@@ -719,10 +721,12 @@ class Network:
                  linestyle='dashed', label='Validation loss curve')
         plt.plot(range(1, self.epoch + 1), test_error_l, color='black', linestyle='dashdot', label='Test loss curve')
         plt.xlabel('Epochs', fontsize='20')
+        plt.xticks(fontsize=15)
         if self.is_classification:
             plt.ylabel('Loss (BCE)', fontsize='20')
         else:
             plt.ylabel('Loss (MEE)', fontsize='20')
+        plt.yticks(fontsize=15)
         plt.legend(fontsize='20')
         plt.grid()
         plt.show()

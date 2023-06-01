@@ -31,7 +31,7 @@ def shuffle_data(input_data):
 #     the second is the subset of columns to scale
 #
 # In case the function has more than 2 arguments, the default
-# behaviour is to scale all the columns
+# behavior is to scale all the columns
 def min_max_scaling(*args):
     training_input = np.array(args[0])
     normalized_dataset = []

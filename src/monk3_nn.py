@@ -1,3 +1,5 @@
+import numpy as np
+
 from src import activation_functions
 from src import error_functions
 from src import preprocessing
@@ -24,7 +26,7 @@ if __name__ == '__main__':
 
     # Defines the tuple for the error function. The form of the tuple is
     # (error function, gradient of that error function)
-    error_function3 = (error_functions.bce, error_functions.bce_gradient)
+    error_function3 = (error_functions.mse, error_functions.mse_gradient)
 
     # Defines the list of hyperparameters to try
     # Each element of the list is a list that contains a tuple (or more than one if we are using activation functions
@@ -34,7 +36,7 @@ if __name__ == '__main__':
     # Define a list of regularization to try. Each element of the list is a tuple that contains the name of the
     # regularization technique and then its value.
     # If there's no need to try a regularization technique, it is sufficient to add the tuple ("None", 0)
-    regularization_techniques3 = [("L2", 0.1)]
+    regularization_techniques3 = [("None", 0)]
 
     # Encoding of the inputs
     training_input3 = preprocessing.one_hot_encoding(training_input3)
@@ -62,8 +64,6 @@ if __name__ == '__main__':
                                                                          regularization_techniques3)],
                                     70, False, "../Monk3_models.json", True)
 
-    training_input3 = preprocessing.shuffle_data(training_input3)
-    training_output3 = preprocessing.shuffle_data(training_output3)
     # retrain the best model over the whole dataset
     best_model.train(training_input3, training_output3, best_mini_batch, best_model.stop, max_epoch, testing_input3,
                      testing_output3)

@@ -1,3 +1,5 @@
+import numpy as np
+
 from src import activation_functions
 from src import error_functions
 from src import preprocessing
@@ -33,7 +35,7 @@ if __name__ == '__main__':
 
     # Define a list of regularization to try. Each element of the list is a tuple that contains the name of the
     # regularization technique and then its value.
-    # If there's no need to try a regularization technique, is sufficient to add the tuple ("None", 0)
+    # If there's no need to try a regularization technique, it is sufficient to add the tuple ("None", 0)
     regularization_techniques2 = [("None", 0)]
 
     # Encoding of the inputs
@@ -56,11 +58,9 @@ if __name__ == '__main__':
                                                                         ("mini_batch_sizes",
                                                                          [1]),
                                                                         ("regularization_techniques",
-                                                                         regularization_techniques2)], 70,
-                                    False, "../Monk2_models.json", True)
+                                                                         regularization_techniques2)],
+                                    70, False, "../Monk2_models.json", True)
 
-    training_input2 = preprocessing.shuffle_data(training_input2)
-    training_output2 = preprocessing.shuffle_data(training_output2)
     # retrain the best model over the whole dataset
     best_model.train(training_input2, training_output2, best_mini_batch, best_model.stop, max_epoch, testing_input2,
                      testing_output2)
