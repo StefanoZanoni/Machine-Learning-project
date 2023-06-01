@@ -37,6 +37,7 @@ if __name__ == '__main__':
     # regularization technique and then its value.
     # If there's no need to try a regularization technique, it is sufficient to add the tuple ("None", 0)
     regularization_techniques3 = [("None", 0)]
+    # ("L2", 0.0007)
 
     # Encoding of the inputs
     training_input3 = preprocessing.one_hot_encoding(training_input3)
