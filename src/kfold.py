@@ -76,6 +76,8 @@ def k_fold_cross_validation(data_set, output_data_set, hyper_parameters_set, k, 
     model = network.Network(best_hp[0], best_hp[1], best_hp[2], best_hp[3], is_classification,
                             best_hp[6], best_hp[4])
 
+    model.W = best_model.initialized_weights
+
     stop = timer()
     print('model selection in seconds: ' + str(np.ceil(stop - start)))
 

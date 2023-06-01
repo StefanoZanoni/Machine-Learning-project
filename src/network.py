@@ -12,7 +12,7 @@ from src import activation_functions as af
 class Network:
 
     def __init__(self, structure, activation_functions, error_function, hyper_parameters, is_classification,
-                 regularization=("None", 0), optimizer="None", patience=400, delta=0):
+                 regularization=("None", 0), optimizer="None", patience=100, delta=0):
 
         # Neural network structure in the form [in, L1, L2, ... , Ln, out]
         # where in and out are respectively the input and the output layer and
@@ -47,6 +47,9 @@ class Network:
 
         # the list of weights matrices of each layer
         self.W = self.__weights_initialization()
+
+        # the list of initialized weights
+        self.initialized_weights = self.W
 
         # the best list of biases found at the end of model selection
         self.best_B = self.B
@@ -91,7 +94,7 @@ class Network:
 
     # This function initializes the weights of the network
     def __weights_initialization(self):
-        np.random.seed(0)
+        # np.random.seed(0)
         weights_list = []
 
         for l, next_l, fun in zip(self.structure[:-1], self.structure[1:], self.activation_functions):
