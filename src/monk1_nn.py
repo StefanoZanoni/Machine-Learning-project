@@ -31,7 +31,7 @@ if __name__ == '__main__':
     # Defines the list of hyperparameters to try
     # Each element of the list is a list that contains a tuple (or more than one if we are using activation functions
     # that requires an additional parameters) with the name of the parameter and the value to try
-    hyper_parameters = [[('learning_rate', 0.29)]]
+    hyper_parameters = [[('learning_rate', 0.297)]]
 
     # Define a list of regularization to try. Each element of the list is a tuple that contains the name of the
     # regularization technique and then its value.
@@ -48,7 +48,7 @@ if __name__ == '__main__':
     # The True let us define that it's a classification problem
     best_model, max_epoch, best_mini_batch, training_error_means, validation_error_means = \
         holdout.holdout_selection(training_input1, training_output1, [("structures",
-                                                                       [[17, 14, 1]]),
+                                                                       [[17, 10, 1]]),
                                                                       ("activation_functions",
                                                                        activation_functions1),
                                                                       ("error_functions",
