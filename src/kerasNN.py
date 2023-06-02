@@ -1,3 +1,5 @@
+from matplotlib import pyplot as plt
+from matplotlib.pyplot import figure
 from sklearn.model_selection import KFold
 from sklearn.model_selection import train_test_split
 
@@ -19,6 +21,7 @@ training_df = pd.read_csv('../MLcup_problem/ML-CUP22-TR.csv',
                           names=['id', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'o1', 'o2'])
 # remove all columns with NaN values
 training_df = training_df.dropna(axis=0)
+training_df.drop_duplicates(inplace=True)
 
 # convert inputs to a numpy array
 input_data = np.array(training_df[['a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9']])
@@ -30,7 +33,7 @@ train_in, test_in, train_out, test_out = train_test_split(input_data, output_dat
                                                           test_size=0.2, random_state=1, shuffle=True)
 
 # k value for k-fold cross validation
-splits = 128
+splits = 2
 
 kf = KFold(n_splits=splits, shuffle=True)
 kf.get_n_splits(train_in)
@@ -62,14 +65,14 @@ for train_index, test_index in kf.split(train_in):
 
     early_stopping = k.callbacks.EarlyStopping(
         monitor="val_loss",
-        patience=10,
+        patience=500,
         min_delta=0,
         restore_best_weights=True
     )
     callbacks = [early_stopping]
 
     history = model.fit(X_train, y_train,
-                        epochs=50,
+                        epochs=700,
                         batch_size=4,
                         shuffle=False,
                         validation_data=(X_val, y_val),
@@ -81,10 +84,20 @@ for train_index, test_index in kf.split(train_in):
     if performance < best_performance:
         best_performance = performance
         best_model = model
+        best_history = history
 
+figure(figsize=(10, 6))
+plt.plot(best_history.history['loss'], color='red', label='Training loss curve')
+plt.plot(best_history.history['val_loss'], color='blue', linestyle='dashed', label='Validation loss curve')
+plt.xlabel('Epochs', fontsize='20')
+plt.xticks(fontsize=15)
+plt.ylabel('Loss (MEE)', fontsize='20')
+plt.yticks(fontsize=15)
+plt.legend(fontsize='20')
+plt.show()
 # compute the performance of the best model on the validation and test sets
 best_model.summary()
 performance = performance_sum / splits
-print('validation performance: ', performance)
+print('performance on the validation test: ', performance)
 result = best_model.evaluate(test_in, test_out, batch_size=4)
-print('test performance: ', result)
+print('performance on the test set: ', result)
