@@ -18,7 +18,7 @@ def read_monk_data_set(problem):
     training_df = training_df.dropna(axis=1)
     testing_df = testing_df.dropna(axis=1)
     training_df.drop_duplicates(inplace=True)
-    training_df = training_df.sample(frac=1).reset_index()
+    training_df = training_df.sample(frac=1, random_state=1).reset_index()
 
     # Converts to numpy array the output training data and the output testing data
     training_output = np.array(training_df["output"])
