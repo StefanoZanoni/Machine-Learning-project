@@ -64,12 +64,13 @@ def k_fold_cross_validation(data_set, output_data_set, hyper_parameters_set, k, 
     # Dumps on file the best model found
     utilities.dump_on_json(best_performance, best_hp, filename, is_classification)
 
+    print('best performance on the training set: ' + str(best_model.best_training_error_means))
     # Prints the best accuracy/error found an on validation set with the list of the best hyperparameters
     if is_classification:
-        print("Best accuracy on validation set: " + str(best_performance) + " | List of hyperparameters used: " + str(
+        print("best accuracy on the validation set: " + str(best_performance) + " | List of hyperparameters used: " + str(
             best_hp))
     else:
-        print("Best error on validation set: " + str(best_performance) + " | List of hyperparameters used: " + str(
+        print("best performance on the validation set: " + str(best_performance) + " | List of hyperparameters used: " + str(
             best_hp))
 
     # Builds a new network with the best hyperparameters found

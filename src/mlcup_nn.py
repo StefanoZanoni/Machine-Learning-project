@@ -5,6 +5,7 @@ from src import activation_functions
 from src import error_functions
 from src import kfold
 from src import utilities
+from src import network
 
 # ML CUP
 if __name__ == '__main__':
@@ -69,7 +70,14 @@ if __name__ == '__main__':
 
     # With the optimal model found in the k-fold selection, we compute the performance on the testing data
     performance = best_model.compute_performance(test_input, test_output)
-    print('performance on the test set: ' + str(performance))
+    print('best performance on the test set: ' + str(performance))
+
+    final_model = network.Network(best_model.structure, best_model.activation_functions, best_model.error_function,
+                                  best_model.hyper_parameters, best_model.is_classification, best_model.regularization,
+                                  "None")
+    final_model.W = best_model.initialized_weights
+    # re-train the model over all the data before predicting on the blind test set
+    final_model.train(input_data, output_data, best_mini_batch, final_model.stop, max_epoch)
 
     output_x = []
     output_y = []

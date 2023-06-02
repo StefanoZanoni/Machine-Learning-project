@@ -12,7 +12,7 @@ from src import activation_functions as af
 class Network:
 
     def __init__(self, structure, activation_functions, error_function, hyper_parameters, is_classification,
-                 regularization=("None", 0), optimizer="None", patience=100, delta=0):
+                 regularization=("None", 0), optimizer="None", patience=500, delta=0):
 
         # Neural network structure in the form [in, L1, L2, ... , Ln, out]
         # where in and out are respectively the input and the output layer and
@@ -80,6 +80,7 @@ class Network:
         self.validation_errors_means = []
         self.test_errors_means = []
 
+        self.best_training_error_means = 0
         if is_classification:
             self.best_validation_errors_means = (0, 0)
         else:
@@ -139,30 +140,21 @@ class Network:
         if self.is_classification:
             rounded_output = np.copy(output)
 
-            # multi-class classification
-            # return the most probable class
-            if len(output) > 1:
-                index = output.argmax(axis=0)
-                index = index.item()
-                mask = [1 if index == i else 0 for i in range(output.shape[0])]
-                return np.array(mask), output
-
             # binary classification
+            if self.take_opposite:
+                # Case where the model produced an accuracy less of 50%.
+                # So it's convenient to take as a prediction the opposite of the predicted output
+                rounded_output[output > 0.5] = 0
+                rounded_output[output < 0.5] = 1
             else:
-                if self.take_opposite:
-                    # Case where the model produced an accuracy less of 50%.
-                    # So it's convenient to take as a prediction the opposite of the predicted output
-                    rounded_output[output > 0.5] = 0
-                    rounded_output[output < 0.5] = 1
-                else:
-                    # The Model produced an accuracy greater than 50%
-                    rounded_output[output > 0.5] = 1
-                    rounded_output[output < 0.5] = 0
+                # The Model produced an accuracy greater than 50%
+                rounded_output[output > 0.5] = 1
+                rounded_output[output < 0.5] = 0
 
-                # In the case of prediction exactly 0.5,
-                # the output is randomly chosen between 0 and 1
-                rounded_output[output == 0.5] = randint(0, 1)
-                return int(rounded_output), output
+            # In the case of prediction exactly 0.5,
+            # the output is randomly chosen between 0 and 1
+            rounded_output[output == 0.5] = randint(0, 1)
+            return int(rounded_output), output
 
         # return simply the output in case of regression problem
         return output
@@ -608,7 +600,7 @@ class Network:
             self.Ws.append(self.W)
             self.Bs.append(self.B)
 
-            if end.__code__.co_code == self.stop.__code__.co_code:
+            if end.__code__.co_code == self.stop.__code__.co_code and len(args) == 3:
                 test_input = args[1]
                 test_output = args[2]
                 performance = self.compute_performance(test_input, test_output)
@@ -653,6 +645,7 @@ class Network:
                 self.best_W = self.Ws[self.epoch - 1]
                 self.best_B = self.Bs[self.epoch - 1]
                 self.best_validation_errors_means = self.validation_errors_means[self.epoch - 1]
+                self.best_training_error_means = self.training_errors_means[self.epoch - 1]
             else:
                 # diminish the patience
                 self.patience -= 1
