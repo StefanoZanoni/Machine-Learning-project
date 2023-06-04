@@ -21,7 +21,7 @@ def shuffle_data(input_data):
 
 # Also known as linear scaling
 # x' = (x - min(x)) / (max(x) - min(x))
-# where x is data and x' is the normalized data
+# where x is data and x' is the normalized data,
 #
 # The function can have both 1 or 2 arguments:
 #   - With only 1 argument the scaling is applied to all
@@ -74,7 +74,7 @@ def min_max_scaling(*args):
 #     the second is the subset of columns to scale
 #
 # In case the function has more than 2 arguments, the default
-# behaviour is to scale all the columns
+# behavior is to scale all the columns
 def z_score_scaling(*args):
     training_input = np.array(args[0])
     normalized_dataset = []

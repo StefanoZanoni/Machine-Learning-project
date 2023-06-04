@@ -1,5 +1,3 @@
-import numpy as np
-
 from src import activation_functions
 from src import error_functions
 from src import preprocessing

@@ -1936,5 +1936,209 @@
             "None",
             0
         ]
+    },
+    {
+        "accuracy": 100.0,
+        "structure": [
+            17,
+            4,
+            1
+        ],
+        "activation_function": [
+            [
+                "relu",
+                "relu_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ]
+        ],
+        "error_function": [
+            "bce",
+            "bce_gradient"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "None",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "None",
+            0
+        ]
+    },
+    {
+        "accuracy": 100.0,
+        "structure": [
+            17,
+            4,
+            1
+        ],
+        "activation_function": [
+            [
+                "relu",
+                "relu_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ]
+        ],
+        "error_function": [
+            "bce",
+            "bce_gradient"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "None",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "None",
+            0
+        ]
+    },
+    {
+        "accuracy": 100.0,
+        "structure": [
+            17,
+            4,
+            1
+        ],
+        "activation_function": [
+            [
+                "relu",
+                "relu_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ]
+        ],
+        "error_function": [
+            "bce",
+            "bce_gradient"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "None",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "None",
+            0
+        ]
+    },
+    {
+        "accuracy": 100.0,
+        "structure": [
+            17,
+            4,
+            1
+        ],
+        "activation_function": [
+            [
+                "relu",
+                "relu_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ]
+        ],
+        "error_function": [
+            "bce",
+            "bce_gradient"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "None",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "None",
+            0
+        ]
+    },
+    {
+        "accuracy": 100.0,
+        "structure": [
+            17,
+            4,
+            1
+        ],
+        "activation_function": [
+            [
+                "relu",
+                "relu_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ]
+        ],
+        "error_function": [
+            "bce",
+            "bce_gradient"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "None",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "None",
+            0
+        ]
+    },
+    {
+        "accuracy": 100.0,
+        "structure": [
+            17,
+            4,
+            1
+        ],
+        "activation_function": [
+            [
+                "relu",
+                "relu_gradient"
+            ],
+            [
+                "sigmoid",
+                "sigmoid_gradient"
+            ]
+        ],
+        "error_function": [
+            "bce",
+            "bce_gradient"
+        ],
+        "hyper_parameters": [
+            [
+                "learning_rate",
+                0.1
+            ]
+        ],
+        "gradient_descent_technique": "None",
+        "mini_batch_size": 1,
+        "regularization_technique": [
+            "None",
+            0
+        ]
     }
 ]

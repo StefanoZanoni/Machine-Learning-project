@@ -1,5 +1,3 @@
-import numpy as np
-
 from src import activation_functions
 from src import error_functions
 from src import preprocessing
@@ -56,8 +54,7 @@ if __name__ == '__main__':
                                                                       ("hyper_parameters",
                                                                        hyper_parameters),
                                                                       ("gradient_descend_techniques",
-                                                                       ["None", "NesterovM" "RMSprop",
-                                                                        "AdaGrad"]),
+                                                                       ["None"]),
                                                                       ("mini_batch_sizes",
                                                                        [2]),
                                                                       ("regularization_techniques",

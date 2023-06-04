@@ -66,7 +66,7 @@ def get_hyper_parameters(hyper_parameters_set, randomized_search, is_classificat
 
 
 # Given a set of arguments to build the network on,
-# returns 20 combinations of hyperparameters randomly chosen
+# return 20 combinations of hyperparameters randomly chosen
 def randomized_grid_search(structures, activation_functions_list, error_functions, hyper_parameters_list,
                            gradient_descent_techniques, mini_batch_sizes, regularization_techniques, is_classification):
     # List of combinations of hyperparameters

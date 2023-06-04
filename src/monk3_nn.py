@@ -1,5 +1,3 @@
-import numpy as np
-
 from src import activation_functions
 from src import error_functions
 from src import preprocessing
@@ -26,7 +24,7 @@ if __name__ == '__main__':
 
     # Defines the tuple for the error function. The form of the tuple is
     # (error function, gradient of that error function)
-    error_function3 = (error_functions.mse, error_functions.mse_gradient)
+    error_function3 = (error_functions.bce, error_functions.bce_gradient)
 
     # Defines the list of hyperparameters to try
     # Each element of the list is a list that contains a tuple (or more than one if we are using activation functions
@@ -37,7 +35,6 @@ if __name__ == '__main__':
     # regularization technique and then its value.
     # If there's no need to try a regularization technique, it is sufficient to add the tuple ("None", 0)
     regularization_techniques3 = [("None", 0)]
-    # ("L2", 0.0007)
 
     # Encoding of the inputs
     training_input3 = preprocessing.one_hot_encoding(training_input3)
@@ -58,7 +55,7 @@ if __name__ == '__main__':
                                                                          hyper_parameters3),
                                                                         (
                                                                             "gradient_descend_techniques",
-                                                                            ["NesterovM"]),
+                                                                            ["None"]),
                                                                         ("mini_batch_sizes",
                                                                          [2]),
                                                                         ("regularization_techniques",
